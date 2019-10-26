@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 
+#include "../external/essentials/include/essentials.hpp"
 #include "node256u.hpp"
 #include "node256s.hpp"
 
@@ -65,20 +66,15 @@ void test(std::vector<int32_t>& A) {
 
 int main(int argc, char** argv) {
     if (argc < 2) {
-        std::cerr << argv[0] << " type < input_array" << std::endl;
+        std::cerr << argv[0] << " type" << std::endl;
         return 1;
     }
 
     std::string type(argv[1]);
-
-    std::vector<int32_t> A;
-    A.reserve(256);
-
-    for (int i = 0; i != 256; ++i) {
-        int32_t x;
-        std::cin >> x;
-        A.push_back(x);
-    }
+    essentials::uniform_int_rng<int32_t> distr(-100, 100,
+                                               essentials::get_random_seed());
+    std::vector<int32_t> A(256);
+    std::generate(A.begin(), A.end(), [&] { return distr.gen(); });
 
     if (type == "node256u") {
         test<node256u>(A);
