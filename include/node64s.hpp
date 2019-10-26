@@ -43,35 +43,41 @@ struct node64s {
 
     void update(uint32_t i, int8_t delta) {
         assert(i < 64);
-        U[i / 8] += delta;
-        S[i % 8] += delta;
+        uint32_t j = i / 8;
+        bool sign = delta >> 7;
+        __m256i s1 = _mm256_load_si256((__m256i const*)T_L + j + sign * 8);
+        __m256i d1 = _mm256_loadu_si256((__m256i const*)(U + 1));
+        __m256i r1 = _mm256_add_epi32(d1, s1);
+        _mm256_storeu_si256((__m256i*)(U + 1), r1);
+        S[i] += delta;
     }
 
     int32_t sum(uint32_t i) const {
         assert(i < 64);
         uint32_t j = i / 8;
         uint32_t k = i % 8;
+        assert(U[0] == 0);
         int32_t s = U[j];
 
 #if __linux__
         static int32_t tmp[4];
 #endif
-
-        __m128i r2 = _mm_loadu_si128((__m128i const*)(S + j * 8));
-        r2 = _mm_add_epi32(r2, _mm_slli_si128(r2, 4));
-        r2 = _mm_add_epi32(r2, _mm_slli_si128(r2, 8));
+        __m128i r1 = _mm_loadu_si128((__m128i const*)(S + j * 8));
+        r1 = _mm_add_epi32(r1, _mm_slli_si128(r1, 4));
+        r1 = _mm_add_epi32(r1, _mm_slli_si128(r1, 8));
 
         if (k < 4) {
 #if __linux__
-            // NOTE: gcc does not support _mm_extract_epi32 with variable index,
-            // so we need to store :/
-            _mm_store_si128((__m128i*)(tmp), r2);
+            // NOTE: gcc does not support
+            // _mm_extract_epi32 with variable index,
+            // thus we need to store :(
+            _mm_store_si128((__m128i*)(tmp), r1);
             s += tmp[k];
 #else
-            s += _mm_extract_epi32(r2, k);
+            s += _mm_extract_epi32(r1, k);
 #endif
         } else {
-            int32_t last = _mm_extract_epi32(r2, 3);
+            int32_t last = _mm_extract_epi32(r1, 3);
             __m128i r2 = _mm_loadu_si128((__m128i const*)(S + j * 8 + 4));
             r2 = _mm_add_epi32(r2, _mm_slli_si128(r2, 4));
             r2 = _mm_add_epi32(r2, _mm_slli_si128(r2, 8));
