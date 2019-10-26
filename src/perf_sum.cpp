@@ -3,7 +3,7 @@
 
 #include "perf_test_common.hpp"
 
-using namespace dps;
+using namespace psds;
 
 template <typename Tree>
 void perf_test() {

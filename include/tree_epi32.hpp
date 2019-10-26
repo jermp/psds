@@ -6,7 +6,7 @@
 
 #include "macros.hpp"
 
-namespace dps {
+namespace psds {
 
 template <typename Node>
 struct tree_epi32 {
@@ -126,4 +126,4 @@ private:
     std::vector<uint8_t> m_data;
 };
 
-}  // namespace dps
+}  // namespace psds

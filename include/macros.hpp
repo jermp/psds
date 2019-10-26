@@ -1,6 +1,6 @@
 #pragma once
 
-namespace dps {
+namespace psds {
 
 #define SQARED(degree) ((degree) * (degree))
 #define CUBED(degree) ((degree) * (degree) * (degree))
@@ -93,4 +93,4 @@ namespace dps {
     node3.update(child3, delta);                                           \
     node4.update(child4, delta);
 
-}  // namespace dps
+}  // namespace psds

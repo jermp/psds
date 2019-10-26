@@ -4,7 +4,7 @@
 #include "node256u.hpp"
 #include "node256s.hpp"
 
-using namespace dps;
+using namespace psds;
 
 template <typename Node>
 void test(std::vector<int32_t>& A) {

@@ -7,7 +7,7 @@
 #include "immintrin.h"
 #include "tables.hpp"
 
-namespace dps {
+namespace psds {
 
 struct node256s {
     static constexpr int8_t max_update = std::numeric_limits<int8_t>::max();
@@ -101,4 +101,4 @@ private:
     int32_t* S;
 };
 
-}  // namespace dps
+}  // namespace psds

@@ -8,7 +8,7 @@
 #endif
 #endif
 
-namespace dps {
+namespace psds {
 
 static const int32_t T_L[128] ALIGNED(16) = {
     +1, +1, +1, +1, +1, +1, +1, +1, 0,  +1, +1, +1, +1, +1, +1, +1, 0,  0,  +1,
@@ -175,4 +175,4 @@ const uint64_t masks[132] ALIGNED(16) = {
     0xffffffffffffffff, 0x00ffffffffffffff, 0xffffffffffffffff,
     0xffffffffffffffff, 0xffffffffffffffff, 0xffffffffffffffff};
 
-}  // namespace dps
+}  // namespace psds

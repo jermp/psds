@@ -6,7 +6,7 @@
 #include "immintrin.h"
 #include "tables.hpp"
 
-namespace dps {
+namespace psds {
 
 struct node256u {
     static constexpr uint32_t degree = 256;
@@ -93,4 +93,4 @@ private:
     int32_t* S;
 };
 
-}  // namespace dps
+}  // namespace psds
