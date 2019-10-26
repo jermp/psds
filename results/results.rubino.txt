@@ -1,0 +1,50 @@
+performing 1000000 SUM queries
+node_epi32 -- 3230874114
+Mean per run: 656.8 [musec]
+Mean per query: 0.6568 [ns]
+performing 1000000 SUM queries
+Prefix Sum 256 (SIMD) -- 3230874114
+Mean per run: 3415.4 [musec]
+Mean per query: 3.4154 [ns]
+performing 1000000 SUM queries
+Segment Tree Vanilla -- 3230874114
+Mean per run: 24210.8 [musec]
+Mean per query: 24.2108 [ns]
+performing 1000000 SUM queries
+Fenwick Tree -- 3230874114
+Mean per run: 7198.4 [musec]
+Mean per query: 7.1984 [ns]
+
+performing 1000000 UPDATE queries
+node_epi32 -- 1247
+Mean per run: 2670.67 [musec]
+Mean per query: 2.67067 [ns]
+performing 1000000 UPDATE queries
+Prefix Sum 256 (SIMD) -- 1247
+Mean per run: 1232.33 [musec]
+Mean per query: 1.23233 [ns]
+performing 1000000 UPDATE queries
+Segment Tree Vanilla -- 1247
+Mean per run: 21156.3 [musec]
+Mean per query: 21.1563 [ns]
+performing 1000000 UPDATE queries
+Fenwick Tree -- 1247
+Mean per run: 8228.67 [musec]
+Mean per query: 8.22867 [ns]
+
+performing 1000000 mixed SUM/UPDATE queries
+node_epi32 -- -4113
+Mean per run: 4346.33 [musec]
+Mean per query: 4.34633 [ns]
+performing 1000000 mixed SUM/UPDATE queries
+Prefix Sum 256 (SIMD) -- -4113
+Mean per run: 4001.67 [musec]
+Mean per query: 4.00167 [ns]
+performing 1000000 mixed SUM/UPDATE queries
+Segment Tree Vanilla -- -4113
+Mean per run: 23213.3 [musec]
+Mean per query: 23.2133 [ns]
+performing 1000000 mixed SUM/UPDATE queries
+Fenwick Tree -- -4113
+Mean per run: 7118 [musec]
+Mean per query: 7.118 [ns]
