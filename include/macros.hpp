@@ -5,9 +5,10 @@ namespace psds {
 #define SQARED(degree) ((degree) * (degree))
 #define CUBED(degree) ((degree) * (degree) * (degree))
 
-#define SUM_H1        \
-    Node node(m_ptr); \
-    int32_t s1 = node.sum(i);
+#define SUM_H1                \
+    Node node(m_ptr);         \
+    int32_t s1 = node.sum(i); \
+    return s1;
 
 #define SUM_H2(degree)                               \
     uint32_t child1 = i / degree;                    \
@@ -15,7 +16,8 @@ namespace psds {
     Node node1(m_ptr);                               \
     Node node2(m_ptr + (1 + child1) * Node::size);   \
     int32_t s1 = child1 ? node1.sum(child1 - 1) : 0; \
-    int32_t s2 = node2.sum(child2);
+    int32_t s2 = node2.sum(child2);                  \
+    return s1 + s2;
 
 #define SUM_H3(degree)                                                     \
     uint32_t child1 = i / SQARED(degree);                                  \
@@ -28,7 +30,8 @@ namespace psds {
                    Node::size);                                            \
     int32_t s1 = child1 ? node1.sum(child1 - 1) : 0;                       \
     int32_t s2 = child2 ? node2.sum(child2 - 1) : 0;                       \
-    int32_t s3 = node3.sum(child3);
+    int32_t s3 = node3.sum(child3);                                        \
+    return s1 + s2 + s3;
 
 #define SUM_H4(degree)                                                     \
     uint32_t child1 = i / CUBED(degree);                                   \
@@ -47,7 +50,8 @@ namespace psds {
     int32_t s1 = child1 ? node1.sum(child1 - 1) : 0;                       \
     int32_t s2 = child2 ? node2.sum(child2 - 1) : 0;                       \
     int32_t s3 = child3 ? node3.sum(child3 - 1) : 0;                       \
-    int32_t s4 = node4.sum(child4);
+    int32_t s4 = node4.sum(child4);                                        \
+    return s1 + s2 + s3 + s4;
 
 #define UPDATE_H1     \
     Node node(m_ptr); \

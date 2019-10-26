@@ -12,9 +12,12 @@
 
 namespace psds {
 
-typedef tree_epi32<node256u> tree256u;
-typedef tree_epi32<node256s> tree256s;
-typedef tree_epi32<node64u> tree64u;
-typedef tree_epi32<node64s> tree64s;
+// typedef tree_epi32<node256u> tree256u;
+// typedef tree_epi32<node256s> tree256s;
+// typedef tree_epi32<node64u> tree64u;
+// typedef tree_epi32<node64s> tree64s;
+
+typedef segment_tree_vanilla<int32_t> segment_tree_type;
+typedef fenwick_tree<int32_t> fenwick_tree_type;
 
 }  // namespace psds
