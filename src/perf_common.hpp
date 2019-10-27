@@ -1,6 +1,9 @@
 #pragma once
 
+#include <iostream>
+#include <random>
 #include <fstream>
+
 #include "../external/essentials/include/essentials.hpp"
 #include "types.hpp"
 

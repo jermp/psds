@@ -1,7 +1,4 @@
-#include <iostream>
-#include <random>
-
-#include "perf_test_common.hpp"
+#include "perf_common.hpp"
 
 using namespace psds;
 
