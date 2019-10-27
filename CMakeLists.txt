@@ -28,6 +28,5 @@ endif()
 
 include_directories(${PSDS_SOURCE_DIR}/include)
 
-#add_subdirectory(external)
 add_subdirectory(src)
 add_subdirectory(test)

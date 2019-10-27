@@ -1,5 +1,5 @@
 Prefix-Sum Data Structures
-===
+------
 
 Given an array S[0..n), we want to solve
 the prefix sums problem.
@@ -92,36 +92,36 @@ The library implements the following solutions.
 	  compute prefix sums on both L and B.
 
 
-	TODO
-	----
+TODO
+------
 
-	1. Blocked Fenwick trees: blocks of *k* integers are 	   indexed using the Fenwick tree layout.
-	   During a traversal of the tree, we compute the sum
-	   or update a block, before proceeding downwards.
-	   The blocks
-	   can be stored in prefix-sum (for faster Sum operation)
-	   or not (for faster Update operation), thus giving
-	   a similar trade-off already established for the segment
-	   tree.
-	   The block factor, i.e., *k*, should be chosen so that
-	   *k* integers fit in a cache line.
-	   Assuming a typical cache line size of 64 B and 32-bit
-	   keys, then *k* = 16.
-	   Maybe *k* = 8 may be more covenient because
-	   if we keep the blocks prefix-summed, then
-	   updating can be done with SIMD using 256-bit registers.
-	   (See `node64u`).
+1. Blocked Fenwick trees: blocks of *k* integers are 	   indexed using the Fenwick tree layout.
+   During a traversal of the tree, we compute the sum
+   or update a block, before proceeding downwards.
+   The blocks
+   can be stored in prefix-sum (for faster Sum operation)
+   or not (for faster Update operation), thus giving
+   a similar trade-off already established for the segment
+   tree.
+   The block factor, i.e., *k*, should be chosen so that
+   *k* integers fit in a cache line.
+   Assuming a typical cache line size of 64 B and 32-bit
+   keys, then *k* = 16.
+   Maybe *k* = 8 may be more covenient because
+   if we keep the blocks prefix-summed, then
+   updating can be done with SIMD using 256-bit registers.
+   (See `node64u`).
 
-	2. Truncated Fenwick trees: we divide S into blocks
-	   of size 256. Then the k = ceil(n / 256) blocks
-	   become the leaves of a fenwick tree.
-	   Thus we use a traditional (binary? or maybe blocked)
-	   Fenwick tree truncated as soon as we reduced the range
-	   down to 256.
-	   The leaves use the node's implementations already
-	   developed for the segment trees.
-	   The nodes of the Fenwick tree will store the prefix
-	   sums of the blocks.
-	   Thus we will have two families of algorithms:
-	   the one based on segment trees; the ones based on
-	   Fenwick trees.
+2. Truncated Fenwick trees: we divide S into blocks
+   of size 256. Then the k = ceil(n / 256) blocks
+   become the leaves of a fenwick tree.
+   Thus we use a traditional (binary? or maybe blocked)
+   Fenwick tree truncated as soon as we reduced the range
+   down to 256.
+   The leaves use the node's implementations already
+   developed for the segment trees.
+   The nodes of the Fenwick tree will store the prefix
+   sums of the blocks.
+   Thus we will have two families of algorithms:
+   the one based on segment trees; the ones based on
+   Fenwick trees.
