@@ -35,7 +35,6 @@ struct tree_epi32 {
         }
         m_ptr = m_data.data() + Height * 4;
 
-        typename Node::builder builder;
         std::vector<int32_t> tmp(Node::degree);
         uint8_t* begin = m_data.data() + total_size;
 
@@ -52,7 +51,7 @@ struct tree_epi32 {
                     }
                     tmp[k] = sum;
                 }
-                builder.build(tmp.data(), begin + i * Node::size);
+                Node::build(tmp.data(), begin + i * Node::size);
             }
         }
     }
@@ -67,33 +66,22 @@ struct tree_epi32 {
 
     void update(uint32_t i, int8_t delta) {
         assert(i < size());
-        if constexpr (Height == 1) {
-            UPDATE_H1
-        } else if constexpr (Height == 2) {
-            UPDATE_H2(Node::degree)
-        } else if constexpr (Height == 3) {
-            UPDATE_H3(Node::degree)
-        } else if constexpr (Height == 4) {
-            UPDATE_H4(Node::degree)
-        }
+        if constexpr (Height == 1) { UPDATE_H1 }
+        if constexpr (Height == 2) { UPDATE_H2 }
+        if constexpr (Height == 3) { UPDATE_H3 }
+        if constexpr (Height == 4) { UPDATE_H4 }
         assert(false);
         __builtin_unreachable();
     }
 
     int32_t sum(uint32_t i) const {
         assert(i < size());
-        if constexpr (Height == 1) {
-            SUM_H1
-        } else if constexpr (Height == 2) {
-            SUM_H2(Node::degree)
-        } else if constexpr (Height == 3) {
-            SUM_H3(Node::degree)
-        } else if constexpr (Height == 4) {
-            SUM_H4(Node::degree)
-        }
+        if constexpr (Height == 1) { SUM_H1 }
+        if constexpr (Height == 2) { SUM_H2 }
+        if constexpr (Height == 3) { SUM_H3 }
+        if constexpr (Height == 4) { SUM_H4 }
         assert(false);
         __builtin_unreachable();
-        return 0;
     }
 
 private:

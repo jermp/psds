@@ -2,10 +2,7 @@
 #include <vector>
 
 #include "../external/essentials/include/essentials.hpp"
-#include "node256u.hpp"
-#include "node256s.hpp"
-#include "node64u.hpp"
-#include "node64s.hpp"
+#include "types.hpp"
 
 using namespace psds;
 
@@ -14,23 +11,20 @@ void test() {
     essentials::uniform_int_rng<int32_t> distr(-100, 100,
                                                essentials::get_random_seed());
     std::vector<int32_t> A(Node::degree);
-    std::generate(A.begin(), A.end(), [&] { return distr.gen(); });
-
-    typename Node::builder builder;
     std::vector<uint8_t> out(Node::size);
-    builder.build(A.data(), out.data());
+    std::generate(A.begin(), A.end(), [&] { return distr.gen(); });
+    Node::build(A.data(), out.data());
     Node n(out.data());
 
     std::cout << "sum queries" << std::endl;
     for (uint32_t i = 0; i != Node::degree; ++i) {
         int32_t s = n.sum(i);
         int32_t expected = 0;
-        for (uint32_t k = 0; k != i + 1; ++k) {
-            expected += A[k];
-        }
+        for (uint32_t k = 0; k != i + 1; ++k) expected += A[k];
         if (s != expected) {
             std::cout << "got sum(" << i << ") = " << s << " but expected "
                       << expected << std::endl;
+            return;
         }
     }
 
@@ -41,13 +35,12 @@ void test() {
             int32_t s = n.sum(i);
             A[i] += 1;
             int32_t expected = 0;
-            for (uint32_t k = 0; k != i + 1; ++k) {
-                expected += A[k];
-            }
+            for (uint32_t k = 0; k != i + 1; ++k) expected += A[k];
             if (s != expected) {
                 std::cout << "error at run " << run << std::endl;
                 std::cout << "got sum(" << i << ") = " << s << " but expected "
                           << expected << std::endl;
+                return;
             }
         }
     }
@@ -59,16 +52,17 @@ void test() {
             int32_t s = n.sum(i);
             A[i] -= 1;
             int32_t expected = 0;
-            for (uint32_t k = 0; k != i + 1; ++k) {
-                expected += A[k];
-            }
+            for (uint32_t k = 0; k != i + 1; ++k) expected += A[k];
             if (s != expected) {
                 std::cout << "error at run " << run << std::endl;
                 std::cout << "got sum(" << i << ") = " << s << " but expected "
                           << expected << std::endl;
+                return;
             }
         }
     }
+
+    std::cout << "everything's good" << std::endl;
 }
 
 int main(int argc, char** argv) {

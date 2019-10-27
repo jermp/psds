@@ -14,31 +14,29 @@ struct node64s {
     static constexpr uint32_t block_size = 8 * 4;
     static constexpr uint32_t size = U_size + 8 * block_size;
 
-    struct builder {
-        void build(int32_t const* input, uint8_t* out) {
-            std::fill(out, out + size, 0);
-            int32_t* U = reinterpret_cast<int32_t*>(out);
-            int32_t* S = reinterpret_cast<int32_t*>(out + U_size);
-            U[0] = 0;
-            for (uint32_t i = 0; i != 8; ++i) {
-                uint32_t base = i * 8;
-                int32_t sum = 0;
-                for (uint32_t j = 0; j != 8; ++j) {
-                    S[base + j] = input[base + j];
-                    sum += input[base + j];
-                }
-                U[i + 1] = U[i] + sum;
+    static void build(int32_t const* input, uint8_t* out) {
+        std::fill(out, out + size, 0);
+        int32_t* U = reinterpret_cast<int32_t*>(out);
+        int32_t* S = reinterpret_cast<int32_t*>(out + U_size);
+        U[0] = 0;
+        for (uint32_t i = 0; i != 8; ++i) {
+            uint32_t base = i * 8;
+            int32_t sum = 0;
+            for (uint32_t j = 0; j != 8; ++j) {
+                S[base + j] = input[base + j];
+                sum += input[base + j];
             }
+            U[i + 1] = U[i] + sum;
         }
-    };
-
-    node64s(uint8_t* ptr) {
-        U = reinterpret_cast<int32_t*>(ptr);
-        S = reinterpret_cast<int32_t*>(ptr + U_size);
     }
 
     static std::string name() {
         return "node64s";
+    }
+
+    node64s(uint8_t* ptr) {
+        U = reinterpret_cast<int32_t*>(ptr);
+        S = reinterpret_cast<int32_t*>(ptr + U_size);
     }
 
     void update(uint32_t i, int8_t delta) {

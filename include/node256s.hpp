@@ -18,16 +18,12 @@ struct node256s {
     static constexpr uint32_t S_size = 256 * 4;
     static constexpr uint32_t size = L_size + B_size + S_size;
 
-    struct builder {
-        void build(int32_t const* input, uint8_t* out) {
-            std::fill(out, out + size, 0);
-            int32_t* S = reinterpret_cast<int32_t*>(out + L_size + B_size);
-            S[0] = input[0];
-            for (uint32_t i = 1; i != 256; ++i) {
-                S[i] = S[i - 1] + input[i];
-            }
-        }
-    };
+    static void build(int32_t const* input, uint8_t* out) {
+        std::fill(out, out + size, 0);
+        int32_t* S = reinterpret_cast<int32_t*>(out + L_size + B_size);
+        S[0] = input[0];
+        for (uint32_t i = 1; i != 256; ++i) S[i] = S[i - 1] + input[i];
+    }
 
     node256s(uint8_t* ptr) {
         L = reinterpret_cast<int16_t*>(ptr);
@@ -52,9 +48,7 @@ struct node256s {
                 S[i] += sum;
                 B[i] = 0;
             }
-            for (uint32_t i = 0; i != 8; ++i) {
-                L[i] = 0;
-            }
+            for (uint32_t i = 0; i != 8; ++i) L[i] = 0;
         }
 
         L[i / 32] += delta;

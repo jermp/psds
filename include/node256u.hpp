@@ -16,23 +16,24 @@ struct node256u {
     static constexpr uint32_t S_size = 256 * 4;
     static constexpr uint32_t size = U_size + L_size + B_size + S_size;
 
-    struct builder {
-        void build(int32_t const* input, uint8_t* out) {
-            std::fill(out, out + size, 0);
-            int32_t* L = reinterpret_cast<int32_t*>(out + U_size);
-            int32_t* S =
-                reinterpret_cast<int32_t*>(out + U_size + L_size + B_size);
-            L[0] = 0;
-            for (uint32_t i = 0; i != 8; ++i) {
-                uint32_t base = i * 32;
-                S[base] = input[base];
-                for (uint32_t j = 1; j != 32; ++j) {
-                    S[base + j] = S[base + j - 1] + input[base + j];
-                }
-                L[i + 1] = L[i] + S[(i + 1) * 32 - 1];
+    static void build(int32_t const* input, uint8_t* out) {
+        std::fill(out, out + size, 0);
+        int32_t* L = reinterpret_cast<int32_t*>(out + U_size);
+        int32_t* S = reinterpret_cast<int32_t*>(out + U_size + L_size + B_size);
+        L[0] = 0;
+        for (uint32_t i = 0; i != 8; ++i) {
+            uint32_t base = i * 32;
+            S[base] = input[base];
+            for (uint32_t j = 1; j != 32; ++j) {
+                S[base + j] = S[base + j - 1] + input[base + j];
             }
+            L[i + 1] = L[i] + S[(i + 1) * 32 - 1];
         }
-    };
+    }
+
+    static std::string name() {
+        return "node256u";
+    }
 
     node256u(uint8_t* ptr) {
         U = reinterpret_cast<uint32_t*>(ptr);
@@ -42,10 +43,6 @@ struct node256u {
         B = reinterpret_cast<int8_t*>(ptr);
         ptr += B_size;
         S = reinterpret_cast<int32_t*>(ptr);
-    }
-
-    static std::string name() {
-        return "node256u";
     }
 
     void update(uint32_t i, int8_t delta) {
@@ -64,7 +61,7 @@ struct node256u {
         }
 
         // NOTE: _mm256_lddqu_si256 instead of _mm256_loadu_si256
-        // made the code 2X slower on Linux
+        // made the code 2X slower on Linux :(
 
         // first level
         __m256i s1 = _mm256_load_si256((__m256i const*)T_L + j + sign * 8);

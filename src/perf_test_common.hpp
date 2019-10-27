@@ -9,7 +9,11 @@ namespace benchmarking {
 
 static constexpr uint32_t num_queries = 1000000;
 static constexpr uint32_t max_log = 24;
+static constexpr unsigned value_seed = 13;
+static constexpr unsigned query_seed = 71;
+static constexpr unsigned posit_seed = 89;
 
+static constexpr int8_t deltas[] = {+1, -1};
 static constexpr uint32_t logs[] = {8,  9,  10, 11, 12, 13, 14, 15, 16,
                                     17, 18, 19, 20, 21, 22, 23, 24};
 
@@ -28,14 +32,17 @@ static constexpr uint32_t degree64_heights[] = {
     4,  // size = 2^i, with i in [19,24]
     4, 4, 4, 4, 4};
 
+#define GEN_TYPE_NODE256(i, Node) \
+    tree_epi32<benchmarking::degree256_heights[i], Node>
+#define GEN_TYPE_NODE64(i, Node) \
+    tree_epi32<benchmarking::degree64_heights[i], Node>
+
 #define MAIN                                          \
     if (argc < 2) {                                   \
         std::cout << argv[0] << " type" << std::endl; \
         return 1;                                     \
     }                                                 \
-                                                      \
     std::string type = argv[1];                       \
-                                                      \
     if (type == "tree256u") {                         \
         perf_test_tree_epi32_node256<node256u>();     \
     } else if (type == "tree256s") {                  \
@@ -44,7 +51,7 @@ static constexpr uint32_t degree64_heights[] = {
         perf_test_tree_epi32_node64<node64u>();       \
     } else if (type == "tree64s") {                   \
         perf_test_tree_epi32_node64<node64s>();       \
-    } else if (type == "stv") {                       \
+    } else if (type == "st") {                        \
         perf_test_competitor<segment_tree_type>();    \
     } else if (type == "ft") {                        \
         perf_test_competitor<fenwick_tree_type>();    \
