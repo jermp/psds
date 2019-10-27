@@ -1,3 +1,6 @@
 [submodule "external/essentials"]
 	path = external/essentials
 	url = https://github.com/jermp/essentials.git
+[submodule "external/doctest"]
+	path = external/doctest
+	url = https://github.com/onqtam/doctest.git

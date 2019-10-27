@@ -29,4 +29,11 @@ endif()
 include_directories(${PSDS_SOURCE_DIR}/include)
 
 add_subdirectory(src)
-add_subdirectory(test)
+
+enable_testing()
+file(GLOB TEST_SOURCES test/test_*.cpp)
+foreach(TEST_SRC ${TEST_SOURCES})
+  get_filename_component (TEST_SRC_NAME ${TEST_SRC} NAME_WE) # without extension
+  add_executable(${TEST_SRC_NAME} ${TEST_SRC})
+  add_test(${TEST_SRC_NAME} ${TEST_SRC_NAME})
+endforeach(TEST_SRC)
