@@ -17,15 +17,18 @@ static constexpr unsigned query_seed = 71;
 static constexpr unsigned posit_seed = 89;
 
 static constexpr int8_t deltas[] = {+1, -1};
-static constexpr uint32_t logs[] = {8,  9,  10, 11, 12, 13, 14, 15, 16,
-                                    17, 18, 19, 20, 21, 22, 23, 24};
+static constexpr uint32_t logs[] = {8,  9,  10, 11, 12, 13, 14, 15,
+                                    16, 17, 18, 19, 20, 21, 22, 23,
+                                    24, 25, 26, 27, 28, 29, 30, 31};
 
 static constexpr uint32_t degree256_heights[] = {
     1,  // size = 2^8
     2,  // size = 2^i, with i in [9,16]
     2, 2, 2, 2, 2, 2, 2,
     3,  // size = 2^i, with i in [17,24]
-    3, 3, 3, 3, 3, 3, 3};
+    3, 3, 3, 3, 3, 3, 3,
+    4,  // size = 2^i, with i in [25,31]
+    4, 4, 4, 4, 4, 4};
 
 static constexpr uint32_t degree64_heights[] = {
     2,  // size = 2^i, with i in [8,12]
