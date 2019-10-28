@@ -92,10 +92,35 @@ The library implements the following solutions.
 	  compute prefix sums on both L and B.
 
 
+Results
+------
+
+By looking at the plots in `script`, we can express the following considerations.
+
+1. The binary segment tree is always outperformed by both the (binary) fenwick tree
+   and the non-binary SIMD-ized segment trees (`tree_epi32`).
+
+2. SIMD instructions are more useful when executing updates rather than prefix sums.
+   This is valid for both buffered (`*node256*`) and un-buffered (`*node64*`) segment trees.
+   This is evident by considering that the solution `tree_epi32_node256s` is not faster than
+   (or even worse for larger values of *n*) the (point-wise) fenwick tree;
+   but the solution `tree_epi32_node256u` is consisitently ~2X faster than the fenwick
+   tree on updates for all values of *n*. (The `tree_epi32_node256s` is ~4X faster than the
+   fenwick tree, though.)
+   This is because the code for computing prefix-sums using SIMD is more complicated than
+   and uses higher-latency instructions than the code performing update.
+
+3. Results for buffered vs. un-buffered segment trees are similar. The un-buffered
+   version can be slightly faster on some small values of *n* (`tree_epi32_node64u` is faster
+   than `tree_epi32_node256u` for log *n* = 9, 10, 11 on sum and
+   for log *n* = 9, 10, 11, 12 on update);
+   the buffered version is generally better on larger values of *n*.
+
 TODO
 ------
 
-1. Blocked Fenwick trees: blocks of *k* integers are 	   indexed using the Fenwick tree layout.
+1. Blocked Fenwick trees: blocks of *k* integers are
+   indexed using the Fenwick tree layout.
    During a traversal of the tree, we compute the sum
    or update a block, before proceeding downwards.
    The blocks
