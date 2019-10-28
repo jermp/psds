@@ -9,6 +9,7 @@
 #endif
 
 namespace psds {
+namespace tables {
 
 static const int32_t T_L[128] ALIGNED(32) = {
     +1, +1, +1, +1, +1, +1, +1, +1, 0,  +1, +1, +1, +1, +1, +1, +1, 0,  0,  +1,
@@ -19,7 +20,7 @@ static const int32_t T_L[128] ALIGNED(32) = {
     -1, 0,  0,  0,  0,  -1, -1, -1, -1, 0,  0,  0,  0,  0,  -1, -1, -1, 0,  0,
     0,  0,  0,  0,  -1, -1, 0,  0,  0,  0,  0,  0,  0,  -1};
 
-static const int8_t T_B[2048] ALIGNED(16) = {
+static const int8_t T_B[2048] ALIGNED(32) = {
     +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1,
     +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, 0,  +1, +1, +1, +1, +1,
     +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1,
@@ -175,4 +176,5 @@ const uint64_t masks[132] ALIGNED(16) = {
     0xffffffffffffffff, 0x00ffffffffffffff, 0xffffffffffffffff,
     0xffffffffffffffff, 0xffffffffffffffff, 0xffffffffffffffff};
 
+}  // namespace tables
 }  // namespace psds

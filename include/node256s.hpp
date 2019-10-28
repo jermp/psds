@@ -39,7 +39,7 @@ struct node256s {
 
     void update(uint32_t i, int8_t delta) {
         assert(i < 256);
-        assert(delta == 1 or delta == -1);
+        assert(delta == +1 or delta == -1);
 
         if (B[i] == max_update or B[i] == min_update) {
             int32_t sum = 0;
@@ -63,7 +63,7 @@ struct node256s {
         uint32_t k = i % 32;
 
         __m128i upd1 = _mm_lddqu_si128((__m128i*)L);
-        __m128i mask1 = _mm_load_si128((__m128i const*)(masks + j * 8));
+        __m128i mask1 = _mm_load_si128((__m128i const*)(tables::masks + j * 8));
         upd1 = _mm_and_si128(upd1, mask1);
         upd1 = _mm_madd_epi16(upd1, _mm_set1_epi16(1));
         upd1 = _mm_add_epi32(upd1, _mm_srli_si128(upd1, 8));
@@ -73,7 +73,7 @@ struct node256s {
 
         __m256i upd2 = _mm256_lddqu_si256((__m256i*)(B + (i & 0xe0)));
         __m256i mask2 =
-            _mm256_load_si256((__m256i const*)(masks + (1 + k) * 4));
+            _mm256_load_si256((__m256i const*)(tables::masks + (1 + k) * 4));
         upd2 = _mm256_and_si256(upd2, mask2);
         __m256i upd2_l =
             _mm256_cvtepi8_epi16(_mm256_extracti128_si256(upd2, 0));

@@ -47,6 +47,7 @@ struct node256u {
 
     void update(uint32_t i, int8_t delta) {
         assert(i < 256);
+        assert(delta == +1 or delta == -1);
 
         uint32_t j = i / 32;
         uint32_t k = i % 32;
@@ -64,13 +65,15 @@ struct node256u {
         // made the code 2X slower on Linux :(
 
         // first level
-        __m256i s1 = _mm256_load_si256((__m256i const*)T_L + j + sign * 8);
+        __m256i s1 =
+            _mm256_load_si256((__m256i const*)tables::T_L + j + sign * 8);
         __m256i d1 = _mm256_loadu_si256((__m256i const*)(L + 1));
         __m256i r1 = _mm256_add_epi32(d1, s1);
         _mm256_storeu_si256((__m256i*)(L + 1), r1);
 
         // second level
-        __m256i s2 = _mm256_load_si256((__m256i const*)T_B + k + sign * 32);
+        __m256i s2 =
+            _mm256_load_si256((__m256i const*)tables::T_B + k + sign * 32);
         __m256i d2 = _mm256_loadu_si256((__m256i const*)(B + j * 32));
         __m256i r2 = _mm256_add_epi8(d2, s2);
         _mm256_storeu_si256((__m256i*)(B + j * 32), r2);

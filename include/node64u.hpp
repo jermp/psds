@@ -40,17 +40,20 @@ struct node64u {
 
     void update(uint32_t i, int8_t delta) {
         assert(i < 64);
+        assert(delta == +1 or delta == -1);
 
         uint32_t j = i / 8;
         uint32_t k = i % 8;
         bool sign = delta >> 7;
 
-        __m256i s1 = _mm256_load_si256((__m256i const*)T_L + j + sign * 8);
+        __m256i s1 =
+            _mm256_load_si256((__m256i const*)tables::T_L + j + sign * 8);
         __m256i d1 = _mm256_loadu_si256((__m256i const*)(U + 1));
         __m256i r1 = _mm256_add_epi32(d1, s1);
         _mm256_storeu_si256((__m256i*)(U + 1), r1);
 
-        __m256i s2 = _mm256_load_si256((__m256i const*)T_L + k + sign * 8);
+        __m256i s2 =
+            _mm256_load_si256((__m256i const*)tables::T_L + k + sign * 8);
         __m256i d2 = _mm256_loadu_si256((__m256i const*)(S + j * 8));
         __m256i r2 = _mm256_add_epi32(d2, s2);
         _mm256_storeu_si256((__m256i*)(S + j * 8), r2);
