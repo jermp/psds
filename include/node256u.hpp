@@ -10,7 +10,7 @@ namespace psds {
 
 struct node256u {
     static constexpr uint32_t degree = 256;
-    static constexpr uint32_t U_size = 4;
+    static constexpr uint32_t U_size = 1;
     static constexpr uint32_t L_size = 8 * 4 + 4;
     static constexpr uint32_t B_size = 256;
     static constexpr uint32_t S_size = 256 * 4;
@@ -36,7 +36,7 @@ struct node256u {
     }
 
     node256u(uint8_t* ptr) {
-        U = reinterpret_cast<uint32_t*>(ptr);
+        U = ptr;
         ptr += U_size;
         L = reinterpret_cast<int32_t*>(ptr);
         ptr += L_size;
@@ -61,17 +61,12 @@ struct node256u {
             *U = 0;
         }
 
-        // NOTE: _mm256_lddqu_si256 instead of _mm256_loadu_si256
-        // made the code 2X slower on Linux :(
-
-        // first level
         __m256i s1 =
             _mm256_load_si256((__m256i const*)tables::T_L + j + sign * 8);
         __m256i d1 = _mm256_loadu_si256((__m256i const*)(L + 1));
         __m256i r1 = _mm256_add_epi32(d1, s1);
         _mm256_storeu_si256((__m256i*)(L + 1), r1);
 
-        // second level
         __m256i s2 =
             _mm256_load_si256((__m256i const*)tables::T_B + k + sign * 32);
         __m256i d2 = _mm256_loadu_si256((__m256i const*)(B + j * 32));
@@ -87,7 +82,7 @@ struct node256u {
     }
 
 private:
-    uint32_t* U;
+    uint8_t* U;
     int32_t* L;
     int8_t* B;
     int32_t* S;
