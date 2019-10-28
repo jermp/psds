@@ -4,6 +4,8 @@
 #include <vector>
 #include <cassert>
 
+namespace psds {
+
 #define left(index) 2 * index + 1
 #define right(index) 2 * index + 2
 
@@ -77,14 +79,14 @@ struct segment_tree_vanilla {
         T sum = 0;
 
         size_t a = ancestor(i);
-        assert(a >= 0 && a < pow(2, height - 2));
+        assert(a >= 0 and a < pow(2, height - 2));
 
         size_t start = 0, end = second_last_level_size - 1;
         size_t index = 0;
         // Compute the sum as if the tree ended at the second-last level
         // It can be considered as always balanced
         for (size_t j = 0; j < height - 1; j++) {
-            assert(start <= a && a <= end);
+            assert(start <= a and a <= end);
             if (a == end) {
                 sum += tree[index];
                 break;
@@ -102,13 +104,11 @@ struct segment_tree_vanilla {
         }
 
         size_t ei = ancestor_interval_end(a);
-        assert(ei >= i && ei <= i + 3);
+        assert(ei >= i and ei <= i + 3);
 
         // The previous for could have added to sum some values, connected to
         // 'a', that are outside the [0,i] interval
-        for (; ei > i; ei--) {
-            sum -= data[ei];
-        }
+        for (; ei > i; ei--) sum -= data[ei];
 
         return sum;
     }
@@ -126,9 +126,7 @@ struct segment_tree_vanilla {
         // to update them
         for (size_t j = 0; j < height - 1; j++) {
             size_t mid = (start + end) / 2;
-
             tree[index] += val;
-
             if (a > mid) {
                 start = mid + 1;
                 index = right(index);
@@ -159,3 +157,5 @@ private:
     size_t second_last_level_size, last_level_size;
     size_t gamma;
 };
+
+}  // namespace psds

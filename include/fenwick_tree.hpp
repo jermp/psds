@@ -2,6 +2,8 @@
 
 #include <vector>
 
+namespace psds {
+
 template <typename T>
 struct fenwick_tree {
     fenwick_tree() {}
@@ -22,32 +24,13 @@ struct fenwick_tree {
 
     T sum(size_t i) const {
         assert(i < fw_tree.size());
-
         T sum = fw_tree[0];
         for (int64_t k = i; k > 0; k &= k - 1) sum += fw_tree[k];
         return sum;
-
-        // T sum = fw_tree[0];
-        // int ones = _mm_popcnt_u64(i);
-        // for (int j = 0; j < ones; j++) {
-        //     sum += fw_tree[i];
-        //     i = i & (i - 1);
-        // }
-        // return sum;
     }
 
     void update(size_t i, T val) {
         assert(i < fw_tree.size());
-
-        // if (i == 0)
-        //     fw_tree[0] += val;
-        // else {
-        //     do {
-        //         fw_tree[i] += val;
-        //         i += i & (-i);
-        //     } while (i < fw_tree.size());
-        // }
-
         if (i == 0) {
             fw_tree[0] += val;
             return;
@@ -58,3 +41,5 @@ struct fenwick_tree {
 private:
     std::vector<T> fw_tree;
 };
+
+}  // namespace psds

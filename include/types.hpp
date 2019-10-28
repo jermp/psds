@@ -1,14 +1,12 @@
 #pragma once
 
 #include "tree_epi32.hpp"
-
 #include "node256u.hpp"
 #include "node256s.hpp"
 #include "node64u.hpp"
 #include "node64s.hpp"
-
-#include "competitor/segment_tree_vanilla.hpp"
-#include "competitor/fenwick_tree.hpp"
+#include "segment_tree_vanilla.hpp"
+#include "fenwick_tree.hpp"
 
 namespace psds {
 
