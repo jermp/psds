@@ -39,7 +39,6 @@ struct node256s {
     void update(uint32_t i, int8_t delta) {
         assert(i < 256);
         assert(delta == +1 or delta == -1);
-
         if (B[i] == max_update or B[i] == min_update) {
             int32_t sum = 0;
             for (uint32_t i = 0; i != 256; ++i) {
@@ -49,7 +48,6 @@ struct node256s {
             }
             for (uint32_t i = 0; i != 8; ++i) L[i] = 0;
         }
-
         L[i / 32] += delta;
         B[i] += delta;
     }

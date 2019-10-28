@@ -43,6 +43,11 @@ struct node64u {
 
         uint32_t j = i / 8;
         uint32_t k = i % 8;
+
+#ifdef DISABLE_AVX
+        for (uint32_t z = j + 1; z != 8 + 1; ++z) U[z] += delta;
+        for (uint32_t z = k, base = j * 8; z != 8; ++z) S[base + z] += delta;
+#else
         bool sign = delta >> 7;
 
         __m256i s1 =
@@ -56,6 +61,7 @@ struct node64u {
         __m256i d2 = _mm256_loadu_si256((__m256i const*)(S + j * 8));
         __m256i r2 = _mm256_add_epi32(d2, s2);
         _mm256_storeu_si256((__m256i*)(S + j * 8), r2);
+#endif
     }
 
     int32_t sum(uint32_t i) const {

@@ -42,12 +42,16 @@ struct node64s {
         assert(i < 64);
         assert(delta == +1 or delta == -1);
         uint32_t j = i / 8;
+#ifdef DISABLE_AVX
+        for (uint32_t z = j + 1; z != 8 + 1; ++z) U[z] += delta;
+#else
         bool sign = delta >> 7;
         __m256i s1 =
             _mm256_load_si256((__m256i const*)tables::T_L + j + sign * 8);
         __m256i d1 = _mm256_loadu_si256((__m256i const*)(U + 1));
         __m256i r1 = _mm256_add_epi32(d1, s1);
         _mm256_storeu_si256((__m256i*)(U + 1), r1);
+#endif
         S[i] += delta;
     }
 
@@ -57,6 +61,10 @@ struct node64s {
         uint32_t k = i % 8;
         assert(U[0] == 0);
         int32_t s = U[j];
+
+#ifdef DISABLE_AVX
+        for (uint32_t z = 0, base = j * 8; z <= k; ++z) s += S[base + z];
+#else
 
 #if __linux__
         static int32_t tmp[4];
@@ -89,7 +97,7 @@ struct node64s {
             s += _mm_extract_epi32(r2, k - 4);
 #endif
         }
-
+#endif
         return s;
     }
 
