@@ -1,6 +1,5 @@
 #pragma once
 
-#include <algorithm>
 #include <cassert>
 
 #include "immintrin.h"
@@ -51,7 +50,6 @@ struct node256u {
 
         uint32_t j = i / 32;
         uint32_t k = i % 32;
-        bool sign = delta >> 7;
 
         if (*U == 127) {
             for (uint32_t i = 0; i != 256; ++i) {
@@ -60,6 +58,12 @@ struct node256u {
             }
             *U = 0;
         }
+
+#ifdef DISABLE_AVX
+        for (uint32_t z = j + 1; z != 8 + 1; ++z) L[z] += delta;
+        for (uint32_t z = k, base = j * 32; z != 32; ++z) B[base + z] += delta;
+#else
+        bool sign = delta >> 7;
 
         __m256i s1 =
             _mm256_load_si256((__m256i const*)tables::T_L + j + sign * 8);
@@ -72,12 +76,13 @@ struct node256u {
         __m256i d2 = _mm256_loadu_si256((__m256i const*)(B + j * 32));
         __m256i r2 = _mm256_add_epi8(d2, s2);
         _mm256_storeu_si256((__m256i*)(B + j * 32), r2);
-
+#endif
         *U += 1;
     }
 
     int32_t sum(uint32_t i) const {
         assert(i < 256);
+        assert(L[0] == 0);
         return L[i / 32] + B[i] + S[i];
     }
 

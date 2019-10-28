@@ -14,13 +14,13 @@ TEST_CASE("test tree_epi32_node64u") {
     test_tree<tree_epi32<3, node64u>>(size_t(1) << 14);
     test_tree<tree_epi32<3, node64u>>(size_t(1) << 15);
     test_tree<tree_epi32<3, node64u>>(size_t(1) << 16);
-    test_tree<tree_epi32<3, node64u>>(size_t(1) << 17);
-    test_tree<tree_epi32<3, node64u>>(size_t(1) << 18);
+    // test_tree<tree_epi32<3, node64u>>(size_t(1) << 17);
+    // test_tree<tree_epi32<3, node64u>>(size_t(1) << 18);
 
-    test_tree<tree_epi32<4, node64u>>(size_t(1) << 19);
-    test_tree<tree_epi32<4, node64u>>(size_t(1) << 20);
-    test_tree<tree_epi32<4, node64u>>(size_t(1) << 21);
-    test_tree<tree_epi32<4, node64u>>(size_t(1) << 22);
-    test_tree<tree_epi32<4, node64u>>(size_t(1) << 23);
-    test_tree<tree_epi32<4, node64u>>(size_t(1) << 24);
+    // test_tree<tree_epi32<4, node64u>>(size_t(1) << 19);
+    // test_tree<tree_epi32<4, node64u>>(size_t(1) << 20);
+    // test_tree<tree_epi32<4, node64u>>(size_t(1) << 21);
+    // test_tree<tree_epi32<4, node64u>>(size_t(1) << 22);
+    // test_tree<tree_epi32<4, node64u>>(size_t(1) << 23);
+    // test_tree<tree_epi32<4, node64u>>(size_t(1) << 24);
 }

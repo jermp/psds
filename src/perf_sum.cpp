@@ -52,7 +52,6 @@ void perf_test_tree_epi32_node256() {
     EXE_PERF_SUM(GEN_TYPE_NODE256(14, Node), 14)
     EXE_PERF_SUM(GEN_TYPE_NODE256(15, Node), 15)
     EXE_PERF_SUM(GEN_TYPE_NODE256(16, Node), 16)
-
     EXE_PERF_SUM(GEN_TYPE_NODE256(17, Node), 17)
     EXE_PERF_SUM(GEN_TYPE_NODE256(18, Node), 18)
     EXE_PERF_SUM(GEN_TYPE_NODE256(19, Node), 19)
@@ -122,7 +121,6 @@ void perf_test_competitor() {
     EXE_PERF_SUM(Tree, 14)
     EXE_PERF_SUM(Tree, 15)
     EXE_PERF_SUM(Tree, 16)
-
     EXE_PERF_SUM(Tree, 17)
     EXE_PERF_SUM(Tree, 18)
     EXE_PERF_SUM(Tree, 19)

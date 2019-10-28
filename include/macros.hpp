@@ -11,8 +11,8 @@ namespace psds {
     return s1;
 
 #define SUM_H2                                       \
-    uint32_t child1 = i / Node::degree;              \
-    uint32_t child2 = i % Node::degree;              \
+    uint64_t child1 = i / Node::degree;              \
+    uint64_t child2 = i % Node::degree;              \
     Node node1(m_ptr);                               \
     Node node2(m_ptr + (1 + child1) * Node::size);   \
     int32_t s1 = child1 ? node1.sum(child1 - 1) : 0; \
@@ -20,9 +20,9 @@ namespace psds {
     return s1 + s2;
 
 #define SUM_H3                                                   \
-    uint32_t child1 = i / SQARED(Node::degree);                  \
-    uint32_t child2 = (i % SQARED(Node::degree)) / Node::degree; \
-    uint32_t child3 = (i % SQARED(Node::degree)) % Node::degree; \
+    uint64_t child1 = i / SQARED(Node::degree);                  \
+    uint64_t child2 = (i % SQARED(Node::degree)) / Node::degree; \
+    uint64_t child3 = (i % SQARED(Node::degree)) % Node::degree; \
     Node node1(m_ptr);                                           \
     Node node2(m_ptr + (1 + child1) * Node::size);               \
     Node node3(m_ptr + (1 + m_num_nodes_per_level[1] + child2 +  \
@@ -34,10 +34,10 @@ namespace psds {
     return s1 + s2 + s3;
 
 #define SUM_H4                                                            \
-    uint32_t child1 = i / CUBED(Node::degree);                            \
-    uint32_t child2 = (i % CUBED(Node::degree)) / SQARED(Node::degree);   \
-    uint32_t child3 = (i % SQARED(Node::degree)) / Node::degree;          \
-    uint32_t child4 = (i % SQARED(Node::degree)) % Node::degree;          \
+    uint64_t child1 = i / CUBED(Node::degree);                            \
+    uint64_t child2 = (i % CUBED(Node::degree)) / SQARED(Node::degree);   \
+    uint64_t child3 = (i % SQARED(Node::degree)) / Node::degree;          \
+    uint64_t child4 = (i % SQARED(Node::degree)) % Node::degree;          \
     Node node1(m_ptr);                                                    \
     Node node2(m_ptr + (1 + child1) * Node::size);                        \
     Node node3(m_ptr + (1 + m_num_nodes_per_level[1] + child2 +           \
@@ -60,8 +60,8 @@ namespace psds {
     return;
 
 #define UPDATE_H2                                  \
-    uint32_t child1 = i / Node::degree;            \
-    uint32_t child2 = i % Node::degree;            \
+    uint64_t child1 = i / Node::degree;            \
+    uint64_t child2 = i % Node::degree;            \
     Node node1(m_ptr);                             \
     Node node2(m_ptr + (1 + child1) * Node::size); \
     node1.update(child1, delta);                   \
@@ -69,9 +69,9 @@ namespace psds {
     return;
 
 #define UPDATE_H3                                                \
-    uint32_t child1 = i / SQARED(Node::degree);                  \
-    uint32_t child2 = (i % SQARED(Node::degree)) / Node::degree; \
-    uint32_t child3 = (i % SQARED(Node::degree)) % Node::degree; \
+    uint64_t child1 = i / SQARED(Node::degree);                  \
+    uint64_t child2 = (i % SQARED(Node::degree)) / Node::degree; \
+    uint64_t child3 = (i % SQARED(Node::degree)) % Node::degree; \
     Node node1(m_ptr);                                           \
     Node node2(m_ptr + (1 + child1) * Node::size);               \
     Node node3(m_ptr + (1 + m_num_nodes_per_level[1] + child2 +  \
@@ -83,10 +83,10 @@ namespace psds {
     return;
 
 #define UPDATE_H4                                                         \
-    uint32_t child1 = i / CUBED(Node::degree);                            \
-    uint32_t child2 = (i % CUBED(Node::degree)) / SQARED(Node::degree);   \
-    uint32_t child3 = (i % SQARED(Node::degree)) / Node::degree;          \
-    uint32_t child4 = (i % SQARED(Node::degree)) % Node::degree;          \
+    uint64_t child1 = i / CUBED(Node::degree);                            \
+    uint64_t child2 = (i % CUBED(Node::degree)) / SQARED(Node::degree);   \
+    uint64_t child3 = (i % SQARED(Node::degree)) / Node::degree;          \
+    uint64_t child4 = (i % SQARED(Node::degree)) % Node::degree;          \
     Node node1(m_ptr);                                                    \
     Node node2(m_ptr + (1 + child1) * Node::size);                        \
     Node node3(m_ptr + (1 + m_num_nodes_per_level[1] + child2 +           \

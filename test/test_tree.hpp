@@ -5,16 +5,18 @@ namespace testing {
 
 template <typename Tree>
 void test_tree(size_t n) {
-    essentials::uniform_int_rng<int32_t> distr(-100, 100,
+    essentials::uniform_int_rng<int32_t> distr(-100, +100,
                                                essentials::get_random_seed());
-    std::cout << "testing " << Tree::name() << " with " << n << " nodes"
-              << std::endl;
+    std::cout << "== testing " << Tree::name() << " with " << n
+              << " nodes ==" << std::endl;
     std::vector<int32_t> A(n);
     std::generate(A.begin(), A.end(), [&] { return distr.gen(); });
     Tree tree;
+    essentials::logger("building tree...");
     tree.build(A.data(), n);
 
     {
+        essentials::logger("testing sum queries...");
         int32_t expected = 0;
         for (uint32_t i = 0; i != n; ++i) {
             int32_t got = tree.sum(i);
@@ -26,6 +28,8 @@ void test_tree(size_t n) {
     }
 
     auto update = [&](int8_t delta) {
+        essentials::logger("testing update " + std::to_string(int(delta)) +
+                           " queries...");
         static constexpr uint32_t queries = 5000;
         uint32_t step = n / queries;
         if (step == 0) step += 1;
