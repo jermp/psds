@@ -1,4 +1,6 @@
-import sys, json
+#!/bin/python
+
+import sys, json, argparse
 import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use('ggplot')
@@ -15,21 +17,29 @@ ax.set_xlabel('n', fontsize = 10)
 ax.set_xscale('log', basex = 2)
 ax.set_yscale('log', basey = 2)
 
-input_filename = sys.argv[1]
-output_filename = sys.argv[2]
+parser = argparse.ArgumentParser()
+parser.add_argument('input_filename', type = str, help = "Results filename.")
+parser.add_argument('output_filename', type = str, help = "Output filename.")
+parser.add_argument('min_log2', type = int, help = "Minimum value of log2(n). Must be at least 8.")
+args = parser.parse_args()
+
+if args.min_log2 < 8:
+  print("min_log2 must be at least 8")
+  exit(1)
 
 y = {}
 types = []
-with open(input_filename) as f:
+offset = args.min_log2 - 8
+with open(args.input_filename) as f:
     for line in f:
         parsed_line = json.loads(line)
         type = parsed_line["type"]
         types.append(type)
-        y[type] = parsed_line["timings"]
+        y[type] = parsed_line["timings"][offset:]
 
 x = []
-n = 256
-for i in range(0, len(y[types[0]])):
+n = pow(2, args.min_log2)
+for i in range(offset, len(y[types[0]]) + offset):
     x.append(n)
     n *= 2
 
@@ -49,6 +59,6 @@ ax.legend(
       loc=3, ncol=1,
       borderaxespad = 0.)
 
-pp = PdfPages(output_filename + '.pdf')
+pp = PdfPages(args.output_filename + '.pdf')
 pp.savefig(bbox_inches = 'tight')
 pp.close()
