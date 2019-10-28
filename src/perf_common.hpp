@@ -11,7 +11,7 @@ namespace psds {
 namespace benchmarking {
 
 static constexpr uint32_t num_queries = 1000000;
-static constexpr uint32_t max_log = 24;
+static constexpr uint32_t max_log = 31;
 static constexpr unsigned value_seed = 13;
 static constexpr unsigned query_seed = 71;
 static constexpr unsigned posit_seed = 89;
