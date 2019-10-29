@@ -9,11 +9,11 @@ struct fenwick_tree {
     fenwick_tree() {}
 
     void build(T const* input, uint32_t n) {
-        fw_tree.resize(n);
-        std::copy(input, input + n, fw_tree.begin());
-        for (size_t step = 1; step < fw_tree.size(); step *= 2) {
-            for (size_t i = step; i + step < fw_tree.size(); i += 2 * step) {
-                fw_tree[i + step] += fw_tree[i];
+        m_data.resize(n);
+        std::copy(input, input + n, m_data.begin());
+        for (size_t step = 1; step < m_data.size(); step *= 2) {
+            for (size_t i = step; i + step < m_data.size(); i += 2 * step) {
+                m_data[i + step] += m_data[i];
             }
         }
     }
@@ -22,24 +22,28 @@ struct fenwick_tree {
         return "fenwick_tree";
     }
 
+    size_t size() const {
+        return m_data.size();
+    }
+
     T sum(size_t i) const {
-        assert(i < fw_tree.size());
-        T sum = fw_tree[0];
-        for (int64_t k = i; k > 0; k &= k - 1) sum += fw_tree[k];
+        assert(i < size());
+        T sum = m_data[0];
+        for (int64_t k = i; k > 0; k &= k - 1) sum += m_data[k];
         return sum;
     }
 
-    void update(size_t i, T val) {
-        assert(i < fw_tree.size());
+    void update(size_t i, T delta) {
+        assert(i < size());
         if (i == 0) {
-            fw_tree[0] += val;
+            m_data[0] += delta;
             return;
         }
-        for (; i < fw_tree.size(); i += i & -i) fw_tree[i] += val;
+        for (; i < size(); i += i & -i) m_data[i] += delta;
     }
 
 private:
-    std::vector<T> fw_tree;
+    std::vector<T> m_data;
 };
 
 }  // namespace psds

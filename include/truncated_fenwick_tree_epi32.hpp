@@ -53,7 +53,7 @@ struct truncated_fenwick_tree_epi32 {
         uint32_t block = i / Node::degree;
         uint32_t offset = i % Node::degree;
         m_fenwick_tree.update(block, delta);
-        return Node(m_ptr + block * Node::size).update(offset, delta);
+        Node(m_ptr + block * Node::size).update(offset, delta);
     }
 
     int32_t sum(uint32_t i) const {
