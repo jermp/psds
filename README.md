@@ -93,6 +93,29 @@ The library implements the following solutions.
 	  We use SIMD during the Sum query to
 	  compute prefix sums on both L and B.
 
+5. ##### Truncated Fenwick trees
+
+	We divide S into blocks of size 256. Then the k = ceil(n / 256) blocks become the leaves of a fenwick tree. Thus we use a Fenwick tree truncated as soon as we reduced the range down to 256. The leaves use the node's implementations already developed for the segment trees. The nodes of the Fenwick tree will store the prefix sums of the blocks.
+	
+6. ##### Blocked Fenwick trees
+
+	Blocks of *k* integers are
+   indexed using the Fenwick tree layout.
+   During a traversal of the tree, we compute the sum
+   or update a block, before proceeding downwards.
+   The blocks
+   can be stored in prefix-sum (for faster Sum operation)
+   or not (for faster Update operation), thus giving
+   a similar trade-off already established for the segment
+   tree.
+   The block factor, i.e., *k*, should be chosen so that
+   *k* integers fit in a cache line.
+   Assuming a typical cache line size of 64 B and 32-bit
+   keys, then *k* = 16.
+   Maybe *k* = 8 may be more covenient because
+   if we keep the blocks prefix-summed, then
+   updating can be done with SIMD using 256-bit registers.
+   (See `node64u`).
 
 Compiling the code <a name="compiling"></a>
 ------------------
@@ -175,26 +198,3 @@ With AVX, sum becomes ~2-4X faster; update ~8X faster.
    than `tree_epi32_node256u` for log *n* = 9, 10, 11 on sum and
    for log *n* = 9, 10, 11, 12 on update);
    the buffered version is generally better on larger values of *n*.
-
-TODO
-------
-
-##### Blocked Fenwick trees
-
-   Blocks of *k* integers are
-   indexed using the Fenwick tree layout.
-   During a traversal of the tree, we compute the sum
-   or update a block, before proceeding downwards.
-   The blocks
-   can be stored in prefix-sum (for faster Sum operation)
-   or not (for faster Update operation), thus giving
-   a similar trade-off already established for the segment
-   tree.
-   The block factor, i.e., *k*, should be chosen so that
-   *k* integers fit in a cache line.
-   Assuming a typical cache line size of 64 B and 32-bit
-   keys, then *k* = 16.
-   Maybe *k* = 8 may be more covenient because
-   if we keep the blocks prefix-summed, then
-   updating can be done with SIMD using 256-bit registers.
-   (See `node64u`).
