@@ -43,26 +43,28 @@ static constexpr uint32_t degree64_heights[] = {
 #define GEN_TYPE_NODE64(i, Node) \
     tree_epi32<benchmarking::degree64_heights[i], Node>
 
-#define MAIN                                          \
-    if (argc < 2) {                                   \
-        std::cout << argv[0] << " type" << std::endl; \
-        return 1;                                     \
-    }                                                 \
-    std::string type = argv[1];                       \
-    if (type == "tree256u") {                         \
-        perf_test_tree_epi32_node256<node256u>();     \
-    } else if (type == "tree256s") {                  \
-        perf_test_tree_epi32_node256<node256s>();     \
-    } else if (type == "tree64u") {                   \
-        perf_test_tree_epi32_node64<node64u>();       \
-    } else if (type == "tree64s") {                   \
-        perf_test_tree_epi32_node64<node64s>();       \
-    } else if (type == "st") {                        \
-        perf_test_competitor<segment_tree_type>();    \
-    } else if (type == "ft") {                        \
-        perf_test_competitor<fenwick_tree_type>();    \
-    } else {                                          \
-        return 1;                                     \
+#define MAIN                                                 \
+    if (argc < 2) {                                          \
+        std::cout << argv[0] << " type" << std::endl;        \
+        return 1;                                            \
+    }                                                        \
+    std::string type = argv[1];                              \
+    if (type == "tree256u") {                                \
+        perf_test_tree_epi32_node256<node256u>();            \
+    } else if (type == "tree256s") {                         \
+        perf_test_tree_epi32_node256<node256s>();            \
+    } else if (type == "tree64u") {                          \
+        perf_test_tree_epi32_node64<node64u>();              \
+    } else if (type == "tree64s") {                          \
+        perf_test_tree_epi32_node64<node64s>();              \
+    } else if (type == "st") {                               \
+        perf_test<segment_tree_type>();                      \
+    } else if (type == "ft") {                               \
+        perf_test<fenwick_tree_type>();                      \
+    } else if (type == "tft256u") {                          \
+        perf_test<truncated_fenwick_tree_epi32<node256u>>(); \
+    } else {                                                 \
+        return 1;                                            \
     }
 
 #define PERF_SUM                                                   \

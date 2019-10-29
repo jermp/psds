@@ -19,7 +19,7 @@ struct tree_epi32 {
         uint64_t m = n;
         uint64_t total_nodes = 0;
         while (m != 1) {
-            m = std::ceil((double)m / Node::degree);
+            m = std::ceil(static_cast<double>(m) / Node::degree);
             assert(m < uint32_t(-1));
             num_nodes_per_level.push_back(m);
             total_nodes += m;

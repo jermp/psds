@@ -95,7 +95,7 @@ void perf_test_tree_epi32_node64() {
 }
 
 template <typename Tree>
-void perf_test_competitor() {
+void perf_test() {
     essentials::uniform_int_rng<int32_t> distr_values(-100, 100,
                                                       benchmarking::value_seed);
     std::vector<uint32_t> queries(benchmarking::num_queries);

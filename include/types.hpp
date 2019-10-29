@@ -7,6 +7,7 @@
 #include "node64s.hpp"
 #include "segment_tree_vanilla.hpp"
 #include "fenwick_tree.hpp"
+#include "truncated_fenwick_tree_epi32.hpp"
 
 namespace psds {
 
