@@ -156,7 +156,10 @@ By looking at the plots in `script`, we can express the following considerations
    and the non-binary SIMD-ized segment trees (`tree_epi32`).
    This is due to its poor cache exploitation given by the large tree height.
 
-2. SIMD instructions are more useful when executing updates rather than prefix sums.
+2. SIMD instructions are very effective to improve the running time of the segment tree. Without AVX there is no appreciable difference between a traditional segment tree and the blocked segment trees.
+With AVX, sum becomes ~2-4X faster; update ~8X faster.
+
+3. SIMD instructions are more useful when executing updates rather than prefix sums.
    This is valid for both buffered (`*node256*`) and un-buffered (`*node64*`) segment trees.
    This is evident by considering that the solution `tree_epi32_node256s` is not faster than the fenwick tree
    (or even worse for larger values of *n*);
@@ -167,7 +170,7 @@ By looking at the plots in `script`, we can express the following considerations
    This is because the code for computing prefix-sums using SIMD is more complicated
    and uses higher-latency instructions than the code performing update.
 
-3. Results for buffered and un-buffered segment trees are similar. The un-buffered
+4. Results for buffered and un-buffered segment trees are similar. The un-buffered
    version can be slightly faster on some small values of *n* (`tree_epi32_node64u` is faster
    than `tree_epi32_node256u` for log *n* = 9, 10, 11 on sum and
    for log *n* = 9, 10, 11, 12 on update);
