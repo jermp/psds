@@ -59,6 +59,10 @@ struct node256s {
         uint32_t j = i / 32;
         uint32_t k = i % 32;
 
+#ifdef DISABLE_AVX
+        for (uint32_t z = 0; z != j; ++z) s += L[z];
+        for (uint32_t z = 0, base = j * 32; z <= k; ++z) s += B[base + z];
+#else
         __m128i upd1 = _mm_lddqu_si128((__m128i*)L);
         __m128i mask1 = _mm_load_si128((__m128i const*)(tables::masks + j * 8));
         upd1 = _mm_and_si128(upd1, mask1);
@@ -82,7 +86,7 @@ struct node256s {
         upd2 = _mm256_add_epi32(upd2, _mm256_bsrli_epi128(upd2, 4));
 
         s += _mm256_extract_epi32(upd2, 0) + _mm256_extract_epi32(upd2, 4);
-
+#endif
         return s;
     }
 

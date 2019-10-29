@@ -2,13 +2,15 @@ Prefix-Sum Data Structures
 ------
 
 Given an array S[0..n), we want to solve
-the prefix sums problem.
+the prefix-sums problem.
 
 The library implements the following solutions.
 
-1. Fenwick tree (`fenwick_tree`)
-2. Non-recursive Segment tree (`segment_tree_vanilla`)
-3. Un-buffered SIMD Segment tree
+1. ##### Fenwick tree
+
+2. ##### Non-recursive Segment tree
+
+3. ##### Un-buffered SIMD Segment tree
 
 	Every node has a fanout of 64.
 	A block S[0..63] of 64 integers is divided into 8
@@ -45,7 +47,7 @@ The library implements the following solutions.
 	  We use SIMD during the Sum query to
 	  compute the prefix sum of a segment of 8 integers.
 
-4. Buffered SIMD Segment tree
+4. ##### Buffered SIMD Segment tree
 
 	Every node has a fanout of 256.
 	A block S[0..255] of 256 integers is divided into 8
@@ -92,6 +94,59 @@ The library implements the following solutions.
 	  compute prefix sums on both L and B.
 
 
+Compiling the code <a name="compiling"></a>
+------------------
+
+The code is tested on Linux with `gcc` 7.4.0 and on Mac 10.14 with `clang` 10.0.0.
+To build the code, [`CMake`](https://cmake.org/) is required.
+
+Clone the repository with
+
+	$ git clone --recursive https://github.com/jermp/psds.git
+
+If you have cloned the repository without `--recursive`, you will need to perform the following commands before
+compiling:
+
+    $ git submodule init
+    $ git submodule update
+
+To compile the code for a release environment (see file `CMakeLists.txt` for the used compilation flags), it is sufficient to do the following:
+
+    $ mkdir build
+    $ cd build
+    $ cmake ..
+    $ make
+
+Hint: Use `make -j4` to compile the library in parallel using, e.g., 4 jobs.
+
+By default, SIMD AVX instructions are enabled (flag `-DDISABLE_AVX=Off`). If you want to
+disable them (although your compiler has proper support), you can compile with
+
+	$ cmake .. -DDISABLE_AVX=On
+	$ make
+
+
+For the best of performance, we recommend compiling with:
+
+	$ cmake .. -DCMAKE_BUILD_TYPE=Release -DUSE_SANITIZERS=Off -DDISABLE_AVX=Off
+
+For a testing environment, use the following instead:
+
+    $ mkdir debug_build
+    $ cd debug_build
+    $ cmake .. -DCMAKE_BUILD_TYPE=Debug -DUSE_SANITIZERS=On
+    $ make
+
+Running the unit tests <a name="testing"></a>
+-----------
+
+The unit tests are written using [doctest](https://github.com/onqtam/doctest).
+
+After compilation, it is advised
+to run the unit tests with:
+
+	$ make test
+	
 Results
 ------
 
@@ -103,10 +158,11 @@ By looking at the plots in `script`, we can express the following considerations
 
 2. SIMD instructions are more useful when executing updates rather than prefix sums.
    This is valid for both buffered (`*node256*`) and un-buffered (`*node64*`) segment trees.
-   This is evident by considering that the solution `tree_epi32_node256s` is not faster than
-   (or even worse for larger values of *n*) the fenwick tree;
+   This is evident by considering that the solution `tree_epi32_node256s` is not faster than the fenwick tree
+   (or even worse for larger values of *n*);
    but the solution `tree_epi32_node256u` is consisitently ~2X faster than the fenwick
-   tree on updates for all values of *n*. (The `tree_epi32_node256s` is ~4X faster than the
+   tree on updates for all values of *n*. See also the plots for the values of *n*.
+   (The `tree_epi32_node256s` is ~4X faster than the
    fenwick tree, though.)
    This is because the code for computing prefix-sums using SIMD is more complicated
    and uses higher-latency instructions than the code performing update.
