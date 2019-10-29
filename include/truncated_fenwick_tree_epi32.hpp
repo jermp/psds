@@ -14,7 +14,7 @@ struct truncated_fenwick_tree_epi32 {
         assert(n > 0);
         m_size = n;
 
-        uint32_t nodes = std::ceil(static_cast<double>(n) / Node::degree);
+        uint64_t nodes = std::ceil(static_cast<double>(n) / Node::degree);
         std::vector<int32_t> fenwick_tree_data(nodes);
         std::vector<int32_t> node_data(Node::degree);
 
