@@ -146,7 +146,7 @@ After compilation, it is advised
 to run the unit tests with:
 
 	$ make test
-	
+
 Results
 ------
 
@@ -179,7 +179,9 @@ With AVX, sum becomes ~2-4X faster; update ~8X faster.
 TODO
 ------
 
-1. Blocked Fenwick trees: blocks of *k* integers are
+##### Blocked Fenwick trees
+
+   Blocks of *k* integers are
    indexed using the Fenwick tree layout.
    During a traversal of the tree, we compute the sum
    or update a block, before proceeding downwards.
@@ -196,17 +198,3 @@ TODO
    if we keep the blocks prefix-summed, then
    updating can be done with SIMD using 256-bit registers.
    (See `node64u`).
-
-2. Truncated Fenwick trees: we divide S into blocks
-   of size 256. Then the k = ceil(n / 256) blocks
-   become the leaves of a fenwick tree.
-   Thus we use a traditional (binary? or maybe blocked)
-   Fenwick tree truncated as soon as we reduced the range
-   down to 256.
-   The leaves use the node's implementations already
-   developed for the segment trees.
-   The nodes of the Fenwick tree will store the prefix
-   sums of the blocks.
-   Thus we will have two families of algorithms:
-   the one based on segment trees; the ones based on
-   Fenwick trees.

@@ -63,6 +63,12 @@ static constexpr uint32_t degree64_heights[] = {
         perf_test<fenwick_tree_type>();                      \
     } else if (type == "tft256u") {                          \
         perf_test<truncated_fenwick_tree_epi32<node256u>>(); \
+    } else if (type == "tft256s") {                          \
+        perf_test<truncated_fenwick_tree_epi32<node256s>>(); \
+    } else if (type == "tft64u") {                           \
+        perf_test<truncated_fenwick_tree_epi32<node64u>>();  \
+    } else if (type == "tft64s") {                           \
+        perf_test<truncated_fenwick_tree_epi32<node64s>>();  \
     } else {                                                 \
         return 1;                                            \
     }
