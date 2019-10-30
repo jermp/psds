@@ -13,7 +13,7 @@ types = ["st", "ft",
 "tree256s", "tft256s", "bft256s",
 "tree64s", "tft64s", "bft64s"]
 
-run = 1
+runs = 1
 def run(exe, results):
     for type in types:
         for i in range(0, runs):
