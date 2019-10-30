@@ -188,15 +188,15 @@ TEST_CASE("test blocked_fenwick_tree_epi32_node256u") {
     // test_tree<blocked_fenwick_tree_epi32<node4>>(size_t(1) << 19);
     // test_tree<blocked_fenwick_tree_epi32<node4>>(size_t(1) << 20);
 
-    // test_tree<__blocked_fenwick_tree_epi32<node256u>>(size_t(1) << 8);
-    // test_tree<__blocked_fenwick_tree_epi32<node256u>>(size_t(1) << 9);
-    // test_tree<__blocked_fenwick_tree_epi32<node256u>>(size_t(1) << 10);
-    // test_tree<__blocked_fenwick_tree_epi32<node256u>>(size_t(1) << 11);
-    // test_tree<__blocked_fenwick_tree_epi32<node256u>>(size_t(1) << 12);
-    // test_tree<__blocked_fenwick_tree_epi32<node256u>>(size_t(1) << 13);
-    // test_tree<__blocked_fenwick_tree_epi32<node256u>>(size_t(1) << 14);
-    // test_tree<__blocked_fenwick_tree_epi32<node256u>>(size_t(1) << 15);
-    // test_tree<__blocked_fenwick_tree_epi32<node<16384>>>(size_t(1) << 16);
+    test_tree<blocked_fenwick_tree_epi32<node256u>>(size_t(1) << 8);
+    test_tree<blocked_fenwick_tree_epi32<node256u>>(size_t(1) << 9);
+    test_tree<blocked_fenwick_tree_epi32<node256u>>(size_t(1) << 10);
+    test_tree<blocked_fenwick_tree_epi32<node256u>>(size_t(1) << 11);
+    test_tree<blocked_fenwick_tree_epi32<node256u>>(size_t(1) << 12);
+    test_tree<blocked_fenwick_tree_epi32<node256u>>(size_t(1) << 13);
+    test_tree<blocked_fenwick_tree_epi32<node256u>>(size_t(1) << 14);
+    test_tree<blocked_fenwick_tree_epi32<node256u>>(size_t(1) << 15);
+    test_tree<blocked_fenwick_tree_epi32<node256u>>(size_t(1) << 16);
     // test_tree<blocked_fenwick_tree_epi32<node256u>>(size_t(1) << 17);
     // test_tree<blocked_fenwick_tree_epi32<node256u>>(size_t(1) << 18);
     // test_tree<blocked_fenwick_tree_epi32<node256u>>(size_t(1) << 19);
