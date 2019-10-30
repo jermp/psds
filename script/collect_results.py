@@ -7,25 +7,6 @@ parser.add_argument('sum_results', type = str, help = "Results filename for SUM.
 parser.add_argument('update_results', type = str, help = "Results filename for UPDATE.")
 args = parser.parse_args()
 
-segment_tree_vanilla
-fenwick_tree
-
-tree_epi32_node256u
-truncated_fenwick_tree_epi32_node256u
-blocked_fenwick_tree_epi32_node256u
-
-tree_epi32_node64u
-truncated_fenwick_tree_epi32_node64u
-blocked_fenwick_tree_epi32_node64u
-
-tree_epi32_node256s
-truncated_fenwick_tree_epi32_node256s
-blocked_fenwick_tree_epi32_node256s
-
-tree_epi32_node64s
-truncated_fenwick_tree_epi32_node64s
-blocked_fenwick_tree_epi32_node64s
-
 types = ["st", "ft",
 "tree256u", "tft256u", "bft256u",
 "tree64u", "tft64u", "bft64u",
