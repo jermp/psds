@@ -69,6 +69,14 @@ static constexpr uint32_t degree64_heights[] = {
         perf_test<truncated_fenwick_tree_epi32<node64u>>();  \
     } else if (type == "tft64s") {                           \
         perf_test<truncated_fenwick_tree_epi32<node64s>>();  \
+    } else if (type == "bft256u") {                          \
+        perf_test<blocked_fenwick_tree_epi32<node256u>>();   \
+    } else if (type == "bft256s") {                          \
+        perf_test<blocked_fenwick_tree_epi32<node256s>>();   \
+    } else if (type == "bft64u") {                           \
+        perf_test<blocked_fenwick_tree_epi32<node64u>>();    \
+    } else if (type == "bft64s") {                           \
+        perf_test<blocked_fenwick_tree_epi32<node64s>>();    \
     } else {                                                 \
         return 1;                                            \
     }

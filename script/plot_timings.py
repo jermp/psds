@@ -44,13 +44,22 @@ for i in range(offset, len(y[types[0]]) + offset):
     n *= 2
 
 m = 5
-colors = ['#9e0142','#d53e4f','#f46d43','#fdae61','#fee08b','#e6f598','#abdda4','#66c2a5','#3288bd','#5e4fa2'] #['#d53e4f','#fc8d59','#fee08b','#e6f598','#99d594','#3288bd'] #['#ccece6','#99d8c9','#66c2a4','#2ca25f','#006d2c'] #['#bae4bc','#7bccc4','#43a2ca','#0868ac']
+colors = ['#d53e4f','#fc8d59','#fee08b','#e6f598','#99d594','#3288bd'] #['#9e0142','#d53e4f','#f46d43','#fdae61','#fee08b','#e6f598','#abdda4','#66c2a5','#3288bd','#5e4fa2'] #['#d53e4f','#fc8d59','#fee08b','#e6f598','#99d594','#3288bd'] #['#ccece6','#99d8c9','#66c2a4','#2ca25f','#006d2c'] #['#bae4bc','#7bccc4','#43a2ca','#0868ac']
 gray = '#696969'
 markers = ['o', 'X', 's', 'd', 'v', '^', 'P', '*', 'D', 'p']
 
 lines = []
-for i in range(0,len(y)):
-    lines.append(ax.plot(x, y[types[i]], zorder = 1, color = colors[i], alpha = 1, linewidth = 1.5, marker = markers[i], markersize = m))
+lines.append(ax.plot(x, y[types[0]], zorder = 1, color = colors[0], alpha = 1, linewidth = 1.5, marker = markers[0], markersize = m))
+lines.append(ax.plot(x, y[types[1]], zorder = 1, color = colors[1], alpha = 1, linewidth = 1.5, marker = markers[1], markersize = m))
+def plot_group(k):
+  for i in range(0, 3):
+      lines.append(ax.plot(x, y[types[2 + 3*k + i]], zorder = 1, color = colors[k + 2], alpha = 1, linewidth = 1.5, marker = markers[i], markersize = m))
+for i in range(0, 4):
+  plot_group(i)
+
+# lines = []
+# for i in range(0, len(y)):
+#     lines.append(ax.plot(x, y[types[i]], zorder = 1, color = colors[i], alpha = 1, linewidth = 1.5, marker = markers[i], markersize = m))
 
 ax.legend(
     ([types[i] for i in range(0,len(types))]),

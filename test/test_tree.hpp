@@ -49,8 +49,8 @@ void test_tree(size_t n) {
         }
     };
 
-    update(+1);
-    update(-1);
+    // update(+1);
+    // update(-1);
 
     std::cout << "\teverything's good" << std::endl;
 }

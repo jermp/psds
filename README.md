@@ -8,9 +8,9 @@ The library implements the following solutions.
 
 1. ##### Fenwick tree
 
-2. ##### Non-recursive Segment tree
+2. ##### Non-recursive Binary Segment tree
 
-3. ##### Un-buffered SIMD Segment tree
+3. ##### Un-buffered SIMD *k*-ary Segment tree
 
 	Every node has a fanout of 64.
 	A block S[0..63] of 64 integers is divided into 8
@@ -47,7 +47,7 @@ The library implements the following solutions.
 	  We use SIMD during the Sum query to
 	  compute the prefix sum of a segment of 8 integers.
 
-4. ##### Buffered SIMD Segment tree
+4. ##### Buffered SIMD *k*-ary Segment tree
 
 	Every node has a fanout of 256.
 	A block S[0..255] of 256 integers is divided into 8

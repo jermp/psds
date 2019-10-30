@@ -83,11 +83,10 @@ struct blocked_fenwick_tree_epi32 {
         uint32_t offset = i % Node::degree;
         int32_t s = 0;
         int64_t k = block;
-        while ((k &= k - 1) > 0) {
+        while ((k &= k - 1) != 0) {
             s += Node(m_ptr + (k - 1) * Node::size).sum(Node::degree - 1);
         }
-        s += Node(m_ptr + (block - 1) * Node::size).sum(offset);
-        return s;
+        return s + Node(m_ptr + (block - 1) * Node::size).sum(offset);
     }
 
 private:
