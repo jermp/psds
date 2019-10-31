@@ -68,8 +68,8 @@ struct blocked_fenwick_tree_epi32 {
     void update(uint32_t i, int8_t delta) {
         assert(i < size());
         assert(delta == +1 or delta == -1);
-        uint32_t block = i / Node::degree + 1;
-        uint32_t offset = i % Node::degree;
+        uint64_t block = i / Node::degree + 1;
+        uint64_t offset = i % Node::degree;
         uint64_t k = block;
         while ((k += k & -k) <= blocks()) {
             Node(m_ptr + (k - 1) * Node::size).update(0, delta);
@@ -79,8 +79,8 @@ struct blocked_fenwick_tree_epi32 {
 
     int32_t sum(uint32_t i) const {
         assert(i < size());
-        uint32_t block = i / Node::degree + 1;
-        uint32_t offset = i % Node::degree;
+        uint64_t block = i / Node::degree + 1;
+        uint64_t offset = i % Node::degree;
         int32_t s = 0;
         int64_t k = block;
         while ((k &= k - 1) != 0) {

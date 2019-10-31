@@ -51,16 +51,16 @@ struct truncated_fenwick_tree_epi32 {
     void update(uint32_t i, int8_t delta) {
         assert(i < size());
         assert(delta == +1 or delta == -1);
-        uint32_t block = i / Node::degree;
-        uint32_t offset = i % Node::degree;
+        uint64_t block = i / Node::degree;
+        uint64_t offset = i % Node::degree;
         m_fenwick_tree.update(block, delta);
         Node(m_ptr + block * Node::size).update(offset, delta);
     }
 
     int32_t sum(uint32_t i) const {
         assert(i < size());
-        uint32_t block = i / Node::degree;
-        uint32_t offset = i % Node::degree;
+        uint64_t block = i / Node::degree;
+        uint64_t offset = i % Node::degree;
         int32_t s = 0;
         if (block > 0) s += m_fenwick_tree.sum(block - 1);
         return s + Node(m_ptr + block * Node::size).sum(offset);
