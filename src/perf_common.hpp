@@ -51,8 +51,8 @@ static constexpr uint32_t degree64_heights[] = {
     std::string type = argv[1];                              \
     if (type == "tree256u") {                                \
         perf_test_tree_epi32_node256<node256u>();            \
-    } else if (type == "tree256u2") {                        \
-        perf_test_tree_epi32_node256<node256u2>();           \
+    } else if (type == "tree256uu") {                        \
+        perf_test_tree_epi32_node256<node256u_unbuffered>(); \
     } else if (type == "tree256s") {                         \
         perf_test_tree_epi32_node256<node256s>();            \
     } else if (type == "tree64u") {                          \
