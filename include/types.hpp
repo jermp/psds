@@ -2,6 +2,7 @@
 
 #include "tree_epi32.hpp"
 #include "node256u.hpp"
+#include "node256u2.hpp"
 #include "node256s.hpp"
 #include "node64u.hpp"
 #include "node64s.hpp"
