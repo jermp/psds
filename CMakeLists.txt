@@ -4,6 +4,7 @@ project(PSDS) # Prefix-Sum Data Structures
 if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release")
 endif()
+
 MESSAGE(STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -30,6 +31,8 @@ if (UNIX)
   endif()
 
 endif()
+
+MESSAGE(STATUS "Compiling with ${CMAKE_CXX_FLAGS}")
 
 include_directories(${PSDS_SOURCE_DIR}/include)
 

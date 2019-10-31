@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "fenwick_tree.hpp"
+#include "blocked_fenwick_tree_epi32.hpp"
 
 namespace psds {
 
@@ -68,6 +69,7 @@ struct truncated_fenwick_tree_epi32 {
 private:
     uint32_t m_size;
     fenwick_tree<int32_t> m_fenwick_tree;
+    // blocked_fenwick_tree_epi32<Node> m_fenwick_tree;
     uint8_t* m_ptr;
     std::vector<uint8_t> m_data;
 };

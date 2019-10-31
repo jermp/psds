@@ -5,7 +5,6 @@ TEST_CASE("test tree_epi32_node256s") {
     using namespace psds::testing;
 
     test_tree<tree_epi32<1, node256s>>(size_t(1) << 8);
-
     test_tree<tree_epi32<2, node256s>>(size_t(1) << 9);
     test_tree<tree_epi32<2, node256s>>(size_t(1) << 10);
     test_tree<tree_epi32<2, node256s>>(size_t(1) << 11);
