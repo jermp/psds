@@ -177,9 +177,9 @@ By looking at the plots in `script`, we can express the following considerations
 
 1. The binary segment tree is always outperformed by both the (binary) fenwick tree
    and the non-binary SIMD-ized segment trees (`tree_epi32`).
-   This is due to its poor cache exploitation given by the large tree height.
+   This is due to its poor cache exploitation given by the large tree height. The Fenwick
 
-2. SIMD instructions are very effective to improve the running time of the segment tree. Without AVX there is no appreciable difference between a traditional segment tree and the blocked segment trees.
+2. After enlarging the degree of a node, SIMD instructions are very effective to improve the running time of the segment tree. Without AVX there is no appreciable difference between a traditional segment tree and the blocked segment trees.
 With AVX, sum becomes ~2-4X faster; update ~8X faster.
 
 3. SIMD instructions are more useful when executing updates rather than prefix sums.
@@ -198,3 +198,12 @@ With AVX, sum becomes ~2-4X faster; update ~8X faster.
    than `tree_epi32_node256u` for log *n* = 9, 10, 11 on sum and
    for log *n* = 9, 10, 11, 12 on update);
    the buffered version is generally better on larger values of *n*.
+   
+5. Blocked Fenwick trees are more efficient than traditional Fenwick trees because the height is reduced from log(*n*) to log(*n*/B).
+The *average* number of nodes traversed will then be log(*n*/B)/2 for
+uniformly distributed (random) queries.
+
+6. However, Blocked Fenwick trees performe worse than a segment tree with the same block arity B in the worst case. This is because the segment tree will always (in the worst case) traverse log(*n*)/log(B) nodes,
+against log(*n*/B) nodes.
+
+7. Truncated Fenwick trees shine for larger values of *n* because the "high" part of the data structure, that is a Fenwick tree, is likely of fit in cache without using any space overhead, and we only apply SIMD on the identified leaf. The segment tree using the same node structure performs worse because every node uses extra space, causing the tree to exit the cache before the truncated variant. Thus the truncated variant wins out because of the reduced number of cache misses.
