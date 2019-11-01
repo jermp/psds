@@ -38,6 +38,7 @@ with open(args.input_filename) as f:
         y[type] = parsed_line["timings"][offset:]
 
 x = []
+# n = pow(2, args.min_log2)
 n = pow(2, 25)
 for i in range(offset, len(y[types[0]]) + offset):
     x.append(n)
@@ -51,10 +52,11 @@ markers = ['o', 'X', 's', 'd', 'v', '^', 'P', '*', 'D', 'p']
 
 # lines = []
 # lines.append(ax.plot(x, y[types[0]], zorder = 1, color = group_colors[0], alpha = 1, linewidth = 1.5, marker = markers[0], markersize = m))
-# lines.append(ax.plot(x, y[types[1]], zorder = 1, color = group_colors[1], alpha = 1, linewidth = 1.5, marker = markers[1], markersize = m))
+# lines.append(ax.plot(x, y[types[1]], zorder = 1, color = group_colors[0], alpha = 1, linewidth = 1.5, marker = markers[1], markersize = m))
+# lines.append(ax.plot(x, y[types[2]], zorder = 1, color = group_colors[1], alpha = 1, linewidth = 1.5, marker = markers[0], markersize = m))
 # def plot_group(k):
 #   for i in range(0, 3):
-#       lines.append(ax.plot(x, y[types[2 + 3*k + i]], zorder = 1, color = group_colors[k + 2], alpha = 1, linewidth = 1.5, marker = markers[i], markersize = m))
+#       lines.append(ax.plot(x, y[types[3 + 3*k + i]], zorder = 1, color = group_colors[k + 2], alpha = 1, linewidth = 1.5, marker = markers[i], markersize = m))
 # for i in range(0, 4):
 #   plot_group(i)
 

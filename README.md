@@ -5,12 +5,10 @@ Given an array S[0..n), we want to solve
 the prefix-sums problem.
 
 The library implements the following solutions.
+   
+1. ##### Binary Segment tree
 
-1. ##### Fenwick tree
-
-2. ##### Non-recursive Binary Segment tree
-
-3. ##### Un-buffered SIMD *k*-ary Segment tree
+2. ##### Un-buffered SIMD *k*-ary Segment tree
 
 	Every node has a fanout of 64.
 	A block S[0..63] of 64 integers is divided into 8
@@ -47,7 +45,7 @@ The library implements the following solutions.
 	  We use SIMD during the Sum query to
 	  compute the prefix sum of a segment of 8 integers.
 
-4. ##### Buffered SIMD *k*-ary Segment tree
+3. ##### Buffered SIMD *k*-ary Segment tree
 
 	Every node has a fanout of 256.
 	A block S[0..255] of 256 integers is divided into 8
@@ -93,9 +91,11 @@ The library implements the following solutions.
 	  We use SIMD during the Sum query to
 	  compute prefix sums on both L and B.
 
+4. ##### Fenwick tree
+
 5. ##### Truncated Fenwick trees
 
-	We divide S into blocks of size 256. Then the k = ceil(n / 256) blocks become the leaves of a fenwick tree. Thus we use a Fenwick tree truncated as soon as we reduced the range down to 256. The leaves use the node's implementations already developed for the segment trees. The nodes of the Fenwick tree will store the prefix sums of the blocks.
+	We divide S into blocks of size *k*. Then the ceil(*n* / *k*) blocks become the leaves of a fenwick tree. Thus we use a Fenwick tree truncated as soon as we reduced the range down to *k*. The nodes of the Fenwick tree will store the prefix sums of the blocks.
 	
 6. ##### Blocked Fenwick trees
 
@@ -108,7 +108,7 @@ The library implements the following solutions.
    or not (for faster Update operation), thus giving
    a similar trade-off already established for the segment
    tree.
-   The block factor, i.e., *k*, should be chosen so that
+   The block size *k* should be chosen so that
    *k* integers fit in a cache line.
    Assuming a typical cache line size of 64 B and 32-bit
    keys, then *k* = 16.
@@ -116,7 +116,7 @@ The library implements the following solutions.
    if we keep the blocks prefix-summed, then
    updating can be done with SIMD using 256-bit registers.
    (See `node64u`).
-
+   
 Compiling the code <a name="compiling"></a>
 ------------------
 
@@ -177,7 +177,9 @@ By looking at the plots in `script`, we can express the following considerations
 
 1. The binary segment tree is always outperformed by both the (binary) fenwick tree
    and the non-binary SIMD-ized segment trees (`tree_epi32`).
-   This is due to its poor cache exploitation given by the large tree height. The Fenwick
+   This is due to its poor cache exploitation given by the large tree height. The Fenwick tree is faster then a binary segment tree because
+   it is smaller (it is an implicit data structure taking *n* space, whereas the segment tree takes at least the double) and its average
+   cost is better.
 
 2. After enlarging the degree of a node, SIMD instructions are very effective to improve the running time of the segment tree. Without AVX there is no appreciable difference between a traditional segment tree and the blocked segment trees.
 With AVX, sum becomes ~2-4X faster; update ~8X faster.
@@ -186,7 +188,7 @@ With AVX, sum becomes ~2-4X faster; update ~8X faster.
    This is valid for both buffered (`*node256*`) and un-buffered (`*node64*`) segment trees.
    This is evident by considering that the solution `tree_epi32_node256s` is not faster than the fenwick tree
    (or even worse for larger values of *n*);
-   but the solution `tree_epi32_node256u` is consisitently ~2X faster than the fenwick
+   but the solution `tree_epi32_node256u` is consistently ~2X faster than the fenwick
    tree on updates for all values of *n*. See also the plots for the values of *n*.
    (The `tree_epi32_node256s` is ~4X faster than the
    fenwick tree, though.)
@@ -203,7 +205,7 @@ With AVX, sum becomes ~2-4X faster; update ~8X faster.
 The *average* number of nodes traversed will then be log(*n*/B)/2 for
 uniformly distributed (random) queries.
 
-6. However, Blocked Fenwick trees performe worse than a segment tree with the same block arity B in the worst case. This is because the segment tree will always (in the worst case) traverse log(*n*)/log(B) nodes,
+6. However, Blocked Fenwick trees perform worse than a segment tree with the same block arity B in the worst case. This is because the segment tree will always (in the worst case) traverse log(*n*)/log(B) nodes,
 against log(*n*/B) nodes.
 
 7. Truncated Fenwick trees shine for larger values of *n* because the "high" part of the data structure, that is a Fenwick tree, is likely of fit in cache without using any space overhead, and we only apply SIMD on the identified leaf. The segment tree using the same node structure performs worse because every node uses extra space, causing the tree to exit the cache before the truncated variant. Thus the truncated variant wins out because of the reduced number of cache misses.

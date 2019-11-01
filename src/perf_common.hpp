@@ -61,8 +61,6 @@ static constexpr uint32_t degree64_heights[] = {
         perf_test_tree_epi32_node64<node64s>();                         \
     } else if (type == "st") {                                          \
         perf_test<segment_tree_type>();                                 \
-    } else if (type == "stv") {                                         \
-        perf_test<segment_tree_vanilla_type>();                         \
     } else if (type == "ft") {                                          \
         perf_test<fenwick_tree_type>();                                 \
     } else if (type == "tft256u") {                                     \
