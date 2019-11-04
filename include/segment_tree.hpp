@@ -27,6 +27,8 @@ struct segment_tree {
         auto r_subtree_sum = build(input, mi + 1, hi, RIGHT(pos));
         m_tree[pos] = l_subtree_sum;
         return l_subtree_sum + r_subtree_sum;
+        // m_tree[pos] = l_subtree_sum + r_subtree_sum;
+        // return m_tree[pos];
     }
 
     segment_tree() {}
@@ -35,18 +37,11 @@ struct segment_tree {
         return "segment_tree";
     }
 
-    // void print() const {
-    //     for (auto x : m_tree) { std::cout << x << " "; }
-    //     std::cout << std::endl;
-    // }
-
     size_t size() const {
         return m_size;
     }
 
     T sum(size_t i) const {
-        // return sum(i, 0, size() - 1, 0); // recursive
-
         size_t lo = 0;
         size_t hi = size() - 1;
         size_t pos = 0;
@@ -64,11 +59,28 @@ struct segment_tree {
             }
         }
         return s + m_tree[pos];
+
+        // size_t lo = 0;
+        // size_t hi = size() - 1;
+        // size_t pos = 0;
+        // T s = 0;
+        // while (lo < hi) {
+        //     size_t mi = (lo + hi) / 2;
+        //     size_t left = LEFT(pos);
+        //     if (i == mi) return s + m_tree[left];
+        //     if (i > mi) {
+        //         s += m_tree[left];
+        //         lo = mi + 1;
+        //         pos = RIGHT(pos);
+        //     } else {
+        //         hi = mi;
+        //         pos = left;
+        //     }
+        // }
+        // return s + m_tree[pos];
     }
 
     void update(size_t i, T delta) {
-        // update(i, delta, 0, size() - 1, 0);  // recursive
-
         size_t lo = 0;
         size_t hi = size() - 1;
         size_t pos = 0;
@@ -84,32 +96,27 @@ struct segment_tree {
             }
         }
         m_tree[pos] += delta;
+
+        // size_t lo = 0;
+        // size_t hi = size() - 1;
+        // size_t pos = 0;
+        // while (lo < hi) {
+        //     m_tree[pos] += delta;
+        //     size_t mi = (lo + hi) / 2;
+        //     if (i > mi) {
+        //         lo = mi + 1;
+        //         pos = RIGHT(pos);
+        //     } else {
+        //         hi = mi;
+        //         pos = LEFT(pos);
+        //     }
+        // }
+        // m_tree[pos] += delta;
     }
 
 private:
     size_t m_size;
     std::vector<T> m_tree;
-
-    // T sum(size_t i, size_t lo, size_t hi, size_t pos) const {
-    //     if (lo == hi) return m_tree[pos];
-    //     size_t mi = (lo + hi) / 2;
-    //     if (i == mi) return m_tree[pos];
-    //     if (i > mi) return m_tree[pos] + sum(i, mi + 1, hi, RIGHT(pos));
-    //     return sum(i, lo, mi, LEFT(pos));
-    // }
-
-    // void update(size_t i, T delta, size_t lo, size_t hi, size_t pos) {
-    //     if (lo == hi) {
-    //         m_tree[pos] += delta;
-    //         return;
-    //     }
-    //     size_t mi = (lo + hi) / 2;
-    //     if (i <= mi) {
-    //         m_tree[pos] += delta;
-    //         update(i, delta, lo, mi, LEFT(pos));
-    //         return;
-    //     }
-    //     update(i, delta, mi + 1, hi, RIGHT(pos));
-    // }
 };
+
 }  // namespace psds
