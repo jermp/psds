@@ -17,14 +17,14 @@ struct segment_tree {
         build(input, 0, n - 1, 0);
     }
 
-    T build(T const* input, size_t lo, size_t hi, size_t pos) {
+    int64_t build(T const* input, size_t lo, size_t hi, size_t pos) {
         if (lo == hi) {
             m_tree[pos] = input[lo];
             return m_tree[pos];
         }
         size_t mi = (lo + hi) / 2;
-        auto l_subtree_sum = build(input, lo, mi, LEFT(pos));
-        auto r_subtree_sum = build(input, mi + 1, hi, RIGHT(pos));
+        int64_t l_subtree_sum = build(input, lo, mi, LEFT(pos));
+        int64_t r_subtree_sum = build(input, mi + 1, hi, RIGHT(pos));
         m_tree[pos] = l_subtree_sum;
         return l_subtree_sum + r_subtree_sum;
         // m_tree[pos] = l_subtree_sum + r_subtree_sum;
@@ -41,16 +41,16 @@ struct segment_tree {
         return m_size;
     }
 
-    T sum(size_t i) const {
+    int64_t sum(size_t i) const {
         size_t lo = 0;
         size_t hi = size() - 1;
         size_t pos = 0;
-        T s = 0;
+        int64_t sum = 0;
         while (lo < hi) {
             size_t mi = (lo + hi) / 2;
-            if (i == mi) return s + m_tree[pos];
+            if (i == mi) return sum + m_tree[pos];
             if (i > mi) {
-                s += m_tree[pos];
+                sum += m_tree[pos];
                 lo = mi + 1;
                 pos = RIGHT(pos);
             } else {
@@ -58,18 +58,18 @@ struct segment_tree {
                 pos = LEFT(pos);
             }
         }
-        return s + m_tree[pos];
+        return sum + m_tree[pos];
 
         // size_t lo = 0;
         // size_t hi = size() - 1;
         // size_t pos = 0;
-        // T s = 0;
+        // int64_t sum = 0;
         // while (lo < hi) {
         //     size_t mi = (lo + hi) / 2;
         //     size_t left = LEFT(pos);
-        //     if (i == mi) return s + m_tree[left];
+        //     if (i == mi) return sum + m_tree[left];
         //     if (i > mi) {
-        //         s += m_tree[left];
+        //         sum += m_tree[left];
         //         lo = mi + 1;
         //         pos = RIGHT(pos);
         //     } else {
@@ -77,10 +77,10 @@ struct segment_tree {
         //         pos = left;
         //     }
         // }
-        // return s + m_tree[pos];
+        // return sum + m_tree[pos];
     }
 
-    void update(size_t i, T delta) {
+    void update(size_t i, int32_t delta) {
         size_t lo = 0;
         size_t hi = size() - 1;
         size_t pos = 0;
@@ -116,7 +116,7 @@ struct segment_tree {
 
 private:
     size_t m_size;
-    std::vector<T> m_tree;
+    std::vector<int64_t> m_tree;
 };
 
 }  // namespace psds
