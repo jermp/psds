@@ -120,7 +120,7 @@ The library implements the following solutions.
 Compiling the code <a name="compiling"></a>
 ------------------
 
-The code is tested on Linux with `gcc` 7.4.0 and on Mac 10.14 with `clang` 10.0.0.
+The code is tested on Linux with `gcc` 7.4; on Mac 10.14 with `clang` 10.0.0 and 11.0.0.
 To build the code, [`CMake`](https://cmake.org/) is required.
 
 Clone the repository with

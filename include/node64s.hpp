@@ -65,37 +65,23 @@ struct node64s {
 #ifdef DISABLE_AVX
         for (uint32_t z = 0, base = j * 8; z <= k; ++z) s += S[base + z];
 #else
-
-#if __linux__
         static int32_t tmp[4];
-#endif
+
         __m128i r1 = _mm_loadu_si128((__m128i const*)(S + j * 8));
         r1 = _mm_add_epi32(r1, _mm_slli_si128(r1, 4));
         r1 = _mm_add_epi32(r1, _mm_slli_si128(r1, 8));
 
         if (k < 4) {
-#if __linux__
-            // NOTE: gcc does not support
-            // _mm_extract_epi32 with variable index,
-            // thus we need to store :(
             _mm_store_si128((__m128i*)(tmp), r1);
             s += tmp[k];
-#else
-            s += _mm_extract_epi32(r1, k);
-#endif
         } else {
             int32_t last = _mm_extract_epi32(r1, 3);
             __m128i r2 = _mm_loadu_si128((__m128i const*)(S + j * 8 + 4));
             r2 = _mm_add_epi32(r2, _mm_slli_si128(r2, 4));
             r2 = _mm_add_epi32(r2, _mm_slli_si128(r2, 8));
             r2 = _mm_add_epi32(r2, _mm_set1_epi32(last));
-
-#if __linux__
             _mm_store_si128((__m128i*)(tmp), r2);
             s += tmp[k - 4];
-#else
-            s += _mm_extract_epi32(r2, k - 4);
-#endif
         }
 #endif
         return s;
