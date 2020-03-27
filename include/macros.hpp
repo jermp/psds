@@ -7,7 +7,7 @@ namespace psds {
 
 #define SUM_H1                \
     Node node(m_ptr);         \
-    int32_t s1 = node.sum(i); \
+    int64_t s1 = node.sum(i); \
     return s1;
 
 #define SUM_H2                                       \
@@ -15,8 +15,8 @@ namespace psds {
     uint64_t child2 = i % Node::degree;              \
     Node node1(m_ptr);                               \
     Node node2(m_ptr + (1 + child1) * Node::size);   \
-    int32_t s1 = child1 ? node1.sum(child1 - 1) : 0; \
-    int32_t s2 = node2.sum(child2);                  \
+    int64_t s1 = child1 ? node1.sum(child1 - 1) : 0; \
+    int64_t s2 = node2.sum(child2);                  \
     return s1 + s2;
 
 #define SUM_H3                                                   \
@@ -28,9 +28,9 @@ namespace psds {
     Node node3(m_ptr + (1 + m_num_nodes_per_level[1] + child2 +  \
                         child1 * Node::degree) *                 \
                            Node::size);                          \
-    int32_t s1 = child1 ? node1.sum(child1 - 1) : 0;             \
-    int32_t s2 = child2 ? node2.sum(child2 - 1) : 0;             \
-    int32_t s3 = node3.sum(child3);                              \
+    int64_t s1 = child1 ? node1.sum(child1 - 1) : 0;             \
+    int64_t s2 = child2 ? node2.sum(child2 - 1) : 0;             \
+    int64_t s3 = node3.sum(child3);                              \
     return s1 + s2 + s3;
 
 #define SUM_H4                                                            \
@@ -48,10 +48,10 @@ namespace psds {
                 child3 + child2 * Node::degree +                          \
                 child1 * SQARED(Node::degree)) *                          \
                    Node::size);                                           \
-    int32_t s1 = child1 ? node1.sum(child1 - 1) : 0;                      \
-    int32_t s2 = child2 ? node2.sum(child2 - 1) : 0;                      \
-    int32_t s3 = child3 ? node3.sum(child3 - 1) : 0;                      \
-    int32_t s4 = node4.sum(child4);                                       \
+    int64_t s1 = child1 ? node1.sum(child1 - 1) : 0;                      \
+    int64_t s2 = child2 ? node2.sum(child2 - 1) : 0;                      \
+    int64_t s3 = child3 ? node3.sum(child3 - 1) : 0;                      \
+    int64_t s4 = node4.sum(child4);                                       \
     return s1 + s2 + s3 + s4;
 
 #define UPDATE_H1          \

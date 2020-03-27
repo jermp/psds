@@ -61,7 +61,7 @@ struct tree_epi32 {
         return m_size;
     }
 
-    void update(uint32_t i, int8_t delta) {
+    void update(size_t i, int8_t delta) {
         assert(i < size());
         if constexpr (Height == 1) { UPDATE_H1 }
         if constexpr (Height == 2) { UPDATE_H2 }
@@ -71,7 +71,7 @@ struct tree_epi32 {
         __builtin_unreachable();
     }
 
-    int32_t sum(uint32_t i) const {
+    int64_t sum(size_t i) const {
         assert(i < size());
         if constexpr (Height == 1) { SUM_H1 }
         if constexpr (Height == 2) { SUM_H2 }
