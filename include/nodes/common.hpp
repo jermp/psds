@@ -1,7 +1,5 @@
 #pragma once
 
-#include "immintrin.h"
-
 namespace psds {
 
 template <typename T>

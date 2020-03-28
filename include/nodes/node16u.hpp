@@ -43,14 +43,14 @@ struct node16u {
 #else
         __m256i upd = _mm256_set1_epi64x(delta);
 
-        __m256i msk_j = _mm256_load_si256((__m256i const*)tables::mask_j + j);
+        __m256i msk_j = _mm256_load_si256((__m256i const*)tables::mask4_j + j);
         __m256i upd_j = _mm256_and_si256(upd, msk_j);
 
         __m256i dst = _mm256_loadu_si256((__m256i const*)summary);
         __m256i res = _mm256_add_epi64(upd_j, dst);
         _mm256_storeu_si256((__m256i*)summary, res);
 
-        __m256i msk_k = _mm256_load_si256((__m256i const*)tables::mask_k + k);
+        __m256i msk_k = _mm256_load_si256((__m256i const*)tables::mask4_k + k);
         __m256i upd_k = _mm256_and_si256(upd, msk_k);
 
         __m256i dst_ =
