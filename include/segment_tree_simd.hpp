@@ -31,7 +31,6 @@ struct segment_tree_simd {
         uint64_t total_size = total_nodes * Node::bytes + Height * 4;
         m_data.resize(total_size);
 
-        // TODO: why not std::reverse?
         m_num_nodes_per_level = reinterpret_cast<uint32_t*>(m_data.data());
         for (int h = Height - 1, i = 0; h >= 0; --h, ++i) {
             m_num_nodes_per_level[i] = num_nodes_per_level[h];
@@ -51,6 +50,15 @@ struct segment_tree_simd {
                     }
                     tmp[k] = sum;
                 }
+
+                // shift everything right by 1, except the leaves
+                if (step != 1) {
+                    for (int i = Node::fanout - 1; i > 0; --i) {
+                        tmp[i] = tmp[i - 1];
+                    }
+                    tmp[0] = 0;
+                }
+
                 Node::build(tmp.data(), begin + i * Node::bytes);
             }
         }

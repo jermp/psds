@@ -3,6 +3,7 @@
 
 TEST_CASE("test segment_tree_simd_node16u") {
     using namespace psds::testing;
+
     test_tree<segment_tree_simd<2, node16u>>(size_t(1) << 8);
     test_tree<segment_tree_simd<3, node16u>>(size_t(1) << 9);
     test_tree<segment_tree_simd<3, node16u>>(size_t(1) << 10);

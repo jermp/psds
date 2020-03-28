@@ -43,9 +43,9 @@ void test_node() {
     };
 
     int64_t delta = distr.gen();
+    std::cout << "delta " << delta << std::endl;
     update(delta);
-
-    std::cout << "everything's good" << std::endl;
+    std::cout << "\teverything's good" << std::endl;
 }
 
 }  // namespace testing

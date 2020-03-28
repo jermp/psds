@@ -17,7 +17,9 @@ void build_node_prefix_sums(T const* input, uint8_t* out, uint64_t segments,
         for (uint64_t j = 1; j != segments; ++j) {
             keys[base + j] = keys[base + j - 1] + input[base + j];
         }
-        summary[i + 1] = summary[i] + keys[(i + 1) * segments - 1];
+        if (i + 1 < segments) {
+            summary[i + 1] = summary[i] + keys[(i + 1) * segments - 1];
+        }
     }
 }
 

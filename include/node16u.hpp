@@ -11,7 +11,7 @@ namespace psds {
 struct node16u {
     static constexpr uint64_t fanout = 16;
     static constexpr uint64_t segments = 4;
-    static constexpr uint64_t summary_bytes = (segments + 1) * sizeof(int64_t);
+    static constexpr uint64_t summary_bytes = segments * sizeof(int64_t);
     static constexpr uint64_t bytes = summary_bytes + fanout * sizeof(int64_t);
 
     template <typename T>
@@ -29,13 +29,14 @@ struct node16u {
     }
 
     void update(uint64_t i, int64_t delta) {
-        assert(i < fanout);
+        if (i == fanout) return;
 
+        assert(i < fanout);
         uint64_t j = i / segments;
         uint64_t k = i % segments;
 
 #ifdef DISABLE_AVX
-        for (uint64_t z = j + 1; z != segments + 1; ++z) summary[z] += delta;
+        for (uint64_t z = j + 1; z != segments; ++z) summary[z] += delta;
         for (uint64_t z = k, base = j * segments; z != segments; ++z) {
             keys[base + z] += delta;
         }

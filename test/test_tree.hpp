@@ -5,12 +5,15 @@ namespace testing {
 
 template <typename Tree>
 void test_tree(size_t n) {
-    essentials::uniform_int_rng<int64_t> distr(0, +1000000000,
+    essentials::uniform_int_rng<int64_t> distr(-100, +1000000000,
                                                essentials::get_random_seed());
     std::cout << "== testing " << Tree::name() << " with " << n
               << " nodes ==" << std::endl;
     std::vector<int64_t> A(n);
     std::generate(A.begin(), A.end(), [&] { return distr.gen(); });
+    // std::cout << "array is:\n";
+    // for (auto x : A) { std::cout << x << " "; }
+    // std::cout << std::endl;
     Tree tree;
     essentials::logger("building tree...");
     tree.build(A.data(), n);
@@ -49,8 +52,8 @@ void test_tree(size_t n) {
     };
 
     int64_t delta = distr.gen();
+    std::cout << "delta " << delta << std::endl;
     update(delta);
-
     std::cout << "\teverything's good" << std::endl;
 }
 
