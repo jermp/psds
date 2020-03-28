@@ -5,11 +5,11 @@ namespace testing {
 
 template <typename Tree>
 void test_tree(size_t n) {
-    essentials::uniform_int_rng<int32_t> distr(0, +1000000000,
-                                               essentials::get_random_seed());
+    essentials::uniform_int_rng<int_type> distr(0, +1000000000,
+                                                essentials::get_random_seed());
     std::cout << "== testing " << Tree::name() << " with " << n
               << " nodes ==" << std::endl;
-    std::vector<int32_t> A(n);
+    std::vector<int_type> A(n);
     std::generate(A.begin(), A.end(), [&] { return distr.gen(); });
     Tree tree;
     essentials::logger("building tree...");
