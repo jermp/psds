@@ -23,11 +23,11 @@ struct segment_tree {
         return "segment_tree";
     }
 
-    size_t size() const {
+    uint64_t size() const {
         return m_size;
     }
 
-    int64_t sum(size_t i) const {
+    int64_t sum(uint64_t i) const {
         size_t lo = 0;
         size_t hi = size() - 1;
         size_t pos = 0;
@@ -66,7 +66,7 @@ struct segment_tree {
         // return sum + m_tree[pos];
     }
 
-    void update(size_t i, int32_t delta) {
+    void update(uint64_t i, int64_t delta) {
         size_t lo = 0;
         size_t hi = size() - 1;
         size_t pos = 0;

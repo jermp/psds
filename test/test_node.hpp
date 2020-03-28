@@ -3,23 +3,22 @@
 namespace psds {
 namespace testing {
 
-template <typename Tree>
-void test_tree(size_t n) {
-    essentials::uniform_int_rng<int64_t> distr(0, +1000000000,
+template <typename Node>
+void test_node() {
+    essentials::uniform_int_rng<int64_t> distr(-100, +1000000000,
                                                essentials::get_random_seed());
-    std::cout << "== testing " << Tree::name() << " with " << n
-              << " nodes ==" << std::endl;
-    std::vector<int64_t> A(n);
+    std::cout << "testing " << Node::name() << " with fanout " << Node::fanout
+              << std::endl;
+    std::vector<int64_t> A(Node::fanout);
+    std::vector<uint8_t> out(Node::bytes);
     std::generate(A.begin(), A.end(), [&] { return distr.gen(); });
-    Tree tree;
-    essentials::logger("building tree...");
-    tree.build(A.data(), n);
+    Node::build(A.data(), out.data());
+    Node node(out.data());
 
     {
-        essentials::logger("testing sum queries...");
         int64_t expected = 0;
-        for (uint32_t i = 0; i != n; ++i) {
-            int64_t got = tree.sum(i);
+        for (uint32_t i = 0; i != Node::fanout; ++i) {
+            int64_t got = node.sum(i);
             expected += A[i];
             REQUIRE_MESSAGE(got == expected, "got sum(" << i << ") = " << got
                                                         << " but expected "
@@ -28,18 +27,13 @@ void test_tree(size_t n) {
     }
 
     auto update = [&](int64_t delta) {
-        essentials::logger("testing update queries...");
-        static constexpr uint32_t queries = 5000;
-        uint32_t step = n / queries;
-        if (step == 0) step += 1;
         for (uint32_t run = 0; run != 100; ++run) {
             int64_t expected = 0;
-            uint32_t k = 0;
-            for (uint32_t i = 0; i < n; i += step) {
-                tree.update(i, delta);
-                int64_t got = tree.sum(i);
+            for (uint32_t i = 0; i != Node::fanout; ++i) {
+                node.update(i, delta);
+                int64_t got = node.sum(i);
                 A[i] += delta;
-                for (; k != i + 1; ++k) expected += A[k];
+                expected += A[i];
                 REQUIRE_MESSAGE(got == expected,
                                 "error during run "
                                     << run << ": got sum(" << i << ") = " << got
@@ -51,7 +45,7 @@ void test_tree(size_t n) {
     int64_t delta = distr.gen();
     update(delta);
 
-    std::cout << "\teverything's good" << std::endl;
+    std::cout << "everything's good" << std::endl;
 }
 
 }  // namespace testing

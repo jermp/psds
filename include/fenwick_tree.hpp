@@ -22,18 +22,18 @@ struct fenwick_tree {
         return "fenwick_tree";
     }
 
-    size_t size() const {
+    uint64_t size() const {
         return m_tree.size();
     }
 
-    int64_t sum(size_t i) const {
+    int64_t sum(uint64_t i) const {
         assert(i < size());
         int64_t sum = m_tree[0];
         for (int64_t k = i; k > 0; k &= k - 1) sum += m_tree[k];
         return sum;
     }
 
-    void update(size_t i, int32_t delta) {
+    void update(uint64_t i, int64_t delta) {
         assert(i < size());
         if (i == 0) {
             m_tree[0] += delta;

@@ -6,7 +6,11 @@
 // #include "node256s.hpp"
 // #include "node64u.hpp"
 // #include "node64s.hpp"
+
+#include "node16u.hpp"
+
 #include "segment_tree.hpp"
+#include "segment_tree_simd.hpp"
 #include "fenwick_tree.hpp"
 // #include "truncated_fenwick_tree_epi32.hpp"
 // #include "blocked_fenwick_tree_epi32.hpp"
