@@ -8,30 +8,16 @@ namespace psds {
 #define LEFT(i) 2 * i + 1
 #define RIGHT(i) 2 * i + 2
 
-template <typename T>
 struct segment_tree {
+    segment_tree() : m_size(0) {}
+
+    template <typename T>
     void build(T const* input, size_t n) {
         m_size = n;
         size_t m = size_t(1) << static_cast<size_t>(ceil(log2(n)));
         m_tree.resize(2 * m - 1);
         build(input, 0, n - 1, 0);
     }
-
-    int64_t build(T const* input, size_t lo, size_t hi, size_t pos) {
-        if (lo == hi) {
-            m_tree[pos] = input[lo];
-            return m_tree[pos];
-        }
-        size_t mi = (lo + hi) / 2;
-        int64_t l_subtree_sum = build(input, lo, mi, LEFT(pos));
-        int64_t r_subtree_sum = build(input, mi + 1, hi, RIGHT(pos));
-        m_tree[pos] = l_subtree_sum;
-        return l_subtree_sum + r_subtree_sum;
-        // m_tree[pos] = l_subtree_sum + r_subtree_sum;
-        // return m_tree[pos];
-    }
-
-    segment_tree() {}
 
     static std::string name() {
         return "segment_tree";
@@ -117,6 +103,21 @@ struct segment_tree {
 private:
     size_t m_size;
     std::vector<int64_t> m_tree;
+
+    template <typename T>
+    int64_t build(T const* input, size_t lo, size_t hi, size_t pos) {
+        if (lo == hi) {
+            m_tree[pos] = input[lo];
+            return m_tree[pos];
+        }
+        size_t mi = (lo + hi) / 2;
+        int64_t l_subtree_sum = build(input, lo, mi, LEFT(pos));
+        int64_t r_subtree_sum = build(input, mi + 1, hi, RIGHT(pos));
+        m_tree[pos] = l_subtree_sum;
+        return l_subtree_sum + r_subtree_sum;
+        // m_tree[pos] = l_subtree_sum + r_subtree_sum;
+        // return m_tree[pos];
+    }
 };
 
 }  // namespace psds

@@ -4,10 +4,10 @@
 
 namespace psds {
 
-template <typename T>
 struct fenwick_tree {
     fenwick_tree() {}
 
+    template <typename T>
     void build(T const* input, uint32_t n) {
         m_tree.resize(n);
         std::copy(input, input + n, m_tree.begin());

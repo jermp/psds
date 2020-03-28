@@ -5,7 +5,7 @@ namespace testing {
 
 template <typename Tree>
 void test_tree(size_t n) {
-    essentials::uniform_int_rng<int32_t> distr(-1000000000, +1000000000,
+    essentials::uniform_int_rng<int32_t> distr(0, +1000000000,
                                                essentials::get_random_seed());
     std::cout << "== testing " << Tree::name() << " with " << n
               << " nodes ==" << std::endl;
