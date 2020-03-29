@@ -12,5 +12,6 @@
 #include "trees/segment_tree.hpp"
 #include "trees/segment_tree_simd.hpp"
 #include "trees/fenwick_tree.hpp"
-// #include "truncated_fenwick_tree_epi32.hpp"
+#include "trees/fenwick_tree_truncated.hpp"
+
 // #include "blocked_fenwick_tree_epi32.hpp"

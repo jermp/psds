@@ -3,7 +3,7 @@
 
 TEST_CASE("test fenwick_tree") {
     using namespace psds::testing;
-    for (int log2 = min_log2; log2 != max_log2 + 1; ++log2) {
+    for (uint32_t log2 = min_log2; log2 != max_log2 + 1; ++log2) {
         test_tree<fenwick_tree>(size_t(1) << log2);
     }
 }
