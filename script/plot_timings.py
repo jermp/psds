@@ -9,7 +9,7 @@ plt.rcParams['axes.facecolor'] = '#f7f7f7'
 from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib.ticker import FuncFormatter
 
-fig, ax = plt.subplots(figsize = (13,7))
+fig, ax = plt.subplots(figsize = (8,8))
 plt.margins(0.01, 0.01)
 
 ax.set_ylabel('ns/query', fontsize = 10)
@@ -33,12 +33,19 @@ if args.min_log2 < 8:
 print(args.types)
 
 y = {}
-
+min = np.Inf
+max = -np.Inf
 offset = args.min_log2 - 8
 with open(args.input_filename) as f:
     for line in f:
         parsed_line = json.loads(line)
         type = parsed_line["type"]
+        m = np.min(parsed_line["timings"][offset:])
+        if m < min:
+            min = m
+        mm = np.max(parsed_line["timings"][offset:])
+        if mm > max:
+            max = mm
         if type in args.types:
             y[type] = parsed_line["timings"][offset:]
 
@@ -48,6 +55,8 @@ for i in range(offset, len(y[args.types[0]]) + offset):
     x.append(n)
     n *= 2
 
+# plt.ylim(min - 0.1, max + 10)
+plt.ylim(min, max)
 m = 5
 
 info = {
