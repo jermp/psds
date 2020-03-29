@@ -56,8 +56,26 @@ static constexpr uint32_t fanout16_heights[] = {
     std::string type = argv[1];                                      \
     if (type == "st") {                                              \
         perf_test<segment_tree>();                                   \
+    } else if (type == "sts_16u") {                                  \
+        perf_segment_tree_simd_node16<node16u>();                    \
+    } else if (type == "sts_64u") {                                  \
+        perf_segment_tree_simd_node64<node64u>();                    \
+    } else if (type == "sts_256u") {                                 \
+        perf_segment_tree_simd_node256<node256u>();                  \
     } else if (type == "ft") {                                       \
         perf_test<fenwick_tree>();                                   \
+    } else if (type == "ftb_16u") {                                  \
+        perf_test<fenwick_tree_blocked<node16u>>();                  \
+    } else if (type == "ftb_64u") {                                  \
+        perf_test<fenwick_tree_blocked<node64u>>();                  \
+    } else if (type == "ftb_256u") {                                 \
+        perf_test<fenwick_tree_blocked<node256u>>();                 \
+    } else if (type == "ftt_16u") {                                  \
+        perf_test<fenwick_tree_truncated<node16u>>();                \
+    } else if (type == "ftt_64u") {                                  \
+        perf_test<fenwick_tree_truncated<node64u>>();                \
+    } else if (type == "ftt_256u") {                                 \
+        perf_test<fenwick_tree_truncated<node256u>>();               \
     } else {                                                         \
         std::cout << "unknown type \"" << type << "\"" << std::endl; \
         return 1;                                                    \
