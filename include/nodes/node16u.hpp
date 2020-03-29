@@ -44,19 +44,20 @@ struct node16u {
         __m256i upd = _mm256_set1_epi64x(delta);
 
         __m256i msk_j = _mm256_load_si256((__m256i const*)tables::mask4_j + j);
-        __m256i upd_j = _mm256_and_si256(upd, msk_j);
-
-        __m256i dst = _mm256_loadu_si256((__m256i const*)summary);
-        __m256i res = _mm256_add_epi64(upd_j, dst);
-        _mm256_storeu_si256((__m256i*)summary, res);
-
         __m256i msk_k = _mm256_load_si256((__m256i const*)tables::mask4_k + k);
+
+        __m256i upd_j = _mm256_and_si256(upd, msk_j);
         __m256i upd_k = _mm256_and_si256(upd, msk_k);
 
-        __m256i dst_ =
+        __m256i dst_summary = _mm256_loadu_si256((__m256i const*)summary);
+        __m256i dst_keys =
             _mm256_loadu_si256((__m256i const*)(keys + j * segments));
-        __m256i res_ = _mm256_add_epi64(upd_k, dst_);
-        _mm256_storeu_si256((__m256i*)(keys + j * segments), res_);
+
+        __m256i res_summary = _mm256_add_epi64(upd_j, dst_summary);
+        __m256i res_keys = _mm256_add_epi64(upd_k, dst_keys);
+
+        _mm256_storeu_si256((__m256i*)summary, res_summary);
+        _mm256_storeu_si256((__m256i*)(keys + j * segments), res_keys);
 #endif
     }
 
