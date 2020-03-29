@@ -5,7 +5,7 @@ Given an array S[0..n), we want to solve
 the prefix-sums problem.
 
 The library implements the following solutions.
-   
+
 1. ##### Binary Segment tree
 
 2. ##### Un-buffered SIMD *k*-ary Segment tree
@@ -96,7 +96,7 @@ The library implements the following solutions.
 5. ##### Truncated Fenwick trees
 
 	We divide S into blocks of size *k*. Then the ceil(*n* / *k*) blocks become the leaves of a fenwick tree. Thus we use a Fenwick tree truncated as soon as we reduced the range down to *k*. The nodes of the Fenwick tree will store the prefix sums of the blocks.
-	
+
 6. ##### Blocked Fenwick trees
 
 	Blocks of *k* integers are
@@ -116,11 +116,11 @@ The library implements the following solutions.
    if we keep the blocks prefix-summed, then
    updating can be done with SIMD using 256-bit registers.
    (See `node64u`).
-   
+
 Compiling the code <a name="compiling"></a>
 ------------------
 
-The code is tested on Linux with `gcc` 7.4; on Mac 10.14 with `clang` 10.0.0 and 11.0.0.
+The code is tested on Linux with `gcc` 7.4 and 9.2.1; on Mac 10.14 with `clang` 10.0.0 and 11.0.0.
 To build the code, [`CMake`](https://cmake.org/) is required.
 
 Clone the repository with
@@ -200,7 +200,7 @@ With AVX, sum becomes ~2-4X faster; update ~8X faster.
    than `tree_epi32_node256u` for log *n* = 9, 10, 11 on sum and
    for log *n* = 9, 10, 11, 12 on update);
    the buffered version is generally better on larger values of *n*.
-   
+
 5. Blocked Fenwick trees are more efficient than traditional Fenwick trees because the height is reduced from log(*n*) to log(*n*/B).
 The *average* number of nodes traversed will then be log(*n*/B)/2 for
 uniformly distributed (random) queries.
