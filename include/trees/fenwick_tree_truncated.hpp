@@ -6,7 +6,7 @@ namespace psds {
 
 template <typename Node>
 struct fenwick_tree_truncated {
-    fenwick_tree_truncated() : m_size(0) {}
+    fenwick_tree_truncated() : m_size(0), m_ptr(nullptr) {}
 
     template <typename T>
     void build(T const* input, uint32_t n) {
