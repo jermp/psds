@@ -2,15 +2,17 @@ Prefix-Sum Data Structures
 ------
 
 Given an array S[0..n), we want to solve
-the prefix-sums problem.
+the prefix-sum problem.
 
 The library implements the following solutions.
 
-1. ##### Binary Segment tree
+- Binary Segment Tree
 
-2. ##### Un-buffered SIMD *k*-ary Segment tree
+- Fenwick Tree
+ 
+- Un-buffered *k*-ary Segment Tree with SIMD
 
-	Every node has a fanout of 64.
+<!--	Every node has a fanout of 64.
 	A block S[0..63] of 64 integers is divided into 8
 	segments
 	of 8 integers each. For each segment we store
@@ -89,17 +91,15 @@ The library implements the following solutions.
 	  B and L.
 
 	  We use SIMD during the Sum query to
-	  compute prefix sums on both L and B.
+	  compute prefix sums on both L and B.-->
+	  
+- Truncated Fenwick Tree
 
-4. ##### Fenwick tree
+<!--	We divide S into blocks of size *k*. Then the ceil(*n* / *k*) blocks become the leaves of a fenwick tree. Thus we use a Fenwick tree truncated as soon as we reduced the range down to *k*. The nodes of the Fenwick tree will store the prefix sums of the blocks.-->
 
-5. ##### Truncated Fenwick trees
+- Blocked Fenwick Tree
 
-	We divide S into blocks of size *k*. Then the ceil(*n* / *k*) blocks become the leaves of a fenwick tree. Thus we use a Fenwick tree truncated as soon as we reduced the range down to *k*. The nodes of the Fenwick tree will store the prefix sums of the blocks.
-
-6. ##### Blocked Fenwick trees
-
-	Blocks of *k* integers are
+<!--	Blocks of *k* integers are
    indexed using the Fenwick tree layout.
    During a traversal of the tree, we compute the sum
    or update a block, before proceeding downwards.
@@ -115,7 +115,7 @@ The library implements the following solutions.
    Maybe *k* = 8 may be more covenient because
    if we keep the blocks prefix-summed, then
    updating can be done with SIMD using 256-bit registers.
-   (See `node64u`).
+   (See `node64u`).-->
 
 Compiling the code <a name="compiling"></a>
 ------------------
@@ -125,40 +125,39 @@ To build the code, [`CMake`](https://cmake.org/) is required.
 
 Clone the repository with
 
-	$ git clone --recursive https://github.com/jermp/psds.git
+	git clone --recursive https://github.com/jermp/psds.git
 
 If you have cloned the repository without `--recursive`, you will need to perform the following commands before
 compiling:
 
-    $ git submodule init
-    $ git submodule update
+    git submodule init
+    git submodule update
 
 To compile the code for a release environment (see file `CMakeLists.txt` for the used compilation flags), it is sufficient to do the following:
 
-    $ mkdir build
-    $ cd build
-    $ cmake ..
-    $ make
-
-Hint: Use `make -j4` to compile the library in parallel using, e.g., 4 jobs.
+    mkdir build
+    cd build
+    cmake ..
+    make -j
 
 By default, SIMD AVX instructions are enabled (flag `-DDISABLE_AVX=Off`). If you want to
 disable them (although your compiler has proper support), you can compile with
 
-	$ cmake .. -DDISABLE_AVX=On
-	$ make
+	cmake .. -DDISABLE_AVX=On
+	make
 
 
-For the best of performance, we recommend compiling with:
+For the best of performance, we recommend compiling with (default configuration):
 
-	$ cmake .. -DCMAKE_BUILD_TYPE=Release -DUSE_SANITIZERS=Off -DDISABLE_AVX=Off
-
+	cmake .. -DCMAKE_BUILD_TYPE=Release -DUSE_SANITIZERS=Off -DDISABLE_AVX=Off
+	make -j
+	
 For a testing environment, use the following instead:
 
-    $ mkdir debug_build
-    $ cd debug_build
-    $ cmake .. -DCMAKE_BUILD_TYPE=Debug -DUSE_SANITIZERS=On
-    $ make
+    mkdir debug_build
+    cd debug_build
+    cmake .. -DCMAKE_BUILD_TYPE=Debug -DUSE_SANITIZERS=On
+    make -j
 
 Running the unit tests <a name="testing"></a>
 -----------
@@ -168,12 +167,12 @@ The unit tests are written using [doctest](https://github.com/onqtam/doctest).
 After compilation, it is advised
 to run the unit tests with:
 
-	$ make test
+	make test
 
 Results
 ------
 
-By looking at the plots in `script`, we can express the following considerations.
+### <span style="color:red">Warning: These considerations are relative to a previous implementation. Should be revised accordingly.</span>
 
 1. The binary segment tree is always outperformed by both the (binary) fenwick tree
    and the non-binary SIMD-ized segment trees (`tree_epi32`).
