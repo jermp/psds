@@ -65,6 +65,10 @@ void perf_segment_tree_simd_node64() {
     EXE_PERF_SUM(GEN_TYPE_NODE64(10, Node), 10)
     EXE_PERF_SUM(GEN_TYPE_NODE64(11, Node), 11)
     EXE_PERF_SUM(GEN_TYPE_NODE64(12, Node), 12)
+    EXE_PERF_SUM(GEN_TYPE_NODE64(13, Node), 13)
+    EXE_PERF_SUM(GEN_TYPE_NODE64(14, Node), 14)
+    EXE_PERF_SUM(GEN_TYPE_NODE64(15, Node), 15)
+    EXE_PERF_SUM(GEN_TYPE_NODE64(16, Node), 16)
 
     json.pop_back();
     json += "]}";
@@ -92,6 +96,10 @@ void perf_segment_tree_simd_node256() {
     EXE_PERF_SUM(GEN_TYPE_NODE256(10, Node), 10)
     EXE_PERF_SUM(GEN_TYPE_NODE256(11, Node), 11)
     EXE_PERF_SUM(GEN_TYPE_NODE256(12, Node), 12)
+    EXE_PERF_SUM(GEN_TYPE_NODE256(13, Node), 13)
+    EXE_PERF_SUM(GEN_TYPE_NODE256(14, Node), 14)
+    EXE_PERF_SUM(GEN_TYPE_NODE256(15, Node), 15)
+    EXE_PERF_SUM(GEN_TYPE_NODE256(16, Node), 16)
 
     json.pop_back();
     json += "]}";
@@ -118,10 +126,10 @@ void perf_test() {
     EXE_PERF_SUM(Tree, 10)
     EXE_PERF_SUM(Tree, 11)
     EXE_PERF_SUM(Tree, 12)
-    // EXE_PERF_SUM(Tree, 13)
-    // EXE_PERF_SUM(Tree, 14)
-    // EXE_PERF_SUM(Tree, 15)
-    // EXE_PERF_SUM(Tree, 16)
+    EXE_PERF_SUM(Tree, 13)
+    EXE_PERF_SUM(Tree, 14)
+    EXE_PERF_SUM(Tree, 15)
+    EXE_PERF_SUM(Tree, 16)
     // EXE_PERF_SUM(Tree, 17)
     // EXE_PERF_SUM(Tree, 18)
     // EXE_PERF_SUM(Tree, 19)

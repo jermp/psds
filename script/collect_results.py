@@ -10,14 +10,14 @@ args = parser.parse_args()
 
 types = [
     "st",
-    "sts_16u",
+    # "sts_16u",
     "sts_64u",
     "sts_256u",
     "ft",
-    "ftb_16u",
+    # "ftb_16u",
     "ftb_64u",
     "ftb_256u",
-    "ftt_16u",
+    # "ftt_16u",
     "ftt_64u",
     "ftt_256u"
 ]

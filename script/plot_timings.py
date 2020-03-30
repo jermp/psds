@@ -9,18 +9,19 @@ plt.rcParams['axes.facecolor'] = '#f7f7f7'
 from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib.ticker import FuncFormatter
 
-fig, ax = plt.subplots(figsize = (8,8))
+fig, ax = plt.subplots(figsize = (5,5))
 plt.margins(0.01, 0.01)
 
 ax.set_ylabel('ns/query', fontsize = 10)
 ax.set_xlabel('n', fontsize = 10)
 ax.set_xscale('log', basex = 2)
-ax.set_yscale('log', basey = 2)
+# ax.set_yscale('log', basey = 2)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('input_filename', type = str, help = "Input json filename.")
 parser.add_argument('output_filename', type = str, help = "Output filename.")
 parser.add_argument('min_log2', type = int, help = "Minimum value of log2(n). Must be at least 8.")
+parser.add_argument('max_log2', type = int, help = "Maximum value of log2(n). Must be >= min_log2.")
 parser.add_argument('types', metavar='types', type = str, nargs='+',
                     help = 'types to plot')
 
@@ -30,37 +31,39 @@ if args.min_log2 < 8:
     print("min_log2 must be at least 8")
     exit(1)
 
-print(args.types)
+if args.max_log2 < args.min_log2:
+    print("max_log2 must be >= min_log2")
+    exit(1)
 
 y = {}
 min = np.Inf
 max = -np.Inf
-offset = args.min_log2 - 8
+offset_min = args.min_log2 - 8
+offset_max = args.max_log2 - 8 + 1
 with open(args.input_filename) as f:
     for line in f:
         parsed_line = json.loads(line)
         type = parsed_line["type"]
-        m = np.min(parsed_line["timings"][offset:])
+        m = np.min(parsed_line["timings"][offset_min:offset_max])
         if m < min:
             min = m
-        mm = np.max(parsed_line["timings"][offset:])
+        mm = np.max(parsed_line["timings"][offset_min:offset_max])
         if mm > max:
             max = mm
         if type in args.types:
-            y[type] = parsed_line["timings"][offset:]
+            y[type] = parsed_line["timings"][offset_min:offset_max]
 
 x = []
 n = pow(2, args.min_log2)
-for i in range(offset, len(y[args.types[0]]) + offset):
+for i in range(offset_min, offset_max):
     x.append(n)
     n *= 2
 
-# plt.ylim(min - 0.1, max + 10)
 plt.ylim(min, max)
 m = 5
 
 info = {
-    "segment_tree":                     ["#252525",'o'],
+    "segment_tree":                     ["#737373",'P'],
 
     "segment_tree_simd_node16u":        ["#a50f15",'X'],
     "segment_tree_simd_node64u":        ["#de2d26",'s'],
@@ -87,7 +90,7 @@ for i in range(0, len(y)):
 
 ax.legend(
     ([args.types[i] for i in range(0,len(args.types))]),
-      fontsize = 9,
+      fontsize = 8,
       loc = "best",
       borderaxespad = 0.)
 
