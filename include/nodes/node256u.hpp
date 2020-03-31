@@ -14,6 +14,8 @@ struct node256u {
     static constexpr uint64_t summary_bytes = segments * sizeof(int64_t);
     static constexpr uint64_t bytes = summary_bytes + fanout * sizeof(int64_t);
 
+    node256u() {}  // do not initialize
+
     template <typename T>
     static void build(T const* input, uint8_t* out) {
         build_node_prefix_sums(input, out, segments, summary_bytes, bytes);
@@ -24,6 +26,12 @@ struct node256u {
     }
 
     node256u(uint8_t* ptr) {
+        // summary = reinterpret_cast<int64_t*>(ptr);
+        // keys = reinterpret_cast<int64_t*>(ptr + summary_bytes);
+        at(ptr);
+    }
+
+    inline void at(uint8_t* ptr) {
         summary = reinterpret_cast<int64_t*>(ptr);
         keys = reinterpret_cast<int64_t*>(ptr + summary_bytes);
     }

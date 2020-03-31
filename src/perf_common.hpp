@@ -85,7 +85,7 @@ static constexpr uint32_t fanout16_heights[] = {
     std::cout << tree.name() << "\n";                           \
     int64_t total = 0;                                          \
     essentials::timer_type t;                                   \
-    static const int runs = 10 + 1;                             \
+    static const int runs = 5;                                  \
     for (int run = 0; run != runs; ++run) {                     \
         t.start();                                              \
         for (auto q : queries) total += tree.sum(q);            \
@@ -100,7 +100,7 @@ static constexpr uint32_t fanout16_heights[] = {
 #define PERF_UPDATE                                                   \
     std::cout << tree.name() << "\n";                                 \
     essentials::timer_type t;                                         \
-    static const int runs = 5 + 1;                                    \
+    static const int runs = 5;                                        \
     for (int run = 0; run != runs; ++run) {                           \
         t.start();                                                    \
         for (auto const& q : queries) tree.update(q.first, q.second); \

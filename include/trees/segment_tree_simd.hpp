@@ -4,7 +4,11 @@
 #include <cmath>
 #include <vector>
 
-#include "macros.hpp"
+#ifdef SLOW_SEGTREE
+#include "slow_macros.hpp"
+#else
+#include "fast_macros.hpp"
+#endif
 
 namespace psds {
 
@@ -28,6 +32,9 @@ struct segment_tree_simd {
         }
         assert(Height == num_nodes_per_level.size());
 
+#ifdef SLOW_SEGTREE
+        m_height = num_nodes_per_level.size();
+#endif
         uint64_t total_size = total_nodes * Node::bytes + Height * 4;
         m_data.resize(total_size);
 
@@ -74,25 +81,55 @@ struct segment_tree_simd {
 
     void update(uint64_t i, int64_t delta) {
         assert(i < size());
+
+#ifdef SLOW_SEGTREE
+        if (m_height == 1) {
+            UPDATE_H1
+        } else if (m_height == 2) {
+            UPDATE_H2
+        } else if (m_height == 3) {
+            UPDATE_H3
+        } else {
+            UPDATE_H4
+        }
+#else
         if constexpr (Height == 1) { UPDATE_H1 }
         if constexpr (Height == 2) { UPDATE_H2 }
         if constexpr (Height == 3) { UPDATE_H3 }
         if constexpr (Height == 4) { UPDATE_H4 }
+#endif
+
         assert(false);
         __builtin_unreachable();
     }
 
     int64_t sum(uint64_t i) const {
         assert(i < size());
+
+#ifdef SLOW_SEGTREE
+        if (m_height == 1) {
+            SUM_H1
+        } else if (m_height == 2) {
+            SUM_H2
+        } else if (m_height == 3) {
+            SUM_H3
+        } else {
+            SUM_H4
+        }
+#else
         if constexpr (Height == 1) { SUM_H1 }
         if constexpr (Height == 2) { SUM_H2 }
         if constexpr (Height == 3) { SUM_H3 }
         if constexpr (Height == 4) { SUM_H4 }
+#endif
         assert(false);
         __builtin_unreachable();
     }
 
 private:
+#ifdef SLOW_SEGTREE
+    uint32_t m_height;
+#endif
     uint32_t m_size;
     uint32_t* m_num_nodes_per_level;
     uint8_t* m_ptr;

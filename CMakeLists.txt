@@ -14,6 +14,11 @@ if (DISABLE_AVX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDISABLE_AVX")
 endif()
 
+if (SLOW_SEGTREE)
+  MESSAGE(STATUS "SLOW_SEGTREE activated")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DSLOW_SEGTREE")
+endif()
+
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 endif ()
