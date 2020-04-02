@@ -12,7 +12,8 @@ struct node64s {
     static constexpr uint64_t fanout = 64;
     static constexpr uint64_t segments = 8;
     static constexpr uint64_t summary_bytes = segments * sizeof(int64_t);
-    static constexpr uint64_t bytes = summary_bytes + fanout * sizeof(int64_t);
+    static constexpr uint64_t bytes =
+        3 * summary_bytes + fanout * sizeof(int64_t);
 
     node64s() {}  // do not initialize
 
@@ -30,8 +31,13 @@ struct node64s {
     }
 
     inline void at(uint8_t* ptr) {
-        summary = reinterpret_cast<int64_t*>(ptr);
-        keys = reinterpret_cast<int64_t*>(ptr + summary_bytes);
+        int64_t* __ptr = reinterpret_cast<int64_t*>(ptr);
+
+        summary_tmp = __ptr;
+        summary = __ptr + segments;
+
+        keys_tmp = __ptr + segments + segments;
+        keys = __ptr + segments + segments + segments;
     }
 
     void update(uint64_t i, int64_t delta) {
@@ -49,7 +55,7 @@ struct node64s {
         uint64_t base = j * segments;
 
         // 1. prefix sum on the summary
-        static int64_t summary_tmp[segments];
+        // static int64_t summary_tmp[segments];
         summary_tmp[0] = 0;
         summary_tmp[1] = summary[0];
         summary_tmp[2] = summary[0] + summary[1];
@@ -66,7 +72,7 @@ struct node64s {
         int64_t s1 = summary_tmp[j];
 
         // 2. prefix sum on a specific segment
-        static int64_t keys_tmp[segments];
+        // static int64_t keys_tmp[segments];
         int64_t* __keys = keys + base;
         keys_tmp[0] = __keys[0];
         keys_tmp[1] = __keys[0] + __keys[1];
@@ -88,7 +94,10 @@ struct node64s {
     }
 
 private:
+    int64_t* summary_tmp;
     int64_t* summary;
+
+    int64_t* keys_tmp;
     int64_t* keys;
 };
 

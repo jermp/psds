@@ -8,8 +8,11 @@ void build_node(T const* input, uint8_t* out, uint64_t fanout,
     assert(fanout % segments == 0);
     uint64_t segment_size = fanout / segments;
     std::fill(out, out + bytes, 0);
-    int64_t* summary = reinterpret_cast<int64_t*>(out);
-    int64_t* keys = reinterpret_cast<int64_t*>(out + summary_bytes);
+
+    int64_t* summary = reinterpret_cast<int64_t*>(out + summary_bytes);
+    int64_t* keys = reinterpret_cast<int64_t*>(out + summary_bytes +
+                                               summary_bytes + summary_bytes);
+
     for (uint64_t i = 0; i != segments; ++i) {
         uint64_t base = i * segments;
         int64_t sum = 0;
