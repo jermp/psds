@@ -72,3 +72,27 @@ TEST_CASE("test segment_tree_simd_node256u") {
     // test_tree<segment_tree_simd<4, node256u>>(size_t(1) << 30);
     // test_tree<segment_tree_simd<4, node256u>>(size_t(1) << 31);
 }
+
+TEST_CASE("test segment_tree_simd_node64s") {
+    using namespace psds::testing;
+
+    test_tree<segment_tree_simd<2, node64s>>(size_t(1) << 8);
+    test_tree<segment_tree_simd<2, node64s>>(size_t(1) << 9);
+    test_tree<segment_tree_simd<2, node64s>>(size_t(1) << 10);
+    test_tree<segment_tree_simd<2, node64s>>(size_t(1) << 11);
+    test_tree<segment_tree_simd<2, node64s>>(size_t(1) << 12);
+
+    test_tree<segment_tree_simd<3, node64s>>(size_t(1) << 13);
+    test_tree<segment_tree_simd<3, node64s>>(size_t(1) << 14);
+    test_tree<segment_tree_simd<3, node64s>>(size_t(1) << 15);
+    test_tree<segment_tree_simd<3, node64s>>(size_t(1) << 16);
+    test_tree<segment_tree_simd<3, node64s>>(size_t(1) << 17);
+    test_tree<segment_tree_simd<3, node64s>>(size_t(1) << 18);
+
+    test_tree<segment_tree_simd<4, node64s>>(size_t(1) << 19);
+    test_tree<segment_tree_simd<4, node64s>>(size_t(1) << 20);
+    test_tree<segment_tree_simd<4, node64s>>(size_t(1) << 21);
+    test_tree<segment_tree_simd<4, node64s>>(size_t(1) << 22);
+    test_tree<segment_tree_simd<4, node64s>>(size_t(1) << 23);
+    test_tree<segment_tree_simd<4, node64s>>(size_t(1) << 24);
+}

@@ -9,7 +9,7 @@ The library implements the following solutions.
 - Binary Segment Tree
 
 - Fenwick Tree
- 
+
 - Un-buffered *k*-ary Segment Tree with SIMD
 
 <!--	Every node has a fanout of 64.
@@ -92,7 +92,7 @@ The library implements the following solutions.
 
 	  We use SIMD during the Sum query to
 	  compute prefix sums on both L and B.-->
-	  
+
 - Truncated Fenwick Tree
 
 <!--	We divide S into blocks of size *k*. Then the ceil(*n* / *k*) blocks become the leaves of a fenwick tree. Thus we use a Fenwick tree truncated as soon as we reduced the range down to *k*. The nodes of the Fenwick tree will store the prefix sums of the blocks.-->
@@ -144,14 +144,14 @@ By default, SIMD AVX instructions are enabled (flag `-DDISABLE_AVX=Off`). If you
 disable them (although your compiler has proper support), you can compile with
 
 	cmake .. -DDISABLE_AVX=On
-	make
+	make -j
 
 
 For the best of performance, we recommend compiling with (default configuration):
 
 	cmake .. -DCMAKE_BUILD_TYPE=Release -DUSE_SANITIZERS=Off -DDISABLE_AVX=Off
 	make -j
-	
+
 For a testing environment, use the following instead:
 
     mkdir debug_build

@@ -18,7 +18,8 @@ struct node256u {
 
     template <typename T>
     static void build(T const* input, uint8_t* out) {
-        build_node_prefix_sums(input, out, segments, summary_bytes, bytes);
+        build_node_prefix_sums(input, out, fanout, segments, summary_bytes,
+                               bytes);
     }
 
     static std::string name() {
@@ -26,8 +27,6 @@ struct node256u {
     }
 
     node256u(uint8_t* ptr) {
-        // summary = reinterpret_cast<int64_t*>(ptr);
-        // keys = reinterpret_cast<int64_t*>(ptr + summary_bytes);
         at(ptr);
     }
 
@@ -44,8 +43,9 @@ struct node256u {
         uint64_t k = i % segments;
 
 #ifdef DISABLE_AVX
+        static constexpr uint64_t segment_size = fanout / segments;
         for (uint64_t z = j + 1; z != segments; ++z) summary[z] += delta;
-        for (uint64_t z = k, base = j * segments; z != segments; ++z) {
+        for (uint64_t z = k, base = j * segments; z != segment_size; ++z) {
             keys[base + z] += delta;
         }
 #else
