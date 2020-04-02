@@ -12,7 +12,3 @@ TEST_CASE("test node64u") {
 TEST_CASE("test node16u") {
     psds::testing::test_node<node256u>();
 }
-
-TEST_CASE("test node64s") {
-    psds::testing::test_node<node64s>();
-}
