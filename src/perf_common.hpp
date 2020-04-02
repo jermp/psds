@@ -62,6 +62,8 @@ static constexpr uint32_t fanout16_heights[] = {
         perf_segment_tree_simd_node64<node64u>();                    \
     } else if (type == "sts_256u") {                                 \
         perf_segment_tree_simd_node256<node256u>();                  \
+    } else if (type == "sts_64s") {                                  \
+        perf_segment_tree_simd_node64<node64s>();                    \
     } else if (type == "ft") {                                       \
         perf_test<fenwick_tree>();                                   \
     } else if (type == "ftb_16u") {                                  \

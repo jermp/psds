@@ -13,6 +13,9 @@ types = [
     # "sts_16u",
     "sts_64u",
     "sts_256u",
+
+    "sts_64s",
+
     "ft",
     # "ftb_16u",
     "ftb_64u",
