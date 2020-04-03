@@ -24,12 +24,11 @@ struct segment_tree_simd {
         std::vector<uint32_t> num_nodes_per_level;
         uint64_t m = n;
         uint64_t total_nodes = 0;
-        while (m != 1) {
+        do {
             m = std::ceil(static_cast<double>(m) / Node::fanout);
-            assert(m < uint32_t(-1));
             num_nodes_per_level.push_back(m);
             total_nodes += m;
-        }
+        } while (m != 1);
         assert(Height == num_nodes_per_level.size());
 
 #ifdef SLOW_SEGTREE

@@ -9,3 +9,4 @@
 #include "trees/fenwick_tree.hpp"
 #include "trees/fenwick_tree_truncated.hpp"
 #include "trees/fenwick_tree_blocked.hpp"
+#include "trees/fenwick_forest.hpp"

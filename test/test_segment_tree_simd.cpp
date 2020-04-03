@@ -1,24 +1,43 @@
 #include "test_common.hpp"
 #include "test_tree.hpp"
 
-TEST_CASE("test segment_tree_simd_node16u") {
-    using namespace psds::testing;
+// TEST_CASE("test segment_tree_simd_node16u") {
+//     using namespace psds::testing;
 
-    test_tree<segment_tree_simd<2, node16u>>(size_t(1) << 8);
+//     test_tree<segment_tree_simd<2, node16u>>(size_t(1) << 8);
 
-    test_tree<segment_tree_simd<3, node16u>>(size_t(1) << 9);
-    test_tree<segment_tree_simd<3, node16u>>(size_t(1) << 10);
-    test_tree<segment_tree_simd<3, node16u>>(size_t(1) << 11);
-    test_tree<segment_tree_simd<3, node16u>>(size_t(1) << 12);
+//     test_tree<segment_tree_simd<3, node16u>>(size_t(1) << 9);
+//     test_tree<segment_tree_simd<3, node16u>>(size_t(1) << 10);
+//     test_tree<segment_tree_simd<3, node16u>>(size_t(1) << 11);
+//     test_tree<segment_tree_simd<3, node16u>>(size_t(1) << 12);
 
-    test_tree<segment_tree_simd<4, node16u>>(size_t(1) << 13);
-    test_tree<segment_tree_simd<4, node16u>>(size_t(1) << 14);
-    test_tree<segment_tree_simd<4, node16u>>(size_t(1) << 15);
-    test_tree<segment_tree_simd<4, node16u>>(size_t(1) << 16);
-}
+//     test_tree<segment_tree_simd<4, node16u>>(size_t(1) << 13);
+//     test_tree<segment_tree_simd<4, node16u>>(size_t(1) << 14);
+//     test_tree<segment_tree_simd<4, node16u>>(size_t(1) << 15);
+//     test_tree<segment_tree_simd<4, node16u>>(size_t(1) << 16);
+// }
 
 TEST_CASE("test segment_tree_simd_node64u") {
     using namespace psds::testing;
+
+    test_tree<segment_tree_simd<1, node64u>>(1);
+    test_tree<segment_tree_simd<1, node64u>>(10);
+    test_tree<segment_tree_simd<1, node64u>>(20);
+    test_tree<segment_tree_simd<1, node64u>>(30);
+    test_tree<segment_tree_simd<1, node64u>>(40);
+    test_tree<segment_tree_simd<1, node64u>>(50);
+    test_tree<segment_tree_simd<1, node64u>>(60);
+    test_tree<segment_tree_simd<2, node64u>>(70);
+    test_tree<segment_tree_simd<2, node64u>>(80);
+    test_tree<segment_tree_simd<2, node64u>>(90);
+    test_tree<segment_tree_simd<2, node64u>>(100);
+    test_tree<segment_tree_simd<2, node64u>>(120);
+    test_tree<segment_tree_simd<2, node64u>>(140);
+    test_tree<segment_tree_simd<2, node64u>>(160);
+    test_tree<segment_tree_simd<2, node64u>>(180);
+    test_tree<segment_tree_simd<2, node64u>>(200);
+    test_tree<segment_tree_simd<2, node64u>>(220);
+    test_tree<segment_tree_simd<2, node64u>>(240);
 
     test_tree<segment_tree_simd<2, node64u>>(size_t(1) << 8);
     test_tree<segment_tree_simd<2, node64u>>(size_t(1) << 9);

@@ -106,6 +106,68 @@ void perf_segment_tree_simd_node256() {
     std::cerr << json << std::endl;
 }
 
+template <typename Node>
+void perf_fenwick_forest_node64() {
+    essentials::uniform_int_rng<int64_t> distr_values(-100, 100,
+                                                      benchmarking::value_seed);
+    std::vector<uint32_t> queries(benchmarking::num_queries);
+    std::string json("{\"type\":\"" + FF_GEN_TYPE_NODE64(0, Node)::name() +
+                     "\", \"timings\":[");
+
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE64(0, Node), 0)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE64(1, Node), 1)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE64(2, Node), 2)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE64(3, Node), 3)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE64(4, Node), 4)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE64(5, Node), 5)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE64(6, Node), 6)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE64(7, Node), 7)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE64(8, Node), 8)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE64(9, Node), 9)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE64(10, Node), 10)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE64(11, Node), 11)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE64(12, Node), 12)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE64(13, Node), 13)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE64(14, Node), 14)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE64(15, Node), 15)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE64(16, Node), 16)
+
+    json.pop_back();
+    json += "]}";
+    std::cerr << json << std::endl;
+}
+
+template <typename Node>
+void perf_fenwick_forest_node256() {
+    essentials::uniform_int_rng<int64_t> distr_values(-100, 100,
+                                                      benchmarking::value_seed);
+    std::vector<uint32_t> queries(benchmarking::num_queries);
+    std::string json("{\"type\":\"" + FF_GEN_TYPE_NODE256(0, Node)::name() +
+                     "\", \"timings\":[");
+
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE256(0, Node), 0)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE256(1, Node), 1)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE256(2, Node), 2)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE256(3, Node), 3)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE256(4, Node), 4)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE256(5, Node), 5)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE256(6, Node), 6)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE256(7, Node), 7)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE256(8, Node), 8)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE256(9, Node), 9)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE256(10, Node), 10)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE256(11, Node), 11)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE256(12, Node), 12)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE256(13, Node), 13)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE256(14, Node), 14)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE256(15, Node), 15)
+    EXE_PERF_SUM(FF_GEN_TYPE_NODE256(16, Node), 16)
+
+    json.pop_back();
+    json += "]}";
+    std::cerr << json << std::endl;
+}
+
 template <typename Tree>
 void perf_test() {
     essentials::uniform_int_rng<int64_t> distr_values(-100, 100,

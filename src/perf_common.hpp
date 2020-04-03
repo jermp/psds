@@ -41,12 +41,23 @@ static constexpr uint32_t fanout16_heights[] = {
     4, 4, 4, 4   // size = 2^i, with i in [13,16]
 };
 
+static constexpr uint32_t fenwick_forest_fanout64_heights[] = {
+    1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3};
+
+static constexpr uint32_t fenwick_forest_fanout256_heights[] = {
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2};
+
 #define GEN_TYPE_NODE256(i, Node) \
     segment_tree_simd<benchmarking::fanout256_heights[i], Node>
 #define GEN_TYPE_NODE64(i, Node) \
     segment_tree_simd<benchmarking::fanout64_heights[i], Node>
 #define GEN_TYPE_NODE16(i, Node) \
     segment_tree_simd<benchmarking::fanout16_heights[i], Node>
+
+#define FF_GEN_TYPE_NODE256(i, Node) \
+    fenwick_forest<benchmarking::fenwick_forest_fanout256_heights[i], 256, Node>
+#define FF_GEN_TYPE_NODE64(i, Node) \
+    fenwick_forest<benchmarking::fenwick_forest_fanout64_heights[i], 256, Node>
 
 #define MAIN                                                         \
     if (argc < 2) {                                                  \
@@ -76,6 +87,10 @@ static constexpr uint32_t fanout16_heights[] = {
         perf_test<fenwick_tree_truncated<node64u>>();                \
     } else if (type == "ftt_256u") {                                 \
         perf_test<fenwick_tree_truncated<node256u>>();               \
+    } else if (type == "ff_64u") {                                   \
+        perf_fenwick_forest_node64<node64u>();                       \
+    } else if (type == "ff_256u") {                                  \
+        perf_fenwick_forest_node256<node256u>();                     \
     } else {                                                         \
         std::cout << "unknown type \"" << type << "\"" << std::endl; \
         return 1;                                                    \
