@@ -81,34 +81,34 @@ static constexpr uint32_t fanout16_heights[] = {
         return 1;                                                    \
     }
 
-#define PERF_SUM                                                \
-    std::cout << tree.name() << "\n";                           \
-    int64_t total = 0;                                          \
-    essentials::timer_type t;                                   \
-    static const int runs = 5;                                  \
-    for (int run = 0; run != runs; ++run) {                     \
-        t.start();                                              \
-        for (auto q : queries) total += tree.sum(q);            \
-        t.stop();                                               \
-    }                                                           \
-    std::cout << "# ignore: " << total << std::endl;            \
-    double min = t.min();                                       \
-    double avg_ns_query = (min * 1000) / queries.size();        \
-    std::cout << "Mean per query: " << avg_ns_query << " [ns]"; \
+#define PERF_SUM                                                 \
+    std::cout << tree.name() << "\n";                            \
+    int64_t total = 0;                                           \
+    essentials::timer_type t;                                    \
+    static const int runs = 10;                                  \
+    for (int run = 0; run != runs; ++run) {                      \
+        t.start();                                               \
+        for (auto q : queries) total += tree.sum(q);             \
+        t.stop();                                                \
+    }                                                            \
+    std::cout << "# ignore: " << total << std::endl;             \
+    double avg_per_run = t.average();                            \
+    double avg_ns_query = (avg_per_run * 1000) / queries.size(); \
+    std::cout << "Mean per query: " << avg_ns_query << " [ns]";  \
     std::cout << std::endl;
 
 #define PERF_UPDATE                                                   \
     std::cout << tree.name() << "\n";                                 \
     essentials::timer_type t;                                         \
-    static const int runs = 5;                                        \
+    static const int runs = 10;                                       \
     for (int run = 0; run != runs; ++run) {                           \
         t.start();                                                    \
         for (auto const& q : queries) tree.update(q.first, q.second); \
         t.stop();                                                     \
     }                                                                 \
     std::cout << "# ignore: " << tree.sum(n - 1) << std::endl;        \
-    double min = t.min();                                             \
-    double avg_ns_query = (min * 1000) / queries.size();              \
+    double avg_per_run = t.average();                                 \
+    double avg_ns_query = (avg_per_run * 1000) / queries.size();      \
     std::cout << "Mean per query: " << avg_ns_query << " [ns]";       \
     std::cout << std::endl;
 
