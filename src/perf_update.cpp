@@ -2,32 +2,30 @@
 
 using namespace psds;
 
-#define EXE_PERF_UPDATE(TREE, i)                                            \
-    {                                                                       \
-        TREE tree;                                                          \
-        uint64_t n = uint64_t(1) << benchmarking::logs[i];                  \
-        std::cout << "### n = " << n << std::endl;                          \
-        {                                                                   \
-            std::vector<int64_t> input(n);                                  \
-            std::generate(input.begin(), input.end(),                       \
-                          [&] { return distr_values.gen(); });              \
-            tree.build(input.data(), n);                                    \
-        }                                                                   \
-        essentials::uniform_int_rng<uint32_t> distr_queries(                \
-            0, n - 1, benchmarking::query_seed);                            \
-        std::generate(queries.begin(), queries.end(), [&] {                 \
-            return std::make_pair(distr_queries.gen(), distr_values.gen()); \
-        });                                                                 \
-        PERF_UPDATE                                                         \
-        json += std::to_string(avg_ns_query) + ',';                         \
+#define EXE_PERF_UPDATE(TREE, i)                               \
+    {                                                          \
+        TREE tree;                                             \
+        uint64_t n = uint64_t(1) << benchmarking::logs[i];     \
+        std::cout << "### n = " << n << std::endl;             \
+        {                                                      \
+            std::vector<int64_t> input(n);                     \
+            std::generate(input.begin(), input.end(),          \
+                          [&] { return distr_values.gen(); }); \
+            tree.build(input.data(), n);                       \
+        }                                                      \
+        essentials::uniform_int_rng<uint32_t> distr_queries(   \
+            0, n - 1, benchmarking::query_seed);               \
+        std::generate(queries.begin(), queries.end(),          \
+                      [&] { return distr_queries.gen(); });    \
+        PERF_UPDATE                                            \
+        json += std::to_string(avg_ns_query) + ',';            \
     }
 
 template <typename Node>
 void perf_segment_tree_simd_node16() {
     essentials::uniform_int_rng<int64_t> distr_values(-100, 100,
                                                       benchmarking::value_seed);
-    std::vector<std::pair<uint32_t, int64_t>> queries(
-        benchmarking::num_queries);
+    std::vector<uint32_t> queries(benchmarking::num_queries);
     std::string json("{\"type\":\"" + GEN_TYPE_NODE16(0, Node)::name() +
                      "\", \"timings\":[");
 
@@ -50,8 +48,7 @@ template <typename Node>
 void perf_segment_tree_simd_node64() {
     essentials::uniform_int_rng<int64_t> distr_values(-100, 100,
                                                       benchmarking::value_seed);
-    std::vector<std::pair<uint32_t, int64_t>> queries(
-        benchmarking::num_queries);
+    std::vector<uint32_t> queries(benchmarking::num_queries);
     std::string json("{\"type\":\"" + GEN_TYPE_NODE64(0, Node)::name() +
                      "\", \"timings\":[");
 
@@ -89,8 +86,7 @@ template <typename Node>
 void perf_segment_tree_simd_node256() {
     essentials::uniform_int_rng<int64_t> distr_values(-100, 100,
                                                       benchmarking::value_seed);
-    std::vector<std::pair<uint32_t, int64_t>> queries(
-        benchmarking::num_queries);
+    std::vector<uint32_t> queries(benchmarking::num_queries);
     std::string json("{\"type\":\"" + GEN_TYPE_NODE256(0, Node)::name() +
                      "\", \"timings\":[");
 
@@ -128,8 +124,7 @@ template <typename Node>
 void perf_fenwick_forest_node64() {
     essentials::uniform_int_rng<int64_t> distr_values(-100, 100,
                                                       benchmarking::value_seed);
-    std::vector<std::pair<uint32_t, int64_t>> queries(
-        benchmarking::num_queries);
+    std::vector<uint32_t> queries(benchmarking::num_queries);
     std::string json("{\"type\":\"" + FF_GEN_TYPE_NODE64(0, Node)::name() +
                      "\", \"timings\":[");
 
@@ -160,8 +155,7 @@ template <typename Node>
 void perf_fenwick_forest_node256() {
     essentials::uniform_int_rng<int64_t> distr_values(-100, 100,
                                                       benchmarking::value_seed);
-    std::vector<std::pair<uint32_t, int64_t>> queries(
-        benchmarking::num_queries);
+    std::vector<uint32_t> queries(benchmarking::num_queries);
     std::string json("{\"type\":\"" + FF_GEN_TYPE_NODE256(0, Node)::name() +
                      "\", \"timings\":[");
 
@@ -192,9 +186,7 @@ template <typename Tree>
 void perf_test() {
     essentials::uniform_int_rng<int64_t> distr_values(-100, 100,
                                                       benchmarking::value_seed);
-    std::vector<std::pair<uint32_t, int64_t>> queries(
-        benchmarking::num_queries);
-
+    std::vector<uint32_t> queries(benchmarking::num_queries);
     std::string json("{\"type\":\"" + Tree::name() + "\", \"timings\":[");
 
     EXE_PERF_UPDATE(Tree, 0)
