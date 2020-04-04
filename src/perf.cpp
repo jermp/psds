@@ -122,12 +122,14 @@ struct test<16 + 1, Tree, TypeTraits> {  // base case
 
 template <template <uint32_t H, typename Node> typename Tree,
           typename TypeTraits>
-void perf_test(std::string const& operation) {
+void perf_test(std::string const& operation, std::string const& name) {
     essentials::uniform_int_rng<int64_t> distr_values(-100, 100, value_seed);
     std::vector<uint32_t> queries(num_queries);
     typedef
         typename Tree<0, typename TypeTraits::node_type>::tree_type tree_type;
-    std::string json("{\"type\":\"" + tree_type::name() + "\", \"timings\":[");
+    auto str = tree_type::name();
+    if (name != "") str = name;
+    std::string json("{\"type\":\"" + str + "\", \"timings\":[");
 
     test<0, Tree, TypeTraits>::run(distr_values, queries, json, operation);
 
@@ -138,26 +140,31 @@ void perf_test(std::string const& operation) {
 
 int main(int argc, char** argv) {
     if (argc < 2) {
-        std::cout << "Usage: " << argv[0] << " [type] [operation]" << std::endl;
+        std::cout << "Usage: " << argv[0] << " [type] [operation] --log [name]"
+                  << std::endl;
         std::cout << "[type] is one among: ..." << std::endl;
         std::cout << "[operation] is either 'sum' or 'update'." << std::endl;
         return 1;
     }
     std::string type = argv[1];
     std::string operation = argv[2];
+    std::string name("");
+    if (argc > 3 and std::string(argv[3]) == "--log") {
+        name = std::string(argv[4]);
+    }
 
     if (type == "st") {
-        perf_test<st_wrapper, fake_type_traits>(operation);
+        perf_test<st_wrapper, fake_type_traits>(operation, name);
     } else if (type == "ft") {
-        perf_test<ft_wrapper, fake_type_traits>(operation);
+        perf_test<ft_wrapper, fake_type_traits>(operation, name);
     } else if (type == "sts_64u") {
-        perf_test<segment_tree_simd, type_traits_64>(operation);
+        perf_test<segment_tree_simd, type_traits_64>(operation, name);
     } else if (type == "sts_256u") {
-        perf_test<segment_tree_simd, type_traits_256>(operation);
+        perf_test<segment_tree_simd, type_traits_256>(operation, name);
     } else if (type == "ftt_64u") {
-        perf_test<ftt_64u_wrapper, fake_type_traits>(operation);
+        perf_test<ftt_64u_wrapper, fake_type_traits>(operation, name);
     } else if (type == "ftt_256u") {
-        perf_test<ftt_256u_wrapper, fake_type_traits>(operation);
+        perf_test<ftt_256u_wrapper, fake_type_traits>(operation, name);
     } else {
         std::cout << "unknown type \"" << type << "\"" << std::endl;
         return 1;
