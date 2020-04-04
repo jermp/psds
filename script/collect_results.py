@@ -10,24 +10,25 @@ args = parser.parse_args()
 
 types = [
     "st",
+
     # "sts_16u",
     "sts_64u",
     "sts_256u",
 
     "ft",
+
     # "ftb_16u",
-    "ftb_64u",
-    "ftb_256u",
+    # "ftb_64u",
+    # "ftb_256u",
+
     # "ftt_16u",
     "ftt_64u",
     "ftt_256u"
 ]
 
-runs = 1
-def run(exe, results):
+def run(operation, results):
     for type in types:
-        for i in range(0, runs):
-            os.system("../" + args.directory + "/" + exe + " " + type + " 2>> " + results)
+        os.system("../" + args.directory + "/perf " + type + " " + operation +  " 2>> " + results)
 
-run("perf_sum", args.sum_results)
-run("perf_update", args.update_results)
+run("sum", args.sum_results)
+run("update", args.update_results)

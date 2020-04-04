@@ -14,6 +14,8 @@ namespace psds {
 
 template <uint32_t Height, typename Node>
 struct segment_tree_simd {
+    typedef segment_tree_simd<Height, Node> tree_type;
+
     segment_tree_simd()
         : m_size(0), m_num_nodes_per_level(nullptr), m_ptr(nullptr) {}
 
