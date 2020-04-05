@@ -121,6 +121,7 @@ struct test {
 
             for (int k = 0; k != K; ++k) {
                 measure();
+                t.discard_max();
                 double avg_ns_query = (t.max() * 1000) / num_queries;
                 max += avg_ns_query;
                 t.reset();
@@ -128,7 +129,8 @@ struct test {
 
             for (int k = 0; k != K; ++k) {
                 measure();
-                t.discard_min_max();
+                t.discard_min();
+                t.discard_max();
                 double avg_ns_query = (t.average() * 1000) / num_queries;
                 avg += avg_ns_query;
                 t.reset();
@@ -136,6 +138,7 @@ struct test {
 
             for (int k = 0; k != K; ++k) {
                 measure();
+                t.discard_min();
                 double avg_ns_query = (t.min() * 1000) / num_queries;
                 min += avg_ns_query;
                 t.reset();
