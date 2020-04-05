@@ -80,31 +80,76 @@ struct test {
             std::generate(queries.begin(), queries.end(),
                           [&] { return distr_queries.gen(); });
             std::cout << tree.name() << "\n";
-            int64_t total = 0;
-            essentials::timer_type t;
 
-            if (operation == "sum") {
-                for (int run = 0; run != runs; ++run) {
-                    t.start();
-                    for (auto q : queries) total += tree.sum(q);
-                    t.stop();
+            essentials::timer_type t;
+            double min = 0.0;
+            double max = 0.0;
+            double avg = 0.0;
+
+            auto measure = [&]() {
+                int64_t total = 0;
+                if (operation == "sum") {
+                    for (int run = 0; run != runs; ++run) {
+                        t.start();
+                        for (auto q : queries) total += tree.sum(q);
+                        t.stop();
+                    }
+                } else if (operation == "update") {
+                    for (int run = 0; run != runs; ++run) {
+                        t.start();
+                        for (auto const& q : queries) tree.update(q, q);
+                        t.stop();
+                    }
+                    total = tree.sum(n - 1);
+                } else {
+                    assert(false);
                 }
-            } else if (operation == "update") {
-                for (int run = 0; run != runs; ++run) {
-                    t.start();
-                    for (auto const& q : queries) tree.update(q, q);
-                    t.stop();
-                }
-                total = tree.sum(n - 1);
-            } else {
-                assert(false);
+                std::cout << "# ignore: " << total << std::endl;
+            };
+
+            static constexpr int K = 10;
+
+            // warm-up
+            for (int k = 0; k != K; ++k) {
+                measure();
+                double avg_ns_query = (t.average() * 1000) / num_queries;
+                avg += avg_ns_query;
+                t.reset();
+            }
+            std::cout << "# warm-up: " << avg / K << std::endl;
+            avg = 0.0;
+
+            for (int k = 0; k != K; ++k) {
+                measure();
+                double avg_ns_query = (t.max() * 1000) / num_queries;
+                max += avg_ns_query;
+                t.reset();
             }
 
-            std::cout << "# ignore: " << total << std::endl;
-            double avg_per_run = t.average();
-            double avg_ns_query = (avg_per_run * 1000) / num_queries;
-            std::cout << "Mean per query: " << avg_ns_query << " [ns]\n";
-            json += std::to_string(avg_ns_query) + ',';
+            for (int k = 0; k != K; ++k) {
+                measure();
+                t.discard_min_max();
+                double avg_ns_query = (t.average() * 1000) / num_queries;
+                avg += avg_ns_query;
+                t.reset();
+            }
+
+            for (int k = 0; k != K; ++k) {
+                measure();
+                double avg_ns_query = (t.min() * 1000) / num_queries;
+                min += avg_ns_query;
+                t.reset();
+            }
+
+            min /= K;
+            max /= K;
+            avg /= K;
+            std::vector<double> tt{min, avg, max};
+            std::sort(tt.begin(), tt.end());
+            std::cout << "[" << tt[0] << "," << tt[1] << "," << tt[2] << "]\n";
+
+            json += "[" + std::to_string(tt[0]) + "," + std::to_string(tt[1]) +
+                    "," + std::to_string(tt[2]) + "],";
         }
 
         test<I + 1, Tree, TypeTraits>::run(distr_values, queries, json,
