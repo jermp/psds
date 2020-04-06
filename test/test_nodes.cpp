@@ -16,3 +16,7 @@ TEST_CASE("test node64u_restricted") {
 TEST_CASE("test node256u") {
     psds::testing::test_node<node256u>();
 }
+
+TEST_CASE("test node256u_restricted") {
+    psds::testing::test_node<node256u_restricted>();
+}

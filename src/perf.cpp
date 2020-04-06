@@ -23,6 +23,14 @@ struct type_traits_256 {
     };
 };
 
+struct type_traits_256_restricted {
+    typedef node256u_restricted node_type;
+    static constexpr uint32_t heights[] = {1, 2, 2, 2, 2, 2, 2, 2, 2,
+                                           3, 3, 3, 3, 3, 3, 3, 3
+
+    };
+};
+
 struct type_traits_64 {
     typedef node64u node_type;
     static constexpr uint32_t heights[] = {2, 2, 2, 2, 2, 3, 3, 3, 3,
@@ -196,7 +204,8 @@ int main(int argc, char** argv) {
     if (argc < 2) {
         std::cout << "Usage: " << argv[0] << " [type] [operation] --log [name]"
                   << std::endl;
-        std::cout << "[type] is one among: ..." << std::endl;
+        // todo: write list of possible type with full names
+        // std::cout << "[type] is one among: ..." << std::endl;
         std::cout << "[operation] is either 'sum' or 'update'." << std::endl;
         return 1;
     }
@@ -218,6 +227,9 @@ int main(int argc, char** argv) {
                                                                 name);
     } else if (type == "sts_256u") {
         perf_test<segment_tree_simd, type_traits_256>(operation, name);
+    } else if (type == "sts_256u_restricted") {
+        perf_test<segment_tree_simd, type_traits_256_restricted>(operation,
+                                                                 name);
     } else if (type == "ftt_64u") {
         perf_test<ftt_64u_wrapper, fake_type_traits>(operation, name);
     } else if (type == "ftt_256u") {
