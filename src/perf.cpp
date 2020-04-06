@@ -29,6 +29,12 @@ struct type_traits_64 {
                                            3, 3, 4, 4, 4, 4, 4, 4};
 };
 
+struct type_traits_64_restricted {
+    typedef node64u_restricted node_type;
+    static constexpr uint32_t heights[] = {2, 2, 2, 2, 2, 3, 3, 3, 3,
+                                           3, 3, 4, 4, 4, 4, 4, 4};
+};
+
 struct fake_type_traits {
     struct fake_node {};
     typedef fake_node node_type;
@@ -207,6 +213,9 @@ int main(int argc, char** argv) {
         perf_test<ft_wrapper, fake_type_traits>(operation, name);
     } else if (type == "sts_64u") {
         perf_test<segment_tree_simd, type_traits_64>(operation, name);
+    } else if (type == "sts_64u_restricted") {
+        perf_test<segment_tree_simd, type_traits_64_restricted>(operation,
+                                                                name);
     } else if (type == "sts_256u") {
         perf_test<segment_tree_simd, type_traits_256>(operation, name);
     } else if (type == "ftt_64u") {
