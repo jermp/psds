@@ -11,9 +11,6 @@ void test_tree(size_t n) {
               << " nodes ==" << std::endl;
     std::vector<int64_t> A(n);
     std::generate(A.begin(), A.end(), [&] { return distr.gen(); });
-    // std::cout << "array is:\n";
-    // for (auto x : A) { std::cout << x << " "; }
-    // std::cout << std::endl;
     Tree tree;
     essentials::logger("building tree...");
     tree.build(A.data(), n);
@@ -30,7 +27,7 @@ void test_tree(size_t n) {
         }
     }
 
-    auto update = [&](int64_t delta) {
+    auto update = [&](int8_t delta) {
         essentials::logger("testing update queries...");
         static constexpr uint32_t queries = 5000;
         uint32_t step = n / queries;
@@ -51,8 +48,8 @@ void test_tree(size_t n) {
         }
     };
 
-    int64_t delta = distr.gen();
-    std::cout << "delta " << delta << std::endl;
+    int8_t delta = distr.gen();
+    std::cout << "delta " << int64_t(delta) << std::endl;
     update(delta);
     std::cout << "\teverything's good" << std::endl;
 }

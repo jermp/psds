@@ -6,7 +6,7 @@ namespace psds {
 
 template <uint64_t ForestHeight, uint64_t TreeSize, typename ForestNode>
 struct fenwick_forest {
-    struct tree {  // this is a fenwick-tree of sized size
+    struct tree {  // this is a fenwick-tree of fixed size
 
         static void build(int64_t const* in, int64_t* out) {
             std::copy(in, in + TreeSize, out);

@@ -2,6 +2,7 @@
 
 #include "nodes/node16u.hpp"
 #include "nodes/node64u.hpp"
+#include "nodes/node64u_restricted.hpp"
 #include "nodes/node256u.hpp"
 
 #include "trees/segment_tree.hpp"

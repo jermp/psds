@@ -11,7 +11,8 @@
 namespace psds {
 namespace tables {
 
-static const uint64_t all1 = -1;
+namespace unrestricted {
+static const uint64_t all1 = uint64_t(-1);
 
 static const uint64_t mask4_j[4 * 4] ALIGNED(32) = {
     0, all1, all1, all1, 0, 0, all1, all1, 0, 0, 0, all1, 0, 0, 0, 0};
@@ -83,6 +84,28 @@ static const uint64_t mask16_k[16 * 16] ALIGNED(32) = {
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    all1, all1,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    all1};
+}  // namespace unrestricted
+
+namespace restricted {
+static const uint16_t all1 = uint16_t(-1);
+
+static const uint16_t mask8_j[8 * 8] ALIGNED(32) = {
+    0,    all1, all1, all1, all1, all1, all1, all1, 0,    0,    all1,
+    all1, all1, all1, all1, all1, 0,    0,    0,    all1, all1, all1,
+    all1, all1, 0,    0,    0,    0,    all1, all1, all1, all1, 0,
+    0,    0,    0,    0,    all1, all1, all1, 0,    0,    0,    0,
+    0,    0,    all1, all1, 0,    0,    0,    0,    0,    0,    0,
+    all1, 0,    0,    0,    0,    0,    0,    0,    0};
+
+static const uint16_t mask8_k[8 * 8] ALIGNED(32) = {
+    all1, all1, all1, all1, all1, all1, all1, all1, 0,    all1, all1,
+    all1, all1, all1, all1, all1, 0,    0,    all1, all1, all1, all1,
+    all1, all1, 0,    0,    0,    all1, all1, all1, all1, all1, 0,
+    0,    0,    0,    all1, all1, all1, all1, 0,    0,    0,    0,
+    0,    all1, all1, all1, 0,    0,    0,    0,    0,    0,    all1,
+    all1, 0,    0,    0,    0,    0,    0,    0,    all1};
+
+}  // namespace restricted
 
 }  // namespace tables
 }  // namespace psds

@@ -26,7 +26,7 @@ void test_node() {
         }
     }
 
-    auto update = [&](int64_t delta) {
+    auto update = [&](int8_t delta) {
         for (uint32_t run = 0; run != 100; ++run) {
             int64_t expected = 0;
             for (uint32_t i = 0; i != Node::fanout; ++i) {
@@ -42,8 +42,8 @@ void test_node() {
         }
     };
 
-    int64_t delta = distr.gen();
-    std::cout << "delta " << delta << std::endl;
+    int8_t delta = distr.gen();
+    std::cout << "delta " << int64_t(delta) << std::endl;
     update(delta);
     std::cout << "\teverything's good" << std::endl;
 }

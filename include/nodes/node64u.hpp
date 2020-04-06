@@ -51,10 +51,10 @@ struct node64u {
 #else
         __m256i upd = _mm256_set1_epi64x(delta);
 
-        __m256i msk_j0 =
-            _mm256_load_si256((__m256i const*)tables::mask8_j + 2 * j + 0);
-        __m256i msk_j1 =
-            _mm256_load_si256((__m256i const*)tables::mask8_j + 2 * j + 1);
+        __m256i msk_j0 = _mm256_load_si256(
+            (__m256i const*)tables::unrestricted::mask8_j + 2 * j + 0);
+        __m256i msk_j1 = _mm256_load_si256(
+            (__m256i const*)tables::unrestricted::mask8_j + 2 * j + 1);
         __m256i upd_j0 = _mm256_and_si256(upd, msk_j0);
         __m256i upd_j1 = _mm256_and_si256(upd, msk_j1);
 
@@ -66,10 +66,10 @@ struct node64u {
         _mm256_storeu_si256((__m256i*)summary + 0, res_summary0);
         _mm256_storeu_si256((__m256i*)summary + 1, res_summary1);
 
-        __m256i msk_k0 =
-            _mm256_load_si256((__m256i const*)tables::mask8_k + 2 * k + 0);
-        __m256i msk_k1 =
-            _mm256_load_si256((__m256i const*)tables::mask8_k + 2 * k + 1);
+        __m256i msk_k0 = _mm256_load_si256(
+            (__m256i const*)tables::unrestricted::mask8_k + 2 * k + 0);
+        __m256i msk_k1 = _mm256_load_si256(
+            (__m256i const*)tables::unrestricted::mask8_k + 2 * k + 1);
 
         __m256i upd_k0 = _mm256_and_si256(upd, msk_k0);
         __m256i upd_k1 = _mm256_and_si256(upd, msk_k1);
