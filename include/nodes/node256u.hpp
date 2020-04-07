@@ -10,16 +10,15 @@ namespace psds {
 
 struct node256u {
     static constexpr uint64_t fanout = 256;
-    static constexpr uint64_t segments = 16;
-    static constexpr uint64_t summary_bytes = segments * sizeof(int64_t);
+    static constexpr uint64_t segment_size = 16;
+    static constexpr uint64_t summary_bytes = segment_size * sizeof(int64_t);
     static constexpr uint64_t bytes = summary_bytes + fanout * sizeof(int64_t);
 
     node256u() {}  // do not initialize
 
     template <typename T>
     static void build(T const* input, uint8_t* out) {
-        build_node_prefix_sums(input, out, fanout, segments, summary_bytes,
-                               bytes);
+        build_node_prefix_sums(input, out, segment_size, summary_bytes, bytes);
     }
 
     static std::string name() {
@@ -39,13 +38,13 @@ struct node256u {
         if (i == fanout) return;
 
         assert(i < fanout);
-        uint64_t j = i / segments;
-        uint64_t k = i % segments;
+        uint64_t j = i / segment_size;
+        uint64_t k = i % segment_size;
 
 #ifdef DISABLE_AVX
-        static constexpr uint64_t segment_size = fanout / segments;
-        for (uint64_t z = j + 1; z != segments; ++z) summary[z] += delta;
-        for (uint64_t z = k, base = j * segments; z != segment_size; ++z) {
+        static constexpr uint64_t segment_size = fanout / segment_size;
+        for (uint64_t z = j + 1; z != segment_size; ++z) summary[z] += delta;
+        for (uint64_t z = k, base = j * segment_size; z != segment_size; ++z) {
             keys[base + z] += delta;
         }
 #else
@@ -92,29 +91,29 @@ struct node256u {
         __m256i upd_k3 = _mm256_and_si256(upd, msk_k3);
 
         __m256i dst_keys0 =
-            _mm256_loadu_si256((__m256i const*)(keys + j * segments) + 0);
+            _mm256_loadu_si256((__m256i const*)(keys + j * segment_size) + 0);
         __m256i dst_keys1 =
-            _mm256_loadu_si256((__m256i const*)(keys + j * segments) + 1);
+            _mm256_loadu_si256((__m256i const*)(keys + j * segment_size) + 1);
         __m256i dst_keys2 =
-            _mm256_loadu_si256((__m256i const*)(keys + j * segments) + 2);
+            _mm256_loadu_si256((__m256i const*)(keys + j * segment_size) + 2);
         __m256i dst_keys3 =
-            _mm256_loadu_si256((__m256i const*)(keys + j * segments) + 3);
+            _mm256_loadu_si256((__m256i const*)(keys + j * segment_size) + 3);
 
         __m256i res_keys0 = _mm256_add_epi64(upd_k0, dst_keys0);
         __m256i res_keys1 = _mm256_add_epi64(upd_k1, dst_keys1);
         __m256i res_keys2 = _mm256_add_epi64(upd_k2, dst_keys2);
         __m256i res_keys3 = _mm256_add_epi64(upd_k3, dst_keys3);
 
-        _mm256_storeu_si256((__m256i*)(keys + j * segments) + 0, res_keys0);
-        _mm256_storeu_si256((__m256i*)(keys + j * segments) + 1, res_keys1);
-        _mm256_storeu_si256((__m256i*)(keys + j * segments) + 2, res_keys2);
-        _mm256_storeu_si256((__m256i*)(keys + j * segments) + 3, res_keys3);
+        _mm256_storeu_si256((__m256i*)(keys + j * segment_size) + 0, res_keys0);
+        _mm256_storeu_si256((__m256i*)(keys + j * segment_size) + 1, res_keys1);
+        _mm256_storeu_si256((__m256i*)(keys + j * segment_size) + 2, res_keys2);
+        _mm256_storeu_si256((__m256i*)(keys + j * segment_size) + 3, res_keys3);
 #endif
     }
 
     int64_t sum(uint64_t i) const {
         assert(i < fanout);
-        return summary[i / segments] + keys[i];
+        return summary[i / segment_size] + keys[i];
     }
 
 private:
