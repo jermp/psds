@@ -23,7 +23,7 @@ struct node64u_restricted {
 
     template <typename T>
     static void build(T const* input, uint8_t* out) {
-        build_node_prefix_sums(input, out, segment_size, summary_bytes, bytes);
+        build_node_prefix_sums(input, out, segment_size, bytes);
         out[bytes - 1] = 255;  // initialize the number of updates
     }
 
@@ -53,7 +53,6 @@ struct node64u_restricted {
         uint64_t k = i % segment_size;
 
 #ifdef DISABLE_AVX
-        static constexpr uint64_t segment_size = fanout / segment_size;
         for (uint64_t z = j + 1; z != segment_size; ++z)
             summary_buffer[z] += delta;
         for (uint64_t z = k, base = j * segment_size; z != segment_size; ++z) {
