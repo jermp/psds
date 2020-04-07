@@ -21,14 +21,16 @@ cd script
 python3 collect_results.py build ../sum.txt ../update.txt
 cd ..
 
-cd build_slow_segtree
-./perf sts_64u     sum --log segment_tree_simd_node64u_no_opt  2>> ../sum.txt
-./perf sts_256u    sum --log segment_tree_simd_node256u_no_opt 2>> ../sum.txt
-./perf sts_64u  update --log segment_tree_simd_node64u_no_opt  2>> ../update.txt
-./perf sts_256u update --log segment_tree_simd_node256u_no_opt 2>> ../update.txt
-cd ..
+# cd build_slow_segtree
+# ./perf sts_64u     sum --log segment_tree_simd_node64u_no_opt  2>> ../sum.txt
+# ./perf sts_256u    sum --log segment_tree_simd_node256u_no_opt 2>> ../sum.txt
+# ./perf sts_64u  update --log segment_tree_simd_node64u_no_opt  2>> ../update.txt
+# ./perf sts_256u update --log segment_tree_simd_node256u_no_opt 2>> ../update.txt
+# cd ..
 
 cd build_no_simd
 ./perf sts_64u  update --log segment_tree_node64u  2>> ../update.txt
 ./perf sts_256u update --log segment_tree_node256u 2>> ../update.txt
+./perf sts_64u_restricted  update --log segment_tree_node64u_restricted  2>> ../update.txt
+./perf sts_256u_restricted update --log segment_tree_node256u_restricted 2>> ../update.txt
 cd ..
