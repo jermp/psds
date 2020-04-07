@@ -12,78 +12,78 @@ static constexpr uint32_t num_queries = 10000;
 static constexpr unsigned value_seed = 13;
 static constexpr unsigned query_seed = 71;
 
-static constexpr uint32_t logs[] = {8,  9,  10, 11, 12, 13, 14, 15,
-                                    16, 17, 18, 19, 20, 21, 22, 23,
-                                    24, 25, 26, 27, 28, 29, 30};
+constexpr size_t ceil_log2(size_t n) {
+    return (n < 2) ? 1 : 1 + ceil_log2(n / 2);
+}
 
-struct type_traits_256 {
-    typedef node256u node_type;
-    static constexpr uint32_t heights[] = {1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3,
-                                           3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4
+constexpr size_t floor_log2(size_t n) {
+    return (n == 1) ? 0 : 1 + floor_log2(n / 2);
+}
 
-    };
+constexpr double const_ceil(double val) {
+    const auto val_int = (int64_t)val;
+    const double fval_int = (double)val_int;
+    return (val < double(0) ? fval_int
+                            : (val == fval_int ? val : fval_int + double(1)));
+}
+
+constexpr uint32_t ceil_log(uint32_t base, uint32_t n) {
+    assert(base > 0);
+    assert((base & (base - 1)) == 0);  // base must be a power of 2
+    return const_ceil(static_cast<double>(ceil_log2(n)) /
+                      static_cast<double>(floor_log2(base)));
+}
+
+static constexpr uint32_t sizes[] = {
+    251,       316,       398,       501,       630,       794,       1000,
+    1258,      1584,      1995,      2511,      3162,      3981,      5011,
+    6309,      7943,      10000,     12589,     15848,     19952,     25118,
+    31622,     39810,     50118,     63095,     79432,     100000,    125892,
+    158489,    199526,    251188,    316227,    398107,    501187,    630957,
+    794328,    1000000,   1258925,   1584893,   1995262,   2511886,   3162277,
+    3981071,   5011872,   6309573,   7943282,   10000000,  12589254,  15848931,
+    19952623,  25118864,  31622776,  39810717,  50118723,  63095734,  79432823,
+    100000000, 125892541, 158489319, 199526231, 251188643, 316227766, 398107170,
+    501187233, 630957344, 794328234, 1000000000};
+
+struct fake_node {
+    static constexpr uint64_t fanout = 2;
 };
 
-struct type_traits_256_restricted {
-    typedef node256u_restricted node_type;
-    static constexpr uint32_t heights[] = {1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3,
-                                           3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4
-
-    };
-};
-
-struct type_traits_64 {
-    typedef node64u node_type;
-    static constexpr uint32_t heights[] = {2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4,
-                                           4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5};
-};
-
-struct type_traits_64_restricted {
-    typedef node64u_restricted node_type;
-    static constexpr uint32_t heights[] = {2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4,
-                                           4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5};
-};
-
-struct fake_type_traits {
-    struct fake_node {};
-    typedef fake_node node_type;
-    static constexpr uint32_t heights[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-};
-
-template <uint32_t Height, typename Node>
+template <uint32_t, class>
 struct ft_wrapper {
     typedef fenwick_tree tree_type;
 };
 
-template <uint32_t Height, typename Node>
+template <uint32_t, class>
 struct st_wrapper {
     typedef segment_tree tree_type;
 };
 
-template <uint32_t Height, typename Node>
+template <uint32_t, class>
 struct ftt_64u_wrapper {
     typedef fenwick_tree_truncated<node64u> tree_type;
 };
 
-template <uint32_t Height, typename Node>
+template <uint32_t, class>
 struct ftt_256u_wrapper {
     typedef fenwick_tree_truncated<node256u> tree_type;
 };
 
-template <int I, template <uint32_t H, typename Node> typename Tree,
-          typename TypeTraits>
+template <int I, template <uint32_t, class> typename Tree, typename Node>
 struct test {
     static void run(essentials::uniform_int_rng<int64_t>& distr_values,
                     std::vector<uint32_t>& queries, std::string& json,
                     std::string const& operation) {
         {
-            typedef typename Tree<TypeTraits::heights[I],
-                                  typename TypeTraits::node_type>::tree_type
-                tree_type;
+            const uint64_t n = sizes[I];
+            const uint32_t height = ceil_log(Node::fanout, n);
+            typedef typename Tree<height, Node>::tree_type tree_type;
             tree_type tree;
-            uint64_t n = uint64_t(1) << logs[I];
-            std::cout << "### n = " << n << std::endl;
+
+            std::cout << "### n = " << n << "; height = " << height
+                      << std::endl;
+
             {
                 std::vector<int64_t> input(n);
                 std::generate(input.begin(), input.end(),
@@ -170,31 +170,27 @@ struct test {
                     "," + std::to_string(tt[2]) + "],";
         }
 
-        test<I + 1, Tree, TypeTraits>::run(distr_values, queries, json,
-                                           operation);
+        test<I + 1, Tree, Node>::run(distr_values, queries, json, operation);
     }
 };
 
-template <template <uint32_t H, typename Node> typename Tree,
-          typename TypeTraits>
-struct test<22 + 1, Tree, TypeTraits> {
+template <template <uint32_t, class> typename Tree, typename Node>
+struct test<sizeof(sizes) / sizeof(sizes[0]), Tree, Node> {
     static inline void run(essentials::uniform_int_rng<int64_t>&,
                            std::vector<uint32_t>&, std::string&,
                            std::string const&) {}
 };
 
-template <template <uint32_t H, typename Node> typename Tree,
-          typename TypeTraits>
+template <template <uint32_t, class> typename Tree, typename Node>
 void perf_test(std::string const& operation, std::string const& name) {
     essentials::uniform_int_rng<int64_t> distr_values(-100, 100, value_seed);
     std::vector<uint32_t> queries(num_queries);
-    typedef
-        typename Tree<0, typename TypeTraits::node_type>::tree_type tree_type;
+    typedef typename Tree<0, Node>::tree_type tree_type;
     auto str = tree_type::name();
     if (name != "") str = name;
     std::string json("{\"type\":\"" + str + "\", \"timings\":[");
 
-    test<0, Tree, TypeTraits>::run(distr_values, queries, json, operation);
+    test<0, Tree, Node>::run(distr_values, queries, json, operation);
 
     json.pop_back();
     json += "]}";
@@ -202,7 +198,7 @@ void perf_test(std::string const& operation, std::string const& name) {
 }
 
 int main(int argc, char** argv) {
-    if (argc < 2) {
+    if (argc < 3) {
         std::cout << "Usage: " << argv[0] << " [type] [operation] --log [name]"
                   << std::endl;
         // todo: write list of possible type with full names
@@ -218,23 +214,21 @@ int main(int argc, char** argv) {
     }
 
     if (type == "st") {
-        perf_test<st_wrapper, fake_type_traits>(operation, name);
+        perf_test<st_wrapper, fake_node>(operation, name);
     } else if (type == "ft") {
-        perf_test<ft_wrapper, fake_type_traits>(operation, name);
+        perf_test<ft_wrapper, fake_node>(operation, name);
     } else if (type == "sts_64u") {
-        perf_test<segment_tree_simd, type_traits_64>(operation, name);
+        perf_test<segment_tree_simd, node64u>(operation, name);
     } else if (type == "sts_64u_restricted") {
-        perf_test<segment_tree_simd, type_traits_64_restricted>(operation,
-                                                                name);
+        perf_test<segment_tree_simd, node64u_restricted>(operation, name);
     } else if (type == "sts_256u") {
-        perf_test<segment_tree_simd, type_traits_256>(operation, name);
+        perf_test<segment_tree_simd, node256u>(operation, name);
     } else if (type == "sts_256u_restricted") {
-        perf_test<segment_tree_simd, type_traits_256_restricted>(operation,
-                                                                 name);
-        // } else if (type == "ftt_64u") {
-        //     perf_test<ftt_64u_wrapper, fake_type_traits>(operation, name);
-        // } else if (type == "ftt_256u") {
-        //     perf_test<ftt_256u_wrapper, fake_type_traits>(operation, name);
+        perf_test<segment_tree_simd, node256u_restricted>(operation, name);
+    } else if (type == "ftt_64u") {
+        perf_test<ftt_64u_wrapper, fake_node>(operation, name);
+    } else if (type == "ftt_256u") {
+        perf_test<ftt_256u_wrapper, fake_node>(operation, name);
     } else {
         std::cout << "unknown type \"" << type << "\"" << std::endl;
         return 1;
