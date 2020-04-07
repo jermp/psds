@@ -90,14 +90,17 @@ struct segment_tree_simd {
             UPDATE_H2
         } else if (m_height == 3) {
             UPDATE_H3
-        } else {
+        } else if (m_height == 4) {
             UPDATE_H4
+        } else {
+            UPDATE_H5
         }
 #else
         if constexpr (Height == 1) { UPDATE_H1 }
         if constexpr (Height == 2) { UPDATE_H2 }
         if constexpr (Height == 3) { UPDATE_H3 }
         if constexpr (Height == 4) { UPDATE_H4 }
+        if constexpr (Height == 5) { UPDATE_H5 }
 #endif
 
         assert(false);
@@ -114,14 +117,17 @@ struct segment_tree_simd {
             SUM_H2
         } else if (m_height == 3) {
             SUM_H3
-        } else {
+        } else if (m_height == 4) {
             SUM_H4
+        } else {
+            SUM_H5
         }
 #else
         if constexpr (Height == 1) { SUM_H1 }
         if constexpr (Height == 2) { SUM_H2 }
         if constexpr (Height == 3) { SUM_H3 }
         if constexpr (Height == 4) { SUM_H4 }
+        if constexpr (Height == 5) { SUM_H5 }
 #endif
         assert(false);
         __builtin_unreachable();

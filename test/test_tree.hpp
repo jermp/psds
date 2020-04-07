@@ -17,10 +17,14 @@ void test_tree(size_t n) {
 
     {
         essentials::logger("testing sum queries...");
+        static constexpr uint32_t sum_queries = 5000;
+        uint32_t step = n / sum_queries;
+        if (step == 0) step += 1;
         int64_t expected = 0;
-        for (uint32_t i = 0; i != n; ++i) {
+        uint32_t k = 0;
+        for (uint32_t i = 0; i < n; ++i, i += step) {
             int64_t got = tree.sum(i);
-            expected += A[i];
+            for (; k != i + 1; ++k) expected += A[k];
             REQUIRE_MESSAGE(got == expected, "got sum(" << i << ") = " << got
                                                         << " but expected "
                                                         << expected);
@@ -29,8 +33,8 @@ void test_tree(size_t n) {
 
     auto update = [&](int8_t delta) {
         essentials::logger("testing update queries...");
-        static constexpr uint32_t queries = 5000;
-        uint32_t step = n / queries;
+        static constexpr uint32_t update_queries = 5000;
+        uint32_t step = n / update_queries;
         if (step == 0) step += 1;
         for (uint32_t run = 0; run != 100; ++run) {
             int64_t expected = 0;

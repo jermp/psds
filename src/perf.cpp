@@ -12,42 +12,43 @@ static constexpr uint32_t num_queries = 10000;
 static constexpr unsigned value_seed = 13;
 static constexpr unsigned query_seed = 71;
 
-static constexpr uint32_t logs[] = {8,  9,  10, 11, 12, 13, 14, 15, 16,
-                                    17, 18, 19, 20, 21, 22, 23, 24};
+static constexpr uint32_t logs[] = {8,  9,  10, 11, 12, 13, 14, 15,
+                                    16, 17, 18, 19, 20, 21, 22, 23,
+                                    24, 25, 26, 27, 28, 29, 30};
 
 struct type_traits_256 {
     typedef node256u node_type;
-    static constexpr uint32_t heights[] = {1, 2, 2, 2, 2, 2, 2, 2, 2,
-                                           3, 3, 3, 3, 3, 3, 3, 3
+    static constexpr uint32_t heights[] = {1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3,
+                                           3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4
 
     };
 };
 
 struct type_traits_256_restricted {
     typedef node256u_restricted node_type;
-    static constexpr uint32_t heights[] = {1, 2, 2, 2, 2, 2, 2, 2, 2,
-                                           3, 3, 3, 3, 3, 3, 3, 3
+    static constexpr uint32_t heights[] = {1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3,
+                                           3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4
 
     };
 };
 
 struct type_traits_64 {
     typedef node64u node_type;
-    static constexpr uint32_t heights[] = {2, 2, 2, 2, 2, 3, 3, 3, 3,
-                                           3, 3, 4, 4, 4, 4, 4, 4};
+    static constexpr uint32_t heights[] = {2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4,
+                                           4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5};
 };
 
 struct type_traits_64_restricted {
     typedef node64u_restricted node_type;
-    static constexpr uint32_t heights[] = {2, 2, 2, 2, 2, 3, 3, 3, 3,
-                                           3, 3, 4, 4, 4, 4, 4, 4};
+    static constexpr uint32_t heights[] = {2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4,
+                                           4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5};
 };
 
 struct fake_type_traits {
     struct fake_node {};
     typedef fake_node node_type;
-    static constexpr uint32_t heights[] = {0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                           0, 0, 0, 0, 0, 0, 0, 0};
+    static constexpr uint32_t heights[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 };
 
 template <uint32_t Height, typename Node>
@@ -176,7 +177,7 @@ struct test {
 
 template <template <uint32_t H, typename Node> typename Tree,
           typename TypeTraits>
-struct test<16 + 1, Tree, TypeTraits> {  // base case
+struct test<22 + 1, Tree, TypeTraits> {
     static inline void run(essentials::uniform_int_rng<int64_t>&,
                            std::vector<uint32_t>&, std::string&,
                            std::string const&) {}
@@ -230,10 +231,10 @@ int main(int argc, char** argv) {
     } else if (type == "sts_256u_restricted") {
         perf_test<segment_tree_simd, type_traits_256_restricted>(operation,
                                                                  name);
-    } else if (type == "ftt_64u") {
-        perf_test<ftt_64u_wrapper, fake_type_traits>(operation, name);
-    } else if (type == "ftt_256u") {
-        perf_test<ftt_256u_wrapper, fake_type_traits>(operation, name);
+        // } else if (type == "ftt_64u") {
+        //     perf_test<ftt_64u_wrapper, fake_type_traits>(operation, name);
+        // } else if (type == "ftt_256u") {
+        //     perf_test<ftt_256u_wrapper, fake_type_traits>(operation, name);
     } else {
         std::cout << "unknown type \"" << type << "\"" << std::endl;
         return 1;

@@ -15,6 +15,9 @@ types = [
     "sts_64u",
     "sts_256u",
 
+    "sts_64u_restricted",
+    "sts_256u_restricted",
+
     "ft",
 
     # "ftb_16u",
@@ -22,8 +25,8 @@ types = [
     # "ftb_256u",
 
     # "ftt_16u",
-    "ftt_64u",
-    "ftt_256u"
+    # "ftt_64u",
+    # "ftt_256u"
 ]
 
 def run(operation, results):

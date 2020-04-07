@@ -20,10 +20,10 @@ TEST_CASE("test fenwick_forest_node64u") {
     test_tree<fenwick_forest<2, tree_size, node64u>>(size_t(1) << 19);
     test_tree<fenwick_forest<2, tree_size, node64u>>(size_t(1) << 20);
 
-    test_tree<fenwick_forest<3, tree_size, node64u>>(size_t(1) << 21);
-    test_tree<fenwick_forest<3, tree_size, node64u>>(size_t(1) << 22);
-    test_tree<fenwick_forest<3, tree_size, node64u>>(size_t(1) << 23);
-    test_tree<fenwick_forest<3, tree_size, node64u>>(size_t(1) << 24);
+    // test_tree<fenwick_forest<3, tree_size, node64u>>(size_t(1) << 21);
+    // test_tree<fenwick_forest<3, tree_size, node64u>>(size_t(1) << 22);
+    // test_tree<fenwick_forest<3, tree_size, node64u>>(size_t(1) << 23);
+    // test_tree<fenwick_forest<3, tree_size, node64u>>(size_t(1) << 24);
 }
 
 TEST_CASE("test fenwick_forest_node256u") {
@@ -44,8 +44,8 @@ TEST_CASE("test fenwick_forest_node256u") {
     test_tree<fenwick_forest<2, tree_size, node256u>>(size_t(1) << 18);
     test_tree<fenwick_forest<2, tree_size, node256u>>(size_t(1) << 19);
     test_tree<fenwick_forest<2, tree_size, node256u>>(size_t(1) << 20);
-    test_tree<fenwick_forest<2, tree_size, node256u>>(size_t(1) << 21);
-    test_tree<fenwick_forest<2, tree_size, node256u>>(size_t(1) << 22);
-    test_tree<fenwick_forest<2, tree_size, node256u>>(size_t(1) << 23);
-    test_tree<fenwick_forest<2, tree_size, node256u>>(size_t(1) << 24);
+    // test_tree<fenwick_forest<2, tree_size, node256u>>(size_t(1) << 21);
+    // test_tree<fenwick_forest<2, tree_size, node256u>>(size_t(1) << 22);
+    // test_tree<fenwick_forest<2, tree_size, node256u>>(size_t(1) << 23);
+    // test_tree<fenwick_forest<2, tree_size, node256u>>(size_t(1) << 24);
 }
