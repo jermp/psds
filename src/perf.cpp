@@ -66,8 +66,38 @@ struct ftt_64u_wrapper {
 };
 
 template <uint32_t, class>
+struct ftt_64u_restricted_wrapper {
+    typedef fenwick_tree_truncated<node64u_restricted> tree_type;
+};
+
+template <uint32_t, class>
 struct ftt_256u_wrapper {
     typedef fenwick_tree_truncated<node256u> tree_type;
+};
+
+template <uint32_t, class>
+struct ftt_256u_restricted_wrapper {
+    typedef fenwick_tree_truncated<node256u_restricted> tree_type;
+};
+
+template <uint32_t, class>
+struct ftb_64u_wrapper {
+    typedef fenwick_tree_blocked<node64u> tree_type;
+};
+
+template <uint32_t, class>
+struct ftb_64u_restricted_wrapper {
+    typedef fenwick_tree_blocked<node64u_restricted> tree_type;
+};
+
+template <uint32_t, class>
+struct ftb_256u_wrapper {
+    typedef fenwick_tree_blocked<node256u> tree_type;
+};
+
+template <uint32_t, class>
+struct ftb_256u_restricted_wrapper {
+    typedef fenwick_tree_blocked<node256u_restricted> tree_type;
 };
 
 template <int I, template <uint32_t, class> typename Tree, typename Node>
@@ -213,22 +243,45 @@ int main(int argc, char** argv) {
         name = std::string(argv[4]);
     }
 
-    if (type == "st") {
+    if (type == "st") {  // segment tree
         perf_test<st_wrapper, fake_node>(operation, name);
-    } else if (type == "ft") {
+
+    } else if (type == "ft") {  // fenwick tree
         perf_test<ft_wrapper, fake_node>(operation, name);
-    } else if (type == "sts_64u") {
+
+    } else if (type == "sts_64u") {  // segment tree with SIMD - fanout 64
         perf_test<segment_tree_simd, node64u>(operation, name);
-    } else if (type == "sts_64u_restricted") {
+    } else if (type == "sts_64u_restricted") {  // segment tree with SIMD -
+                                                // fanout 64 - restricted case
         perf_test<segment_tree_simd, node64u_restricted>(operation, name);
-    } else if (type == "sts_256u") {
+    } else if (type == "sts_256u") {  // segment tree with SIMD - fanout 256
         perf_test<segment_tree_simd, node256u>(operation, name);
-    } else if (type == "sts_256u_restricted") {
+    } else if (type == "sts_256u_restricted") {  // segment tree with SIMD -
+                                                 // fanout 256 - restricted case
         perf_test<segment_tree_simd, node256u_restricted>(operation, name);
-    } else if (type == "ftt_64u") {
+
+    } else if (type == "ftt_64u") {  // fenwick tree truncated - fanout 64
         perf_test<ftt_64u_wrapper, fake_node>(operation, name);
-    } else if (type == "ftt_256u") {
+    } else if (type == "ftt_64u_restricted") {  // fenwick tree truncated -
+                                                // fanout 64 - restricted case
+        perf_test<ftt_64u_restricted_wrapper, fake_node>(operation, name);
+    } else if (type == "ftt_256u") {  // fenwick tree truncated - fanout 256
         perf_test<ftt_256u_wrapper, fake_node>(operation, name);
+    } else if (type == "ftt_256u_restricted") {  // fenwick tree truncated -
+                                                 // fanout 256 - restricted case
+        perf_test<ftt_256u_restricted_wrapper, fake_node>(operation, name);
+
+    } else if (type == "ftb_64u") {  // fenwick tree blocked - fanout 64
+        perf_test<ftb_64u_wrapper, fake_node>(operation, name);
+    } else if (type == "ftb_64u_restricted") {  // fenwick tree blocked -
+                                                // fanout 64 - restricted case
+        perf_test<ftb_64u_restricted_wrapper, fake_node>(operation, name);
+    } else if (type == "ftb_256u") {  // fenwick tree blocked - fanout 256
+        perf_test<ftb_256u_wrapper, fake_node>(operation, name);
+    } else if (type == "ftb_256u_restricted") {  // fenwick tree blocked -
+                                                 // fanout 256 - restricted case
+        perf_test<ftb_256u_restricted_wrapper, fake_node>(operation, name);
+
     } else {
         std::cout << "unknown type \"" << type << "\"" << std::endl;
         return 1;

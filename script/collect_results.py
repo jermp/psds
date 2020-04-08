@@ -9,24 +9,25 @@ parser.add_argument('update_results', type = str, help = "Results filename for U
 args = parser.parse_args()
 
 types = [
-    "st",
 
-    # "sts_16u",
-    "sts_64u",
-    "sts_256u",
+    # "st",
 
-    "sts_64u_restricted",
-    "sts_256u_restricted",
+    # "sts_64u",
+    # "sts_256u",
+    # "sts_64u_restricted",
+    # "sts_256u_restricted",
 
-    "ft",
+    # "ft",
 
-    # "ftb_16u",
-    # "ftb_64u",
-    # "ftb_256u",
+    "ftb_64u",
+    "ftb_256u",
+    "ftb_64u_restricted",
+    "ftb_256u_restricted",
 
-    # "ftt_16u",
-    # "ftt_64u",
-    # "ftt_256u"
+    "ftt_64u",
+    "ftt_256u",
+    "ftt_64u_restricted",
+    "ftt_256u_restricted"
 ]
 
 def run(operation, results):
