@@ -215,7 +215,7 @@ template <template <uint32_t, class> typename Tree, typename Node>
 void perf_test(std::string const& operation, std::string const& name) {
     essentials::uniform_int_rng<int64_t> distr_values(-100, 100, value_seed);
     std::vector<uint32_t> queries(num_queries);
-    typedef typename Tree<0, Node>::tree_type tree_type;
+    typedef typename Tree<1, Node>::tree_type tree_type;
     auto str = tree_type::name();
     if (name != "") str = name;
     std::string json("{\"type\":\"" + str + "\", \"timings\":[");

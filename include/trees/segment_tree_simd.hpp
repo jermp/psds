@@ -14,6 +14,7 @@ namespace psds {
 
 template <uint32_t Height, typename Node>
 struct segment_tree_simd {
+    static_assert(Height > 0);
     typedef segment_tree_simd<Height, Node> tree_type;
 
     segment_tree_simd()
@@ -23,31 +24,33 @@ struct segment_tree_simd {
     void build(T const* input, uint64_t n) {
         assert(n > 0);
         m_size = n;
-        std::vector<uint32_t> num_nodes_per_level;
+        std::vector<uint32_t> num_nodes_per_level(Height);
         uint64_t m = n;
         uint64_t total_nodes = 0;
-        do {
+        for (int h = Height - 1; h >= 0; --h) {
             m = std::ceil(static_cast<double>(m) / Node::fanout);
-            num_nodes_per_level.push_back(m);
+            num_nodes_per_level[h] = m;
             total_nodes += m;
-        } while (m != 1);
-        assert(Height == num_nodes_per_level.size());
+        }
+        assert(m == 1);
 
 #ifdef SLOW_SEGTREE
-        m_height = num_nodes_per_level.size();
+        m_height = Height;
 #endif
-        uint64_t total_size = total_nodes * Node::bytes + Height * 4;
+        uint64_t total_size =
+            total_nodes * Node::bytes + Height * sizeof(uint32_t);
         m_data.resize(total_size);
 
         m_num_nodes_per_level = reinterpret_cast<uint32_t*>(m_data.data());
-        for (int h = Height - 1, i = 0; h >= 0; --h, ++i) {
-            m_num_nodes_per_level[i] = num_nodes_per_level[h];
+        for (uint32_t i = 0; i != Height; ++i) {
+            m_num_nodes_per_level[i] = num_nodes_per_level[i];
         }
-        m_ptr = m_data.data() + Height * 4;
+        m_ptr = m_data.data() + Height * sizeof(uint32_t);
 
         std::vector<int64_t> tmp(Node::fanout);
         uint8_t* begin = m_data.data() + total_size;  // end
-        for (uint64_t h = 0, step = 1; h != Height; ++h, step *= Node::fanout) {
+        uint64_t step = 1;
+        for (int h = Height - 1; h >= 0; --h, step *= Node::fanout) {
             uint64_t nodes = num_nodes_per_level[h];
             begin -= nodes * Node::bytes;
             for (uint64_t i = 0, base = 0; i != nodes; ++i) {
