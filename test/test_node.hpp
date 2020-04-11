@@ -1,7 +1,6 @@
 #pragma once
 
-namespace psds {
-namespace testing {
+namespace psds::testing {
 
 template <typename Node>
 void test_node() {
@@ -48,5 +47,4 @@ void test_node() {
     std::cout << "\teverything's good" << std::endl;
 }
 
-}  // namespace testing
-}  // namespace psds
+}  // namespace psds::testing

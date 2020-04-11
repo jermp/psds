@@ -4,6 +4,7 @@
 
 #include "../external/essentials/include/essentials.hpp"
 #include "types.hpp"
+#include "util.hpp"
 
 using namespace psds;
 
@@ -11,28 +12,6 @@ static constexpr int runs = 100;
 static constexpr uint32_t num_queries = 10000;
 static constexpr unsigned value_seed = 13;
 static constexpr unsigned query_seed = 71;
-
-constexpr size_t ceil_log2(size_t n) {
-    return (n < 2) ? 1 : 1 + ceil_log2(n / 2);
-}
-
-constexpr size_t floor_log2(size_t n) {
-    return (n == 1) ? 0 : 1 + floor_log2(n / 2);
-}
-
-constexpr double const_ceil(double val) {
-    const auto val_int = (int64_t)val;
-    const double fval_int = (double)val_int;
-    return (val < double(0) ? fval_int
-                            : (val == fval_int ? val : fval_int + double(1)));
-}
-
-constexpr uint32_t ceil_log(uint32_t base, uint32_t n) {
-    assert(base > 0);
-    assert((base & (base - 1)) == 0);  // base must be a power of 2
-    return const_ceil(static_cast<double>(ceil_log2(n)) /
-                      static_cast<double>(floor_log2(base)));
-}
 
 static constexpr uint32_t sizes[] = {
     251,       316,       398,       501,       630,       794,       1000,
@@ -107,7 +86,7 @@ struct test {
                     std::string const& operation) {
         {
             const uint64_t n = sizes[I];
-            const uint32_t height = ceil_log(Node::fanout, n);
+            const uint32_t height = util::ceil_log(Node::fanout, n);
             typedef typename Tree<height, Node>::tree_type tree_type;
             tree_type tree;
 

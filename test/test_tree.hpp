@@ -1,7 +1,6 @@
 #pragma once
 
-namespace psds {
-namespace testing {
+namespace psds::testing {
 
 template <typename Tree>
 void test_tree(size_t n) {
@@ -22,7 +21,7 @@ void test_tree(size_t n) {
         if (step == 0) step += 1;
         int64_t expected = 0;
         uint32_t k = 0;
-        for (uint32_t i = 0; i < n; ++i, i += step) {
+        for (uint32_t i = 0; i < n; i += step) {
             int64_t got = tree.sum(i);
             for (; k != i + 1; ++k) expected += A[k];
             REQUIRE_MESSAGE(got == expected, "got sum(" << i << ") = " << got
@@ -58,5 +57,4 @@ void test_tree(size_t n) {
     std::cout << "\teverything's good" << std::endl;
 }
 
-}  // namespace testing
-}  // namespace psds
+}  // namespace psds::testing
