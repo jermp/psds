@@ -20,20 +20,20 @@ struct segment_tree {
     }
 
     int64_t sum(uint64_t i) const {
-        if ((m_size + 1) / 2 < 16777216) {  // go branch-less here...
+        if ((m_size + 1) / 2 < 4194304) {  // go branch-less here...
             uint64_t n = m_size;
             uint64_t m = (m_size - 1) / 2;
-            uint64_t pos = 0;
+            uint64_t p = 0;
             int64_t sum = 0;
             while (n != 1) {
                 uint64_t cmp = i > m;
-                sum += cmp * m_tree[pos];
-                pos = (pos << 1) + cmp + 1;
-                n >>= 1;
+                sum += cmp * m_tree[p];
+                p = 2 * p + cmp + 1;
+                n /= 2;
                 int64_t offset = cmp * n - n / 2;
                 m += offset;
             }
-            return sum + m_tree[pos];
+            return sum + m_tree[p];
         }
         // but switch to branchy code for large n
         size_t lo = 0;
@@ -56,15 +56,15 @@ struct segment_tree {
     }
 
     void update(uint64_t i, int64_t delta) {
-        if ((m_size + 1) / 2 < 16777216) {
+        if ((m_size + 1) / 2 < 4194304) {
             uint64_t n = m_size;
             uint64_t m = (m_size - 1) / 2;
             uint64_t p = 0;
             while (n != 1) {
                 uint64_t cmp = i > m;
                 m_tree[p] += !cmp * delta;
-                p = (p << 1) + cmp + 1;
-                n >>= 1;
+                p = 2 * p + cmp + 1;
+                n /= 2;
                 int64_t offset = cmp * n - n / 2;
                 m += offset;
             }
