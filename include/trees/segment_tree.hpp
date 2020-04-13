@@ -11,7 +11,7 @@ struct segment_tree {
         m_size = size_t(1) << static_cast<size_t>(ceil(log2(n)));
         m_tree.resize(2 * m_size - 1, 0);
         std::vector<int64_t> in(m_size, 0);
-        for (uint64_t i = 0; i != n; ++i) in[i] = input[i];
+        std::copy(input, input + n, in.begin());
         build(in.data(), 0, m_size - 1, 0);
     }
 
