@@ -27,8 +27,9 @@ struct segment_tree {
             int64_t sum = 0;
             while (n != 1) {
                 uint64_t cmp = i > m;
+                p = 2 * p + 1;
                 sum += cmp * m_tree[p];
-                p = 2 * p + cmp + 1;
+                p += cmp;
                 n /= 2;
                 int64_t offset = cmp * n - n / 2;
                 m += offset;
@@ -36,20 +37,20 @@ struct segment_tree {
             return sum + m_tree[p];
         }
         // but switch to branchy code for large n
-        size_t lo = 0;
-        size_t hi = m_size - 1;
+        size_t l = 0;
+        size_t h = m_size - 1;
         size_t p = 0;
         int64_t sum = 0;
-        while (lo < hi) {
-            size_t m = (lo + hi) / 2;
-            if (i == m) break;
+        while (l < h) {
+            if (i == h) break;
+            size_t m = (l + h) / 2;
+            p = 2 * p + 1;
             if (i > m) {
                 sum += m_tree[p];
-                lo = m + 1;
-                p = 2 * p + 2;
+                l = m + 1;
+                p += 1;
             } else {
-                hi = m;
-                p = 2 * p + 1;
+                h = m;
             }
         }
         return sum + m_tree[p];
@@ -61,8 +62,8 @@ struct segment_tree {
             uint64_t m = (m_size - 1) / 2;
             uint64_t p = 0;
             while (n != 1) {
+                m_tree[p] += delta;
                 uint64_t cmp = i > m;
-                m_tree[p] += !cmp * delta;
                 p = 2 * p + cmp + 1;
                 n /= 2;
                 int64_t offset = cmp * n - n / 2;
@@ -71,18 +72,18 @@ struct segment_tree {
             m_tree[p] += delta;
             return;
         }
-        size_t lo = 0;
-        size_t hi = m_size - 1;
+        size_t l = 0;
+        size_t h = m_size - 1;
         size_t p = 0;
-        while (lo < hi) {
-            size_t m = (lo + hi) / 2;
+        while (l < h) {
+            m_tree[p] += delta;
+            size_t m = (l + h) / 2;
+            p = 2 * p + 1;
             if (i > m) {
-                lo = m + 1;
-                p = 2 * p + 2;
+                l = m + 1;
+                p += 1;
             } else {
-                m_tree[p] += delta;
-                hi = m;
-                p = 2 * p + 1;
+                h = m;
             }
         }
         m_tree[p] += delta;
@@ -93,16 +94,12 @@ private:
     std::vector<int64_t> m_tree;
 
     template <typename T>
-    int64_t build(T const* input, size_t lo, size_t hi, size_t p) {
-        if (lo == hi) {
-            m_tree[p] = input[lo];
-            return m_tree[p];
-        }
-        size_t mi = (lo + hi) / 2;
-        int64_t l_subtree_sum = build(input, lo, mi, 2 * p + 1);
-        int64_t r_subtree_sum = build(input, mi + 1, hi, 2 * p + 2);
-        m_tree[p] = l_subtree_sum;
-        return l_subtree_sum + r_subtree_sum;
+    int64_t build(T const* input, size_t l, size_t h, size_t p) {
+        if (l == h) return m_tree[p] = input[l];
+        size_t m = (l + h) / 2;
+        int64_t l_sum = build(input, l, m, 2 * p + 1);
+        int64_t r_sum = build(input, m + 1, h, 2 * p + 2);
+        return m_tree[p] = l_sum + r_sum;
     }
 };
 
