@@ -93,8 +93,7 @@ private:
     size_t m_size;
     std::vector<int64_t> m_tree;
 
-    template <typename T>
-    int64_t build(T const* input, size_t l, size_t h, size_t p) {
+    int64_t build(int64_t const* input, size_t l, size_t h, size_t p) {
         if (l == h) return m_tree[p] = input[l];
         size_t m = (l + h) / 2;
         int64_t l_sum = build(input, l, m, 2 * p + 1);
