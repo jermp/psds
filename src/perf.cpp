@@ -3,6 +3,7 @@
 #include <fstream>
 
 #include "../external/essentials/include/essentials.hpp"
+#include "../external/cmd_line_parser/include/parser.hpp"
 #include "types.hpp"
 #include "util.hpp"
 
@@ -83,8 +84,8 @@ template <int I, template <uint32_t, class> typename Tree, typename Node>
 struct test {
     static void run(essentials::uniform_int_rng<int64_t>& distr_values,
                     std::vector<uint32_t>& queries, std::string& json,
-                    std::string const& operation) {
-        {
+                    std::string const& operation, int i = -1) {
+        if (i == -1 or i == I) {
             const uint64_t n = sizes[I];
             const uint32_t height = util::ceil_log(Node::fanout, n);
             typedef typename Tree<height, Node>::tree_type tree_type;
@@ -128,14 +129,15 @@ struct test {
                 } else {
                     assert(false);
                 }
-                std::cout << "# ignore: " << total << std::endl;
+                return total;
             };
 
             static constexpr int K = 10;
+            int64_t ignore = 0;
 
             // warm-up
             for (int k = 0; k != K; ++k) {
-                measure();
+                ignore += measure();
                 double avg_ns_query = (t.average() * 1000) / num_queries;
                 avg += avg_ns_query;
                 t.reset();
@@ -144,7 +146,7 @@ struct test {
             avg = 0.0;
 
             for (int k = 0; k != K; ++k) {
-                measure();
+                ignore += measure();
                 t.discard_max();
                 double avg_ns_query = (t.max() * 1000) / num_queries;
                 max += avg_ns_query;
@@ -152,7 +154,7 @@ struct test {
             }
 
             for (int k = 0; k != K; ++k) {
-                measure();
+                ignore += measure();
                 t.discard_min();
                 t.discard_max();
                 double avg_ns_query = (t.average() * 1000) / num_queries;
@@ -161,12 +163,14 @@ struct test {
             }
 
             for (int k = 0; k != K; ++k) {
-                measure();
+                ignore += measure();
                 t.discard_min();
                 double avg_ns_query = (t.min() * 1000) / num_queries;
                 min += avg_ns_query;
                 t.reset();
             }
+
+            std::cout << "# ignore: " << ignore << std::endl;
 
             min /= K;
             max /= K;
@@ -179,7 +183,7 @@ struct test {
                     "," + std::to_string(tt[2]) + "],";
         }
 
-        test<I + 1, Tree, Node>::run(distr_values, queries, json, operation);
+        test<I + 1, Tree, Node>::run(distr_values, queries, json, operation, i);
     }
 };
 
@@ -187,19 +191,22 @@ template <template <uint32_t, class> typename Tree, typename Node>
 struct test<sizeof(sizes) / sizeof(sizes[0]), Tree, Node> {
     static inline void run(essentials::uniform_int_rng<int64_t>&,
                            std::vector<uint32_t>&, std::string&,
-                           std::string const&) {}
+                           std::string const&, int) {}
 };
 
 template <template <uint32_t, class> typename Tree, typename Node>
-void perf_test(std::string const& operation, std::string const& name) {
+void perf_test(std::string const& operation, std::string const& name,
+               int i = -1) {
     essentials::uniform_int_rng<int64_t> distr_values(-100, 100, value_seed);
     std::vector<uint32_t> queries(num_queries);
     typedef typename Tree<1, Node>::tree_type tree_type;
     auto str = tree_type::name();
     if (name != "") str = name;
-    std::string json("{\"type\":\"" + str + "\", \"timings\":[");
+    std::string json("{\"type\":\"" + str + "\", ");
+    if (i != -1) json += "\"n\":\"" + std::to_string(sizes[i]) + "\", ";
+    json += "\"timings\":[";
 
-    test<0, Tree, Node>::run(distr_values, queries, json, operation);
+    test<0, Tree, Node>::run(distr_values, queries, json, operation, i);
 
     json.pop_back();
     json += "]}";
@@ -207,59 +214,62 @@ void perf_test(std::string const& operation, std::string const& name) {
 }
 
 int main(int argc, char** argv) {
-    if (argc < 3) {
-        std::cout << "Usage: " << argv[0] << " [type] [operation] --log [name]"
-                  << std::endl;
-        // todo: write list of possible type with full names
-        // std::cout << "[type] is one among: ..." << std::endl;
-        std::cout << "[operation] is either 'sum' or 'update'." << std::endl;
-        return 1;
-    }
-    std::string type = argv[1];
-    std::string operation = argv[2];
+    cmd_line_parser::parser parser(argc, argv);
+    parser.add("type", "Tree type.");
+    parser.add("operation", "Either 'sum' or 'update'.");
+    parser.add("name", "Friendly name.", "-n", false);
+    parser.add("i",
+               "Use a specific array size calculated as: floor(base^i) with "
+               "base = 10^{1/10} = 1.25893. Running the program without this "
+               "option will execute the benchmark for i = 24..90.",
+               "-i", false);
+    if (!parser.parse()) return 1;
+
     std::string name("");
-    if (argc > 3 and std::string(argv[3]) == "--log") {
-        name = std::string(argv[4]);
-    }
+    int i = -1;
+    auto type = parser.get<std::string>("type");
+    auto operation = parser.get<std::string>("operation");
+    if (parser.parsed("name")) name = parser.get<std::string>("name");
+    if (parser.parsed("i")) i = parser.get<int>("i");
 
     if (type == "st") {  // segment tree
-        perf_test<st_wrapper, fake_node>(operation, name);
+        perf_test<st_wrapper, fake_node>(operation, name, i);
 
     } else if (type == "ft") {  // fenwick tree
-        perf_test<ft_wrapper, fake_node>(operation, name);
+        perf_test<ft_wrapper, fake_node>(operation, name, i);
 
     } else if (type == "sts_64u") {  // segment tree with SIMD - fanout 64
-        perf_test<segment_tree_simd, node64u>(operation, name);
+        perf_test<segment_tree_simd, node64u>(operation, name, i);
     } else if (type == "sts_64u_restricted") {  // segment tree with SIMD -
                                                 // fanout 64 - restricted case
-        perf_test<segment_tree_simd, node64u_restricted>(operation, name);
+        perf_test<segment_tree_simd, node64u_restricted>(operation, name, i);
     } else if (type == "sts_256u") {  // segment tree with SIMD - fanout 256
-        perf_test<segment_tree_simd, node256u>(operation, name);
+        perf_test<segment_tree_simd, node256u>(operation, name, i);
     } else if (type == "sts_256u_restricted") {  // segment tree with SIMD -
                                                  // fanout 256 - restricted case
-        perf_test<segment_tree_simd, node256u_restricted>(operation, name);
+        perf_test<segment_tree_simd, node256u_restricted>(operation, name, i);
 
     } else if (type == "ftt_64u") {  // fenwick tree truncated - fanout 64
-        perf_test<ftt_64u_wrapper, fake_node>(operation, name);
+        perf_test<ftt_64u_wrapper, fake_node>(operation, name, i);
     } else if (type == "ftt_64u_restricted") {  // fenwick tree truncated -
                                                 // fanout 64 - restricted case
-        perf_test<ftt_64u_restricted_wrapper, fake_node>(operation, name);
+        perf_test<ftt_64u_restricted_wrapper, fake_node>(operation, name, i);
     } else if (type == "ftt_256u") {  // fenwick tree truncated - fanout 256
-        perf_test<ftt_256u_wrapper, fake_node>(operation, name);
+        perf_test<ftt_256u_wrapper, fake_node>(operation, name, i);
     } else if (type == "ftt_256u_restricted") {  // fenwick tree truncated -
                                                  // fanout 256 - restricted case
-        perf_test<ftt_256u_restricted_wrapper, fake_node>(operation, name);
+        perf_test<ftt_256u_restricted_wrapper, fake_node>(operation, name, i);
 
     } else if (type == "ftb_64u") {  // fenwick tree blocked - fanout 64
-        perf_test<ftb_64u_wrapper, fake_node>(operation, name);
+        perf_test<ftb_64u_wrapper, fake_node>(operation, name, i);
     } else if (type == "ftb_64u_restricted") {  // fenwick tree blocked -
                                                 // fanout 64 - restricted case
-        perf_test<ftb_64u_restricted_wrapper, fake_node>(operation, name);
+        perf_test<ftb_64u_restricted_wrapper, fake_node>(operation, name, i);
     } else if (type == "ftb_256u") {  // fenwick tree blocked - fanout 256
-        perf_test<ftb_256u_wrapper, fake_node>(operation, name);
+        perf_test<ftb_256u_wrapper, fake_node>(operation, name, i);
     } else if (type == "ftb_256u_restricted") {  // fenwick tree blocked -
                                                  // fanout 256 - restricted case
-        perf_test<ftb_256u_restricted_wrapper, fake_node>(operation, name);
+        perf_test<ftb_256u_restricted_wrapper, fake_node>(operation, name, i);
 
     } else {
         std::cout << "unknown type \"" << type << "\"" << std::endl;
