@@ -7,8 +7,8 @@ namespace psds {
 
 struct segment_tree {
     template <typename T>
-    void build(T const* input, size_t n) {
-        m_size = size_t(1) << static_cast<size_t>(ceil(log2(n)));
+    void build(T const* input, uint64_t n) {
+        m_size = uint64_t(1) << static_cast<uint64_t>(ceil(log2(n)));
         m_tree.resize(2 * m_size - 1, 0);
         std::vector<int64_t> in(m_size, 0);
         std::copy(input, input + n, in.begin());
@@ -37,13 +37,13 @@ struct segment_tree {
             return sum + m_tree[p];
         }
         // but switch to branchy code for large n
-        size_t l = 0;
-        size_t h = m_size - 1;
-        size_t p = 0;
+        uint64_t l = 0;
+        uint64_t h = m_size - 1;
+        uint64_t p = 0;
         int64_t sum = 0;
         while (l < h) {
             if (i == h) break;
-            size_t m = (l + h) / 2;
+            uint64_t m = (l + h) / 2;
             p = 2 * p + 1;
             if (i > m) {
                 sum += m_tree[p];
@@ -72,12 +72,12 @@ struct segment_tree {
             m_tree[p] += delta;
             return;
         }
-        size_t l = 0;
-        size_t h = m_size - 1;
-        size_t p = 0;
+        uint64_t l = 0;
+        uint64_t h = m_size - 1;
+        uint64_t p = 0;
         while (l < h) {
             m_tree[p] += delta;
-            size_t m = (l + h) / 2;
+            uint64_t m = (l + h) / 2;
             p = 2 * p + 1;
             if (i > m) {
                 l = m + 1;
@@ -90,12 +90,12 @@ struct segment_tree {
     }
 
 private:
-    size_t m_size;
+    uint64_t m_size;
     std::vector<int64_t> m_tree;
 
-    int64_t build(int64_t const* input, size_t l, size_t h, size_t p) {
+    int64_t build(int64_t const* input, uint64_t l, uint64_t h, uint64_t p) {
         if (l == h) return m_tree[p] = input[l];
-        size_t m = (l + h) / 2;
+        uint64_t m = (l + h) / 2;
         int64_t l_sum = build(input, l, m, 2 * p + 1);
         int64_t r_sum = build(input, m + 1, h, 2 * p + 2);
         return m_tree[p] = l_sum + r_sum;
