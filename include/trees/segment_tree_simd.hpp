@@ -53,13 +53,15 @@ struct segment_tree_simd {
         for (int h = Height - 1; h >= 0; --h, step *= Node::fanout) {
             uint64_t nodes = num_nodes_per_level[h];
             begin -= nodes * Node::bytes;
+            uint8_t* out = begin;
             for (uint64_t i = 0, base = 0; i != nodes; ++i) {
-                for (uint64_t k = 0; k != Node::fanout; ++k, base += step) {
+                for (int64_t& x : tmp) {
                     int64_t sum = 0;
-                    for (uint64_t l = 0; l != step; ++l) {
-                        sum += base + l < n ? input[base + l] : 0;
+                    for (uint64_t k = 0; k != step and base + k < n; ++k) {
+                        sum += input[base + k];
                     }
-                    tmp[k] = sum;
+                    x = sum;
+                    base += step;
                 }
 
                 // shift everything right by 1, except the leaves
@@ -70,7 +72,8 @@ struct segment_tree_simd {
                     tmp[0] = 0;
                 }
 
-                Node::build(tmp.data(), begin + i * Node::bytes);
+                Node::build(tmp.data(), out);
+                out += Node::bytes;
             }
         }
     }
