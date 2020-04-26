@@ -8,9 +8,9 @@
 
 namespace psds {
 
-struct node64u_restricted {
-    static constexpr uint64_t fanout = 64;
-    static constexpr uint64_t segment_size = 8;
+struct node256_restricted {
+    static constexpr uint64_t fanout = 256;
+    static constexpr uint64_t segment_size = 16;
     static constexpr uint64_t summary_buffer_bytes =
         segment_size * sizeof(int16_t);
     static constexpr uint64_t summary_bytes = segment_size * sizeof(int64_t);
@@ -19,7 +19,7 @@ struct node64u_restricted {
     static constexpr uint64_t bytes = summary_buffer_bytes + summary_bytes +
                                       keys_buffer_bytes + keys_bytes + 1;
 
-    node64u_restricted() {}  // do not initialize
+    node256_restricted() {}  // do not initialize
 
     template <typename T>
     static void build(T const* input, uint8_t* out) {
@@ -28,10 +28,10 @@ struct node64u_restricted {
     }
 
     static std::string name() {
-        return "node64u_restricted";
+        return "node256_restricted";
     }
 
-    node64u_restricted(uint8_t* ptr) {
+    node256_restricted(uint8_t* ptr) {
         at(ptr);
     }
 
@@ -53,29 +53,31 @@ struct node64u_restricted {
         uint64_t k = i % segment_size;
 
 #ifdef DISABLE_AVX
-        for (uint64_t z = j + 1; z != segment_size; ++z)
+        for (uint64_t z = j + 1; z != segment_size; ++z) {
             summary_buffer[z] += delta;
+        }
         for (uint64_t z = k, base = j * segment_size; z != segment_size; ++z) {
             keys_buffer[base + z] += delta;
         }
 #else
-        __m128i upd = _mm_set1_epi16(delta);
+        __m256i upd = _mm256_set1_epi16(delta);
 
-        __m128i msk_j =
-            _mm_load_si128((__m128i const*)tables::restricted::mask8_j + j);
-        __m128i upd_j = _mm_and_si128(upd, msk_j);
-        __m128i dst_summary_buffer =
-            _mm_loadu_si128((__m128i const*)summary_buffer);
-        __m128i res_summary_buffer = _mm_add_epi16(upd_j, dst_summary_buffer);
-        _mm_storeu_si128((__m128i*)summary_buffer, res_summary_buffer);
+        __m256i msk_j =
+            _mm256_load_si256((__m256i const*)tables::restricted::mask16_j + j);
+        __m256i upd_j = _mm256_and_si256(upd, msk_j);
+        __m256i dst_summary_buffer =
+            _mm256_loadu_si256((__m256i const*)summary_buffer);
+        __m256i res_summary_buffer =
+            _mm256_add_epi16(upd_j, dst_summary_buffer);
+        _mm256_storeu_si256((__m256i*)summary_buffer, res_summary_buffer);
 
-        __m128i msk_k =
-            _mm_load_si128((__m128i const*)tables::restricted::mask8_k + k);
-        __m128i upd_k = _mm_and_si128(upd, msk_k);
-        __m128i dst_keys_buffer =
-            _mm_loadu_si128((__m128i const*)keys_buffer + j);
-        __m128i res_keys_buffer = _mm_add_epi16(upd_k, dst_keys_buffer);
-        _mm_storeu_si128((__m128i*)keys_buffer + j, res_keys_buffer);
+        __m256i msk_k =
+            _mm256_load_si256((__m256i const*)tables::restricted::mask16_k + k);
+        __m256i upd_k = _mm256_and_si256(upd, msk_k);
+        __m256i dst_keys_buffer =
+            _mm256_loadu_si256((__m256i const*)keys_buffer + j);
+        __m256i res_keys_buffer = _mm256_add_epi16(upd_k, dst_keys_buffer);
+        _mm256_storeu_si256((__m256i*)keys_buffer + j, res_keys_buffer);
 #endif
 
         *updates += 1;

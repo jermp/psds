@@ -78,9 +78,9 @@ will benchmark the speed of sum queries for the Fenwick Tree data structure (`ft
 - The command
 
 		./perf sts_256u update -i 40
-		
+
 will benchmark the speed of updates for the SIMD Segment Tree
-with branching factor 256 (`sts_256u`) for an array
+with branching factor 256 (`sts_256`) for an array
 of size floor((1.25893)^40) = 2,511,886.
 
 Unit tests <a name="testing"></a>

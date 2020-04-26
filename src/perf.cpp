@@ -41,43 +41,43 @@ struct st_wrapper {
 };
 
 template <uint32_t, class>
-struct ftt_64u_wrapper {
-    typedef fenwick_tree_truncated<node64u> tree_type;
+struct ftt_64_wrapper {
+    typedef fenwick_tree_truncated<node64> tree_type;
 };
 
 template <uint32_t, class>
-struct ftt_64u_restricted_wrapper {
-    typedef fenwick_tree_truncated<node64u_restricted> tree_type;
+struct ftt_64_restricted_wrapper {
+    typedef fenwick_tree_truncated<node64_restricted> tree_type;
 };
 
 template <uint32_t, class>
-struct ftt_256u_wrapper {
-    typedef fenwick_tree_truncated<node256u> tree_type;
+struct ftt_256_wrapper {
+    typedef fenwick_tree_truncated<node256> tree_type;
 };
 
 template <uint32_t, class>
-struct ftt_256u_restricted_wrapper {
-    typedef fenwick_tree_truncated<node256u_restricted> tree_type;
+struct ftt_256_restricted_wrapper {
+    typedef fenwick_tree_truncated<node256_restricted> tree_type;
 };
 
 template <uint32_t, class>
-struct ftb_64u_wrapper {
-    typedef fenwick_tree_blocked<node64u> tree_type;
+struct ftb_64_wrapper {
+    typedef fenwick_tree_blocked<node64> tree_type;
 };
 
 template <uint32_t, class>
-struct ftb_64u_restricted_wrapper {
-    typedef fenwick_tree_blocked<node64u_restricted> tree_type;
+struct ftb_64_restricted_wrapper {
+    typedef fenwick_tree_blocked<node64_restricted> tree_type;
 };
 
 template <uint32_t, class>
-struct ftb_256u_wrapper {
-    typedef fenwick_tree_blocked<node256u> tree_type;
+struct ftb_256_wrapper {
+    typedef fenwick_tree_blocked<node256> tree_type;
 };
 
 template <uint32_t, class>
-struct ftb_256u_restricted_wrapper {
-    typedef fenwick_tree_blocked<node256u_restricted> tree_type;
+struct ftb_256_restricted_wrapper {
+    typedef fenwick_tree_blocked<node256_restricted> tree_type;
 };
 
 template <int I, template <uint32_t, class> typename Tree, typename Node>
@@ -238,38 +238,38 @@ int main(int argc, char** argv) {
     } else if (type == "ft") {  // fenwick tree
         perf_test<ft_wrapper, fake_node>(operation, name, i);
 
-    } else if (type == "sts_64u") {  // segment tree with SIMD - fanout 64
-        perf_test<segment_tree_simd, node64u>(operation, name, i);
-    } else if (type == "sts_64u_restricted") {  // segment tree with SIMD -
-                                                // fanout 64 - restricted case
-        perf_test<segment_tree_simd, node64u_restricted>(operation, name, i);
-    } else if (type == "sts_256u") {  // segment tree with SIMD - fanout 256
-        perf_test<segment_tree_simd, node256u>(operation, name, i);
-    } else if (type == "sts_256u_restricted") {  // segment tree with SIMD -
-                                                 // fanout 256 - restricted case
-        perf_test<segment_tree_simd, node256u_restricted>(operation, name, i);
+    } else if (type == "sts_64") {  // segment tree with SIMD - fanout 64
+        perf_test<segment_tree_simd, node64>(operation, name, i);
+    } else if (type == "sts_64_restricted") {  // segment tree with SIMD -
+                                               // fanout 64 - restricted case
+        perf_test<segment_tree_simd, node64_restricted>(operation, name, i);
+    } else if (type == "sts_256") {  // segment tree with SIMD - fanout 256
+        perf_test<segment_tree_simd, node256>(operation, name, i);
+    } else if (type == "sts_256_restricted") {  // segment tree with SIMD -
+                                                // fanout 256 - restricted case
+        perf_test<segment_tree_simd, node256_restricted>(operation, name, i);
 
-    } else if (type == "ftt_64u") {  // fenwick tree truncated - fanout 64
-        perf_test<ftt_64u_wrapper, fake_node>(operation, name, i);
-    } else if (type == "ftt_64u_restricted") {  // fenwick tree truncated -
-                                                // fanout 64 - restricted case
-        perf_test<ftt_64u_restricted_wrapper, fake_node>(operation, name, i);
-    } else if (type == "ftt_256u") {  // fenwick tree truncated - fanout 256
-        perf_test<ftt_256u_wrapper, fake_node>(operation, name, i);
-    } else if (type == "ftt_256u_restricted") {  // fenwick tree truncated -
-                                                 // fanout 256 - restricted case
-        perf_test<ftt_256u_restricted_wrapper, fake_node>(operation, name, i);
+    } else if (type == "ftt_64") {  // fenwick tree truncated - fanout 64
+        perf_test<ftt_64_wrapper, fake_node>(operation, name, i);
+    } else if (type == "ftt_64_restricted") {  // fenwick tree truncated -
+                                               // fanout 64 - restricted case
+        perf_test<ftt_64_restricted_wrapper, fake_node>(operation, name, i);
+    } else if (type == "ftt_256") {  // fenwick tree truncated - fanout 256
+        perf_test<ftt_256_wrapper, fake_node>(operation, name, i);
+    } else if (type == "ftt_256_restricted") {  // fenwick tree truncated -
+                                                // fanout 256 - restricted case
+        perf_test<ftt_256_restricted_wrapper, fake_node>(operation, name, i);
 
-    } else if (type == "ftb_64u") {  // fenwick tree blocked - fanout 64
-        perf_test<ftb_64u_wrapper, fake_node>(operation, name, i);
-    } else if (type == "ftb_64u_restricted") {  // fenwick tree blocked -
-                                                // fanout 64 - restricted case
-        perf_test<ftb_64u_restricted_wrapper, fake_node>(operation, name, i);
-    } else if (type == "ftb_256u") {  // fenwick tree blocked - fanout 256
-        perf_test<ftb_256u_wrapper, fake_node>(operation, name, i);
-    } else if (type == "ftb_256u_restricted") {  // fenwick tree blocked -
-                                                 // fanout 256 - restricted case
-        perf_test<ftb_256u_restricted_wrapper, fake_node>(operation, name, i);
+    } else if (type == "ftb_64") {  // fenwick tree blocked - fanout 64
+        perf_test<ftb_64_wrapper, fake_node>(operation, name, i);
+    } else if (type == "ftb_64_restricted") {  // fenwick tree blocked -
+                                               // fanout 64 - restricted case
+        perf_test<ftb_64_restricted_wrapper, fake_node>(operation, name, i);
+    } else if (type == "ftb_256") {  // fenwick tree blocked - fanout 256
+        perf_test<ftb_256_wrapper, fake_node>(operation, name, i);
+    } else if (type == "ftb_256_restricted") {  // fenwick tree blocked -
+                                                // fanout 256 - restricted case
+        perf_test<ftb_256_restricted_wrapper, fake_node>(operation, name, i);
 
     } else {
         std::cout << "unknown type \"" << type << "\"" << std::endl;

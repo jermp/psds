@@ -18,18 +18,18 @@ struct test<sizeof(sizes) / sizeof(sizes[0]), Tree, Node> {
     static void run() {}
 };
 
-TEST_CASE("test segment_tree_simd_node64u") {
-    test<0, segment_tree_simd, node64u>::run();
+TEST_CASE("test segment_tree_simd_node64") {
+    test<0, segment_tree_simd, node64>::run();
 }
 
-TEST_CASE("test segment_tree_simd_node64u_restricted") {
-    test<0, segment_tree_simd, node64u_restricted>::run();
+TEST_CASE("test segment_tree_simd_node64_restricted") {
+    test<0, segment_tree_simd, node64_restricted>::run();
 }
 
-TEST_CASE("test segment_tree_simd_node256u") {
-    test<0, segment_tree_simd, node256u>::run();
+TEST_CASE("test segment_tree_simd_node256") {
+    test<0, segment_tree_simd, node256>::run();
 }
 
-TEST_CASE("test segment_tree_simd_node256u_restricted") {
-    test<0, segment_tree_simd, node256u_restricted>::run();
+TEST_CASE("test segment_tree_simd_node256_restricted") {
+    test<0, segment_tree_simd, node256_restricted>::run();
 }

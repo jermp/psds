@@ -22,15 +22,15 @@ python3 collect_results.py build ../sum_fenwick_tree_family.txt ../update_fenwic
 cd ..
 
 # cd build_slow_segtree
-# ./perf sts_64u     sum --log segment_tree_simd_node64u_no_opt  2>> ../sum.txt
-# ./perf sts_256u    sum --log segment_tree_simd_node256u_no_opt 2>> ../sum.txt
-# ./perf sts_64u  update --log segment_tree_simd_node64u_no_opt  2>> ../update.txt
-# ./perf sts_256u update --log segment_tree_simd_node256u_no_opt 2>> ../update.txt
+# ./perf sts_64     sum --log segment_tree_simd_node64_no_opt  2>> ../sum.txt
+# ./perf sts_256    sum --log segment_tree_simd_node256_no_opt 2>> ../sum.txt
+# ./perf sts_64  update --log segment_tree_simd_node64_no_opt  2>> ../update.txt
+# ./perf sts_256 update --log segment_tree_simd_node256_no_opt 2>> ../update.txt
 # cd ..
 
 # cd build_no_simd
-# ./perf sts_64u  update --log segment_tree_node64u  2>> ../update.txt
-# ./perf sts_256u update --log segment_tree_node256u 2>> ../update.txt
-# ./perf sts_64u_restricted  update --log segment_tree_node64u_restricted  2>> ../update.txt
-# ./perf sts_256u_restricted update --log segment_tree_node256u_restricted 2>> ../update.txt
+# ./perf sts_64  update --log segment_tree_node64  2>> ../update.txt
+# ./perf sts_256 update --log segment_tree_node256 2>> ../update.txt
+# ./perf sts_64_restricted  update --log segment_tree_node64_restricted  2>> ../update.txt
+# ./perf sts_256_restricted update --log segment_tree_node256_restricted 2>> ../update.txt
 # cd ..

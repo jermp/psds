@@ -1,7 +1,6 @@
-#include <iostream>
+#pragma once
+
 #include <vector>
-#include <cmath>
-#include <cassert>
 
 namespace psds {
 

@@ -12,22 +12,22 @@ types = [
 
     # "st",
 
-    # "sts_64u",
-    # "sts_256u",
-    # "sts_64u_restricted",
-    # "sts_256u_restricted",
+    # "sts_64",
+    # "sts_256",
+    # "sts_64_restricted",
+    # "sts_256_restricted",
 
     # "ft",
 
-    "ftb_64u",
-    "ftb_256u",
-    "ftb_64u_restricted",
-    "ftb_256u_restricted",
+    "ftb_64",
+    "ftb_256",
+    "ftb_64_restricted",
+    "ftb_256_restricted",
 
-    "ftt_64u",
-    "ftt_256u",
-    "ftt_64u_restricted",
-    "ftt_256u_restricted"
+    "ftt_64",
+    "ftt_256",
+    "ftt_64_restricted",
+    "ftt_256_restricted"
 ]
 
 def run(operation, results):

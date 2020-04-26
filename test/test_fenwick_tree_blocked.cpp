@@ -1,16 +1,16 @@
 #include "test_common.hpp"
 #include "test_tree.hpp"
 
-TEST_CASE("test fenwick_tree_blocked_node64u") {
+TEST_CASE("test fenwick_tree_blocked_node64") {
     uint64_t n = sizeof(sizes) / sizeof(sizes[0]);
     for (uint64_t i = 0; i != n; ++i) {
-        test_tree<fenwick_tree_blocked<node64u>>(sizes[i]);
+        test_tree<fenwick_tree_blocked<node64>>(sizes[i]);
     }
 }
 
-TEST_CASE("test fenwick_tree_blocked_node256u") {
+TEST_CASE("test fenwick_tree_blocked_node256") {
     uint64_t n = sizeof(sizes) / sizeof(sizes[0]);
     for (uint64_t i = 0; i != n; ++i) {
-        test_tree<fenwick_tree_blocked<node256u>>(sizes[i]);
+        test_tree<fenwick_tree_blocked<node256>>(sizes[i]);
     }
 }
