@@ -7,6 +7,10 @@
 #include "types.hpp"
 #include "util.hpp"
 
+#ifdef AVX_512
+#include "nodes/node1024_restricted.hpp"
+#endif
+
 using namespace psds;
 
 static constexpr int runs = 100;
@@ -248,6 +252,13 @@ int main(int argc, char** argv) {
     } else if (type == "sts_256_restricted") {  // segment tree with SIMD -
                                                 // fanout 256 - restricted case
         perf_test<segment_tree_simd, node256_restricted>(operation, name, i);
+
+#ifdef AVX_512
+    } else if (type ==
+               "sts_1024_restricted") {  // segment tree with SIMD AVX 512 -
+                                         // fanout 1024 - restricted case
+        perf_test<segment_tree_simd, node1024_restricted>(operation, name, i);
+#endif
 
     } else if (type == "ftt_64") {  // fenwick tree truncated - fanout 64
         perf_test<ftt_64_wrapper, fake_node>(operation, name, i);
