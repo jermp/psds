@@ -60,7 +60,7 @@ struct node1024_restricted {
             keys_buffer[base + z] += delta;
         }
 #else
-        __m256i upd = _mm512_set1_epi16(delta);
+        __m512i upd = _mm512_set1_epi16(delta);
 
         __m512i msk_j =
             _mm512_load_si512((__m512i const*)tables::restricted::mask32_j + j);
