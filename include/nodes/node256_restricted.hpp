@@ -62,8 +62,8 @@ struct node256_restricted {
 #else
         __m256i upd = _mm256_set1_epi16(delta);
 
-        __m256i msk_j =
-            _mm256_load_si256((__m256i const*)tables::restricted::mask16_j + j);
+        __m256i msk_j = _mm256_load_si256(
+            (__m256i const*)(tables::restricted::mask16 + 16) + j);
         __m256i upd_j = _mm256_and_si256(upd, msk_j);
         __m256i dst_summary_buffer =
             _mm256_loadu_si256((__m256i const*)summary_buffer);
@@ -72,7 +72,7 @@ struct node256_restricted {
         _mm256_storeu_si256((__m256i*)summary_buffer, res_summary_buffer);
 
         __m256i msk_k =
-            _mm256_load_si256((__m256i const*)tables::restricted::mask16_k + k);
+            _mm256_load_si256((__m256i const*)tables::restricted::mask16 + k);
         __m256i upd_k = _mm256_and_si256(upd, msk_k);
         __m256i dst_keys_buffer =
             _mm256_loadu_si256((__m256i const*)keys_buffer + j);

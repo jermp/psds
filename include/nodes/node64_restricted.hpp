@@ -62,7 +62,7 @@ struct node64_restricted {
         __m128i upd = _mm_set1_epi16(delta);
 
         __m128i msk_j =
-            _mm_load_si128((__m128i const*)tables::restricted::mask8_j + j);
+            _mm_load_si128((__m128i const*)(tables::restricted::mask8 + 8) + j);
         __m128i upd_j = _mm_and_si128(upd, msk_j);
         __m128i dst_summary_buffer =
             _mm_loadu_si128((__m128i const*)summary_buffer);
@@ -70,7 +70,7 @@ struct node64_restricted {
         _mm_storeu_si128((__m128i*)summary_buffer, res_summary_buffer);
 
         __m128i msk_k =
-            _mm_load_si128((__m128i const*)tables::restricted::mask8_k + k);
+            _mm_load_si128((__m128i const*)tables::restricted::mask8 + k);
         __m128i upd_k = _mm_and_si128(upd, msk_k);
         __m128i dst_keys_buffer =
             _mm_loadu_si128((__m128i const*)keys_buffer + j);

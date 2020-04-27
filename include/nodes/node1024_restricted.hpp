@@ -62,8 +62,8 @@ struct node1024_restricted {
 #else
         __m512i upd = _mm512_set1_epi16(delta);
 
-        __m512i msk_j =
-            _mm512_load_si512((__m512i const*)tables::restricted::mask32_j + j);
+        __m512i msk_j = _mm512_load_si512(
+            (__m512i const*)(tables::restricted::mask32 + 32) + j);
         __m512i upd_j = _mm512_and_si512(upd, msk_j);
         __m512i dst_summary_buffer =
             _mm512_loadu_si512((__m512i const*)summary_buffer);
@@ -72,7 +72,7 @@ struct node1024_restricted {
         _mm512_storeu_si512((__m512i*)summary_buffer, res_summary_buffer);
 
         __m512i msk_k =
-            _mm512_load_si512((__m512i const*)tables::restricted::mask32_k + k);
+            _mm512_load_si512((__m512i const*)tables::restricted::mask32 + k);
         __m512i upd_k = _mm512_and_si512(upd, msk_k);
         __m512i dst_keys_buffer =
             _mm512_loadu_si512((__m512i const*)keys_buffer + j);
