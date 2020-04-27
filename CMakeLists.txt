@@ -16,7 +16,7 @@ endif()
 
 if (AVX_512)
   MESSAGE(STATUS "SIMD AVX 512 enabled")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -avx512f -DAVX_512")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx512f -DAVX_512")
 endif()
 
 if (SLOW_SEGTREE)
