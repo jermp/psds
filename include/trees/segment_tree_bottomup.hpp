@@ -28,8 +28,12 @@ struct segment_tree_bottomup {
         p -= (p >= m_tree.size()) * m_size;
         int64_t sum = m_tree[p];
         while (p) {
-            uint64_t pp = (p - 1) / 2;
-            if ((p & 1) == 0) sum += m_tree[pp];  // p is right child
+            uint64_t pp = (p - 1) / 2;  // parent
+            if (((p + 1) & 3) == 0) {
+                pp = (pp - 1) / 2;  // grand parent
+            } else if ((p & 1) == 0) {
+                sum += m_tree[pp];  // p is right child
+            }
             // sum += ((p & 1) == 0) * m_tree[pp];
             p = pp;
         }

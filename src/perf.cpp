@@ -45,6 +45,11 @@ struct st_wrapper {
 };
 
 template <uint32_t, class>
+struct st_bu_wrapper {
+    typedef segment_tree_bottomup tree_type;
+};
+
+template <uint32_t, class>
 struct ftt_64_wrapper {
     typedef fenwick_tree_truncated<node64> tree_type;
 };
@@ -235,6 +240,8 @@ int main(int argc, char** argv) {
 
     if (type == "st") {  // segment tree
         perf_test<st_wrapper, fake_node>(operation, name, i);
+    } else if (type == "st_bu") {  // segment tree - bottomup
+        perf_test<st_bu_wrapper, fake_node>(operation, name, i);
 
     } else if (type == "ft") {  // fenwick tree
         perf_test<ft_wrapper, fake_node>(operation, name, i);
@@ -256,7 +263,6 @@ int main(int argc, char** argv) {
                                          // fanout 1024 - restricted case
         perf_test<segment_tree_simd, node1024_restricted>(operation, name, i);
 #endif
-
     } else if (type == "ftt_64") {  // fenwick tree truncated - fanout 64
         perf_test<ftt_64_wrapper, fake_node>(operation, name, i);
     } else if (type == "ftt_64_restricted") {  // fenwick tree truncated -
@@ -267,7 +273,6 @@ int main(int argc, char** argv) {
     } else if (type == "ftt_256_restricted") {  // fenwick tree truncated -
                                                 // fanout 256 - restricted case
         perf_test<ftt_256_restricted_wrapper, fake_node>(operation, name, i);
-
     } else if (type == "ftb_64") {  // fenwick tree blocked - fanout 64
         perf_test<ftb_64_wrapper, fake_node>(operation, name, i);
     } else if (type == "ftb_64_restricted") {  // fenwick tree blocked -
@@ -278,7 +283,6 @@ int main(int argc, char** argv) {
     } else if (type == "ftb_256_restricted") {  // fenwick tree blocked -
                                                 // fanout 256 - restricted case
         perf_test<ftb_256_restricted_wrapper, fake_node>(operation, name, i);
-
     } else {
         std::cout << "unknown type \"" << type << "\"" << std::endl;
         return 1;
