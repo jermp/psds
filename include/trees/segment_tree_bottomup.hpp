@@ -25,9 +25,16 @@ struct segment_tree_bottomup {
         uint64_t p = m_begin + i;
         p -= (p >= m_tree.size()) * m_size;
         int64_t sum = m_tree[p];
-        while (p) {
-            if ((p & 1) == 0) sum += m_tree[p - 1];
-            p = (p - 1) / 2;
+        if (m_size < (1ULL << 25)) {
+            while (p) {
+                sum += ((p & 1) == 0) * m_tree[p - 1];
+                p = (p - 1) / 2;
+            }
+        } else {
+            while (p) {
+                if ((p & 1) == 0) sum += m_tree[p - 1];
+                p = (p - 1) / 2;
+            }
         }
         return sum;
     }
