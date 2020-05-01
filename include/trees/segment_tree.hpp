@@ -56,36 +56,19 @@ struct segment_tree {
     }
 
     void update(uint64_t i, int64_t delta) {
-        if ((m_size + 1) / 2 < 4194304) {
-            uint64_t n = m_size;
-            uint64_t m = (m_size - 1) / 2;
-            uint64_t p = 0;
-            while (n != 1) {
-                m_tree[p] += delta;
-                uint64_t cmp = i > m;
-                p = 2 * p + cmp + 1;
-                n /= 2;
-                int64_t offset = cmp * n - n / 2;
-                m += offset;
-            }
-            m_tree[p] += delta;
-            return;
-        }
-        uint64_t l = 0;
-        uint64_t h = m_size - 1;
+        uint64_t n = m_size;
+        uint64_t m = (m_size - 1) / 2;
         uint64_t p = 0;
-        while (l < h) {
+        while (n != 1) {
             m_tree[p] += delta;
-            uint64_t m = (l + h) / 2;
-            p = 2 * p + 1;
-            if (i > m) {
-                l = m + 1;
-                p += 1;
-            } else {
-                h = m;
-            }
+            uint64_t cmp = i > m;
+            p = 2 * p + cmp + 1;
+            n /= 2;
+            int64_t offset = cmp * n - n / 2;
+            m += offset;
         }
         m_tree[p] += delta;
+        return;
     }
 
 private:
