@@ -93,7 +93,7 @@ template <int I, template <uint32_t, class> typename Tree, typename Node>
 struct test {
     static void run(essentials::uniform_int_rng<int64_t>& distr_values,
                     std::vector<uint32_t>& queries, std::string& json,
-                    std::string const& operation, int i = -1) {
+                    std::string const& operation, int i) {
         if (i == -1 or i == I) {
             const uint64_t n = sizes[I];
             const uint32_t height = util::ceil_log(Node::fanout, n);
@@ -135,6 +135,12 @@ struct test {
                         t.stop();
                     }
                     total = tree.sum(n - 1);
+                } else if (operation == "build") {
+                    for (int run = 0; run != runs; ++run) {
+                        t.start();
+                        for (auto q : queries) total += q;
+                        t.stop();
+                    }
                 } else {
                     assert(false);
                 }
@@ -201,8 +207,7 @@ struct test<sizeof(sizes) / sizeof(sizes[0]), Tree, Node> {
 };
 
 template <template <uint32_t, class> typename Tree, typename Node>
-void perf_test(std::string const& operation, std::string const& name,
-               int i = -1) {
+void perf_test(std::string const& operation, std::string const& name, int i) {
     essentials::uniform_int_rng<int64_t> distr_values(-100, 100, value_seed);
     std::vector<uint32_t> queries(num_queries);
     typedef typename Tree<1, Node>::tree_type tree_type;
@@ -222,8 +227,13 @@ void perf_test(std::string const& operation, std::string const& name,
 int main(int argc, char** argv) {
     cmd_line_parser::parser parser(argc, argv);
     parser.add("type", "Tree type.");
-    parser.add("operation", "Either 'sum' or 'update'.");
-    parser.add("name", "Friendly name.", "-n", false);
+    parser.add(
+        "operation",
+        "Either 'sum', 'update', or 'build'. If 'build' is specified, the data "
+        "structure is only built and queries generated, but without running "
+        "sum or update. Useful to compute the benchmark overhead, e.g., cache "
+        "misses or cycles spent during these steps.");
+    parser.add("name", "Friendly name to be logged.", "-n", false);
     parser.add("i",
                "Use a specific array size calculated as: floor(base^i) with "
                "base = 10^{1/10} = 1.25893. Running the program without this "
@@ -263,6 +273,7 @@ int main(int argc, char** argv) {
                                          // fanout 1024 - restricted case
         perf_test<segment_tree_simd, node1024_restricted>(operation, name, i);
 #endif
+
     } else if (type == "ftt_64") {  // fenwick tree truncated - fanout 64
         perf_test<ftt_64_wrapper, fake_node>(operation, name, i);
     } else if (type == "ftt_64_restricted") {  // fenwick tree truncated -
