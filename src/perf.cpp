@@ -268,10 +268,11 @@ int main(int argc, char** argv) {
         perf_test<segment_tree_simd, node256_restricted>(operation, name, i);
 
 #ifdef AVX_512
-    } else if (type ==
-               "sts_1024_restricted") {  // segment tree with SIMD AVX 512 -
-                                         // fanout 1024 - restricted case
-        perf_test<segment_tree_simd, node1024_restricted>(operation, name, i);
+    } else if (type == "sts_1024_restricted") {  // segment tree with SIMD
+        AVX 512 -
+            // fanout 1024 - restricted
+            case perf_test<segment_tree_simd, node1024_restricted>(operation,
+                                                                   name, i);
 #endif
 
     } else if (type == "ftt_64") {  // fenwick tree truncated - fanout 64
@@ -286,13 +287,13 @@ int main(int argc, char** argv) {
         perf_test<ftt_256_restricted_wrapper, fake_node>(operation, name, i);
     } else if (type == "ftb_64") {  // fenwick tree blocked - fanout 64
         perf_test<ftb_64_wrapper, fake_node>(operation, name, i);
-    } else if (type == "ftb_64_restricted") {  // fenwick tree blocked -
-                                               // fanout 64 - restricted case
+    } else if (type == "ftb_64_restricted") {  // fenwick tree blocked - fanout
+                                               // 64 - restricted case
         perf_test<ftb_64_restricted_wrapper, fake_node>(operation, name, i);
     } else if (type == "ftb_256") {  // fenwick tree blocked - fanout 256
         perf_test<ftb_256_wrapper, fake_node>(operation, name, i);
-    } else if (type == "ftb_256_restricted") {  // fenwick tree blocked -
-                                                // fanout 256 - restricted case
+    } else if (type == "ftb_256_restricted") {  // fenwick tree blocked - fanout
+                                                // 256 - restricted case
         perf_test<ftb_256_restricted_wrapper, fake_node>(operation, name, i);
     } else {
         std::cout << "unknown type \"" << type << "\"" << std::endl;

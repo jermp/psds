@@ -9,7 +9,7 @@ struct fenwick_tree_truncated {
     fenwick_tree_truncated() : m_size(0), m_ptr(nullptr) {}
 
     template <typename T>
-    void build(T const* input, uint32_t n) {
+    void build(T const* input, uint64_t n) {
         m_size = n;
 
         uint64_t nodes = std::ceil(static_cast<double>(n) / Node::fanout);
@@ -48,9 +48,9 @@ struct fenwick_tree_truncated {
         assert(i < size());
         uint64_t block = i / Node::fanout;
         uint64_t offset = i % Node::fanout;
-        int64_t s = 0;
-        if (block > 0) s += m_fenwick_tree.sum(block - 1);
-        return s + Node(m_ptr + block * Node::bytes).sum(offset);
+        int64_t sum = Node(m_ptr + block * Node::bytes).sum(offset);
+        if (block > 0) sum += m_fenwick_tree.sum(block - 1);
+        return sum;
     }
 
     void update(uint64_t i, int64_t delta) {
