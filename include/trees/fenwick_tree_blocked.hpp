@@ -38,12 +38,11 @@ struct fenwick_tree_blocked {
         m_ptr = m_data.data();
 
         uint8_t* ptr = m_data.data();
-        for (uint64_t i = 0; i != m_blocks; ++i) {
+        for (uint64_t i = 0, base = 0; i != m_blocks;
+             ++i, base += Node::fanout) {
             node_data[0] = fenwick_tree_data[i];
-            for (uint64_t k = 1, base = i * Node::fanout; k != Node::fanout;
-                 ++k) {
-                uint64_t j = base + k;
-                node_data[k] = j < n ? input[j] : 0;
+            for (uint64_t k = 1; k != Node::fanout and base + k < n; ++k) {
+                node_data[k] = input[base + k];
             }
             Node::build(node_data.data(), ptr);
             ptr += Node::bytes;

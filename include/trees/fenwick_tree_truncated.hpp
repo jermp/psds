@@ -19,12 +19,10 @@ struct fenwick_tree_truncated {
         m_nodes.resize(nodes * Node::bytes);
         m_ptr = m_nodes.data();
         uint8_t* ptr = m_nodes.data();
-        for (uint64_t i = 0; i != nodes; ++i) {
+        for (uint64_t i = 0, base = 0; i != nodes; ++i, base += Node::fanout) {
             int64_t sum = 0;
-            for (uint64_t k = 0, base = i * Node::fanout; k != Node::fanout;
-                 ++k) {
-                uint64_t j = base + k;
-                node_data[k] = j < n ? input[j] : 0;
+            for (uint64_t k = 0; k != Node::fanout and base + k < n; ++k) {
+                node_data[k] = input[base + k];
                 sum += node_data[k];
             }
             Node::build(node_data.data(), ptr);
