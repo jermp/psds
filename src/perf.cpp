@@ -268,9 +268,9 @@ int main(int argc, char** argv) {
         perf_test<segment_tree_simd, node256_restricted>(operation, name, i);
 
 #ifdef AVX_512
-    } else if (type == "sts_1024_restricted") {  // segment tree with SIMD
-        AVX 512 -
-            // fanout 1024 - restricted
+    } else if (type ==
+               "sts_1024_restricted") {  // segment tree with SIMD AVX 512 -
+                                         // fanout 1024 - restricted
             case perf_test<segment_tree_simd, node1024_restricted>(operation,
                                                                    name, i);
 #endif
