@@ -11,11 +11,9 @@ struct fenwick_tree {
     // void build(T const* input, uint64_t n) {
     //     m_tree.resize(n + 1, 0);
     //     std::copy(input, input + n, m_tree.begin() + 1);
-    //     for (size_t step = 1; step < m_tree.size(); step *= 2) {
-    //         for (size_t i = step; i + step < m_tree.size(); i += 2 * step) {
-    //             m_tree[i + step] += m_tree[i];
-    //         }
-    //     }
+    //     for (size_t step = 2; step <= n; step *= 2)
+    //         for (size_t i = step; i <= n; i += step)
+    //             m_tree[i] += m_tree[i - step / 2];
     // }
 
     template <typename T>
