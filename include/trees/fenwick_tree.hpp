@@ -19,11 +19,11 @@ struct fenwick_tree {
     template <typename T>
     void build(T const* input, uint64_t n) {
         m_size = n;
-        m_tree.resize(pos(n) + 1, 0);
-        for (size_t i = 1; i <= n; i++) m_tree[pos(i)] = input[i - 1];
+        m_tree.resize(index(n) + 1, 0);
+        for (size_t i = 1; i <= n; i++) m_tree[index(i)] = input[i - 1];
         for (size_t step = 2; step <= n; step *= 2) {
             for (size_t i = step; i <= n; i += step) {
-                m_tree[pos(i)] += m_tree[pos(i - step / 2)];
+                m_tree[index(i)] += m_tree[index(i - step / 2)];
             }
         }
     }
@@ -40,21 +40,21 @@ struct fenwick_tree {
         assert(i < size());
         int64_t sum = 0;
         // for (++i; i != 0; i &= i - 1) sum += m_tree[i];
-        for (++i; i != 0; i &= i - 1) sum += m_tree[pos(i)];
+        for (++i; i != 0; i &= i - 1) sum += m_tree[index(i)];
         return sum;
     }
 
     void update(uint64_t i, int64_t delta) {
         assert(i < size());
         // for (++i; i < size(); i += i & -i) m_tree[i] += delta;
-        for (++i; i <= m_size; i += i & -i) m_tree[pos(i)] += delta;
+        for (++i; i <= m_size; i += i & -i) m_tree[index(i)] += delta;
     }
 
 private:
     uint64_t m_size;
     std::vector<int64_t> m_tree;
 
-    static inline uint64_t pos(uint64_t i) {
+    static inline uint64_t index(uint64_t i) {
         return i + (i >> 14);
     }
 };
