@@ -34,19 +34,32 @@ struct fenwick_tree_blocked {
 
         std::vector<int64_t> node_data(Node::fanout);
 
-        m_data.resize(m_blocks * Node::bytes);
+        m_data.resize(index(m_blocks * Node::bytes));
         m_ptr = m_data.data();
-
         uint8_t* ptr = m_data.data();
+        uint64_t size = 0;
         for (uint64_t i = 0, base = 0; i != m_blocks;
              ++i, base += Node::fanout) {
             node_data[0] = fenwick_tree_data[i];
             for (uint64_t k = 1; k != Node::fanout and base + k < n; ++k) {
                 node_data[k] = input[base + k];
             }
-            Node::build(node_data.data(), ptr);
-            ptr += Node::bytes;
+            Node::build(node_data.data(), ptr + index(size));
+            size += Node::bytes;
         }
+
+        // m_data.resize(m_blocks * Node::bytes);
+        // m_ptr = m_data.data();
+        // uint8_t* ptr = m_data.data();
+        // for (uint64_t i = 0, base = 0; i != m_blocks;
+        //      ++i, base += Node::fanout) {
+        //     node_data[0] = fenwick_tree_data[i];
+        //     for (uint64_t k = 1; k != Node::fanout and base + k < n; ++k) {
+        //         node_data[k] = input[base + k];
+        //     }
+        //     Node::build(node_data.data(), ptr);
+        //     ptr += Node::bytes;
+        // }
     }
 
     static std::string name() {
@@ -61,10 +74,15 @@ struct fenwick_tree_blocked {
         assert(i < size());
         uint64_t block = i / Node::fanout + 1;
         uint64_t offset = i % Node::fanout;
-        int64_t sum = Node(m_ptr + (block - 1) * Node::bytes).sum(offset);
+        // int64_t sum = Node(m_ptr + (block - 1) * Node::bytes).sum(offset);
+        int64_t sum =
+            Node(m_ptr + index((block - 1) * Node::bytes)).sum(offset);
         while ((block &= block - 1) != 0) {
-            sum +=
-                Node(m_ptr + (block - 1) * Node::bytes).sum(Node::fanout - 1);
+            // sum +=
+            //     Node(m_ptr + (block - 1) * Node::bytes).sum(Node::fanout -
+            //     1);
+            sum += Node(m_ptr + index((block - 1) * Node::bytes))
+                       .sum(Node::fanout - 1);
         }
         return sum;
     }
@@ -73,9 +91,11 @@ struct fenwick_tree_blocked {
         assert(i < size());
         uint64_t block = i / Node::fanout + 1;
         uint64_t offset = i % Node::fanout;
-        Node(m_ptr + (block - 1) * Node::bytes).update(offset, delta);
+        // Node(m_ptr + (block - 1) * Node::bytes).update(offset, delta);
+        Node(m_ptr + index((block - 1) * Node::bytes)).update(offset, delta);
         while ((block += block & -block) <= m_blocks) {
-            Node(m_ptr + (block - 1) * Node::bytes).update(0, delta);
+            // Node(m_ptr + (block - 1) * Node::bytes).update(0, delta);
+            Node(m_ptr + index((block - 1) * Node::bytes)).update(0, delta);
         }
     }
 
@@ -84,6 +104,10 @@ private:
     uint32_t m_size;
     uint8_t* m_ptr;
     std::vector<uint8_t> m_data;
+
+    static inline uint64_t index(uint64_t i) {
+        return i + (i >> 14);
+    }
 };
 
 }  // namespace psds
