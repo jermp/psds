@@ -22,12 +22,13 @@ types = [
     "ftb_64",
     "ftb_256",
     "ftb_64_restricted",
-    "ftb_256_restricted",
+    "ftb_256_restricted"
+    # ,
 
-    "ftt_64",
-    "ftt_256",
-    "ftt_64_restricted",
-    "ftt_256_restricted"
+    # "ftt_64",
+    # "ftt_256",
+    # "ftt_64_restricted",
+    # "ftt_256_restricted"
 ]
 
 def run(operation, results):

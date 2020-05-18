@@ -120,13 +120,19 @@ struct segment_tree_bottomup {
         return "segment_tree_bottomup";
     }
 
-    static const uint64_t LEVEL3_CACHE_SIZE = 16777216;
-    static const uint64_t T = (LEVEL3_CACHE_SIZE / sizeof(int64_t)) / 8;
+    static const uint64_t LEVEL1_CACHE_SIZE = 32768 / sizeof(int64_t);
+    static const uint64_t LEVEL2_CACHE_SIZE = 1048576 / sizeof(int64_t);
+    static const uint64_t LEVEL3_CACHE_SIZE = 20185088 / sizeof(int64_t);
 
     int64_t sum(uint64_t i) const {
         uint64_t p = m_begin + i;
         p -= (p >= m_tree.size()) * m_size;
+
+        uint64_t T = LEVEL2_CACHE_SIZE;
+        if (m_size > LEVEL3_CACHE_SIZE) T = LEVEL1_CACHE_SIZE;
+
         int64_t sum = m_tree[p];
+
         while (p > T) {
             uint64_t parent = (p - 1) / 2;
             if ((p & 1) == 0) sum += m_tree[parent];
@@ -178,7 +184,12 @@ struct segment_tree_bottomup {
     void update(uint64_t i, int64_t delta) {
         uint64_t p = m_begin + i;
         p -= (p >= m_tree.size()) * m_size;
+
+        uint64_t T = LEVEL2_CACHE_SIZE;
+        if (m_size > LEVEL3_CACHE_SIZE) T = LEVEL1_CACHE_SIZE;
+
         m_tree[p] += delta;
+
         while (p > T) {
             uint64_t parent = (p - 1) / 2;
             if ((p & 1) == 1) m_tree[parent] += delta;
