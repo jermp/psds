@@ -21,8 +21,8 @@ namespace psds {
 //         return "segment_tree_bottomup";
 //     }
 
-//     // static const uint64_t LEVEL3_CACHE_SIZE = 16777216;
-//     // static const uint64_t T = (LEVEL3_CACHE_SIZE / sizeof(int64_t)) / 8;
+//     // static const uint64_t L3_CACHE_SIZE = 16777216;
+//     // static const uint64_t T = (L3_CACHE_SIZE / sizeof(int64_t)) / 8;
 
 //     // int64_t sum(uint64_t i) const {
 //     //     uint64_t p = m_begin + i;
@@ -113,26 +113,23 @@ struct segment_tree_bottomup {
         uint64_t i = 0;
         for (; m_begin + i != m; ++i) m_tree[m_begin + i] = input[i];
         for (uint64_t j = 0; i != n; ++i, ++j) m_tree[n - 1 + j] = input[i];
-        build(0);
+        visit(0);
     }
 
     static std::string name() {
         return "segment_tree_bottomup";
     }
 
-    static const uint64_t LEVEL1_CACHE_SIZE = 32768 / sizeof(int64_t);
-    static const uint64_t LEVEL2_CACHE_SIZE = 1048576 / sizeof(int64_t);
-    static const uint64_t LEVEL3_CACHE_SIZE = 20185088 / sizeof(int64_t);
+    static const uint64_t L1_CACHE_SIZE = 32768 / sizeof(int64_t);
+    static const uint64_t L2_CACHE_SIZE = 1048576 / sizeof(int64_t);
+    static const uint64_t L3_CACHE_SIZE = 20185088 / sizeof(int64_t);
 
     int64_t sum(uint64_t i) const {
         uint64_t p = m_begin + i;
         p -= (p >= m_tree.size()) * m_size;
-
-        uint64_t T = LEVEL2_CACHE_SIZE;
-        if (m_size > LEVEL3_CACHE_SIZE) T = LEVEL1_CACHE_SIZE;
-
+        uint64_t T = L2_CACHE_SIZE -
+                     (m_size > L3_CACHE_SIZE) * (L2_CACHE_SIZE - L1_CACHE_SIZE);
         int64_t sum = m_tree[p];
-
         while (p > T) {
             uint64_t parent = (p - 1) / 2;
             if ((p & 1) == 0) sum += m_tree[parent];
@@ -184,12 +181,9 @@ struct segment_tree_bottomup {
     void update(uint64_t i, int64_t delta) {
         uint64_t p = m_begin + i;
         p -= (p >= m_tree.size()) * m_size;
-
-        uint64_t T = LEVEL2_CACHE_SIZE;
-        if (m_size > LEVEL3_CACHE_SIZE) T = LEVEL1_CACHE_SIZE;
-
+        uint64_t T = L2_CACHE_SIZE -
+                     (m_size > L3_CACHE_SIZE) * (L2_CACHE_SIZE - L1_CACHE_SIZE);
         m_tree[p] += delta;
-
         while (p > T) {
             uint64_t parent = (p - 1) / 2;
             if ((p & 1) == 1) m_tree[parent] += delta;
@@ -206,10 +200,10 @@ private:
     uint64_t m_size, m_begin;
     std::vector<int64_t> m_tree;
 
-    int64_t build(uint64_t p) {
+    int64_t visit(uint64_t p) {
         uint64_t l = 2 * p + 1;
-        if (l >= m_tree.size()) return m_tree[p];  // leaf
-        int64_t l_sum = build(l), r_sum = build(l + 1);
+        if (l >= m_tree.size()) return m_tree[p];
+        int64_t l_sum = visit(l), r_sum = visit(l + 1);
         m_tree[p] = l_sum;
         return l_sum + r_sum;
     }
