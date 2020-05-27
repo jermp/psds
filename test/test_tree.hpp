@@ -18,7 +18,7 @@ void test_tree(size_t n) {
         essentials::logger("testing sum queries...");
         static constexpr uint32_t sum_queries = 5000;
         uint32_t step = n / sum_queries;
-        if (step == 0) step += 1;
+        if (step == 0) step = 1;
         int64_t expected = 0;
         uint32_t k = 0;
         for (uint32_t i = 0; i < n; i += step) {
@@ -34,7 +34,7 @@ void test_tree(size_t n) {
         essentials::logger("testing update queries...");
         static constexpr uint32_t update_queries = 5000;
         uint32_t step = n / update_queries;
-        if (step == 0) step += 1;
+        if (step == 0) step = 1;
         for (uint32_t run = 0; run != 100; ++run) {
             int64_t expected = 0;
             uint32_t k = 0;
