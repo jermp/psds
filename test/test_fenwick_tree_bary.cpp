@@ -3,6 +3,8 @@
 #include <iostream>
 #include <vector>
 #include <random>
+#include <chrono>
+#include <algorithm>
 
 unsigned get_random_seed() {
     return std::chrono::system_clock::now().time_since_epoch().count();
