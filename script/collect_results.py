@@ -19,10 +19,15 @@ types = [
 
     # "ft",
 
-    "ftb_64",
-    "ftb_256",
-    "ftb_64_restricted",
-    "ftb_256_restricted"
+    "fts_64",
+    "fts_256",
+    "fts_64_restricted",
+    "fts_256_restricted",
+
+    # "ftb_64",
+    # "ftb_256",
+    # "ftb_64_restricted",
+    # "ftb_256_restricted"
     # ,
 
     # "ftt_64",
