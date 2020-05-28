@@ -253,18 +253,14 @@ int main(int argc, char** argv) {
 
     } else if (type == "fts_64") {  // fenwick tree b-ary - fanout 64
         perf_test<fenwick_tree_bary, node64>(operation, name, i);
-        // } else if (type == "fts_64_restricted") {  // fenwick tree b-ary -
-        // fanout 64
-        //                                            // - restricted case
-        //     perf_test<fenwick_tree_bary, node64_restricted>(operation, name,
-        //     i);
+    } else if (type == "fts_64_restricted") {  // fenwick tree b-ary - fanout 64
+                                               // - restricted case
+        perf_test<fenwick_tree_bary, node64_restricted>(operation, name, i);
     } else if (type == "fts_256") {  // fenwick tree b-ary - fanout 256
         perf_test<fenwick_tree_bary, node256>(operation, name, i);
-        // } else if (type == "fts_256_restricted") {  // fenwick tree b-ary -
-        // fanout
-        //                                             // 256 - restricted case
-        //     perf_test<fenwick_tree_bary, node256_restricted>(operation, name,
-        //     i);
+    } else if (type == "fts_256_restricted") {  // fenwick tree b-ary - fanout
+                                                // 256 - restricted case
+        perf_test<fenwick_tree_bary, node256_restricted>(operation, name, i);
 
     } else if (type == "sts_64") {  // segment tree b-ary - fanout 64
         perf_test<segment_tree_bary, node64>(operation, name, i);

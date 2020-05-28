@@ -10,9 +10,10 @@ for any 0 ≤ i < n:
 
 The library implements the following solutions to solve the problem.
 
-- Binary Segment Tree
-- SIMD *k*-ary Segment Tree
+- Segment Tree with node fanout 2 (top-down and bottom-up)
+- Segment Tree with node fanout b > 2
 - Fenwick Tree
+- Fenwick Tree with node fanout b > 2
 - Truncated Fenwick Tree
 - Blocked Fenwick Tree
 
@@ -77,7 +78,7 @@ will benchmark the speed of sum queries for the Fenwick Tree data structure (`ft
 
 - The command
 
-		./perf sts_256u update -i 40
+		./perf sts_256 update -i 40
 
 will benchmark the speed of updates for the SIMD Segment Tree
 with branching factor 256 (`sts_256`) for an array

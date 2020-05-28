@@ -99,6 +99,26 @@ struct node64_restricted {
         return summary[j] + keys[i] + s1 + s2;
     }
 
+    int64_t back() const {
+        return (keys[fanout - 1] - keys[fanout - 2]) +
+               (keys_buffer[fanout - 1] - keys_buffer[fanout - 2]);
+    }
+
+    void update_back(int64_t delta) {
+        keys[fanout - 1] += delta;
+        *updates += 1;
+        if (*updates == 255) {
+            for (uint64_t z = 0; z != segment_size; ++z) {
+                summary[z] += summary_buffer[z];
+                summary_buffer[z] = 0;
+            }
+            for (uint64_t z = 0; z != fanout; ++z) {
+                keys[z] += keys_buffer[z];
+                keys_buffer[z] = 0;
+            }
+        }
+    }
+
 private:
     int64_t* summary;
     int64_t* keys;
