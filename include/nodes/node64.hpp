@@ -106,6 +106,14 @@ struct node64 {
         return summary[i / segment_size] + keys[i];
     }
 
+    int64_t back() const {
+        return keys[fanout - 1] - keys[fanout - 2];
+    }
+
+    void update_back(int64_t delta) {
+        keys[fanout - 1] += delta;
+    }
+
 private:
     int64_t* summary;
     int64_t* keys;

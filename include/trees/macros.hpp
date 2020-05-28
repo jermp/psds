@@ -84,18 +84,16 @@ namespace psds {
     int64_t s5 = node5.sum(child5);                                         \
     return s1 + s2 + s3 + s4 + s5;
 
-#define UPDATE_H1           \
-    NODE1                   \
-    node1.update(i, delta); \
-    return;
+#define UPDATE_H1 \
+    NODE1         \
+    node1.update(i, delta);
 
 #define UPDATE_H2                       \
     uint64_t child1 = i / Node::fanout; \
     uint64_t child2 = i % Node::fanout; \
     NODE2                               \
     node1.update(child1 + 1, delta);    \
-    node2.update(child2, delta);        \
-    return;
+    node2.update(child2, delta);
 
 #define UPDATE_H3                                                \
     uint64_t child1 = i / SQARED(Node::fanout);                  \
@@ -104,8 +102,7 @@ namespace psds {
     NODE3                                                        \
     node1.update(child1 + 1, delta);                             \
     node2.update(child2 + 1, delta);                             \
-    node3.update(child3, delta);                                 \
-    return;
+    node3.update(child3, delta);
 
 #define UPDATE_H4                                                       \
     uint64_t child1 = i / CUBED(Node::fanout);                          \
@@ -116,8 +113,7 @@ namespace psds {
     node1.update(child1 + 1, delta);                                    \
     node2.update(child2 + 1, delta);                                    \
     node3.update(child3 + 1, delta);                                    \
-    node4.update(child4, delta);                                        \
-    return;
+    node4.update(child4, delta);
 
 #define UPDATE_H5                                                           \
     uint64_t child1 = i / BIQUADRATE(Node::fanout);                         \
@@ -130,7 +126,6 @@ namespace psds {
     node2.update(child2 + 1, delta);                                        \
     node3.update(child3 + 1, delta);                                        \
     node4.update(child4 + 1, delta);                                        \
-    node5.update(child5, delta);                                            \
-    return;
+    node5.update(child5, delta);
 
 }  // namespace psds

@@ -4,7 +4,7 @@
 
 namespace psds {
 
-struct segment_tree {
+struct segment_tree_topdown {
     template <typename T>
     void build(T const* input, uint64_t n) {
         m_size = uint64_t(1) << static_cast<uint64_t>(ceil(log2(n)));
@@ -15,7 +15,7 @@ struct segment_tree {
     }
 
     static std::string name() {
-        return "segment_tree";
+        return "segment_tree_topdown";
     }
 
     int64_t sum(uint64_t i) const {

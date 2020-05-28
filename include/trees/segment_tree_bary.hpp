@@ -4,20 +4,16 @@
 #include <cmath>
 #include <vector>
 
-#ifdef SLOW_SEGTREE
-#include "slow_macros.hpp"
-#else
-#include "fast_macros.hpp"
-#endif
+#include "macros.hpp"
 
 namespace psds {
 
 template <uint32_t Height, typename Node>
-struct segment_tree_simd {
+struct segment_tree_bary {
     static_assert(Height > 0);
-    typedef segment_tree_simd<Height, Node> tree_type;
+    typedef segment_tree_bary<Height, Node> tree_type;
 
-    segment_tree_simd()
+    segment_tree_bary()
         : m_size(0), m_num_nodes_per_level(nullptr), m_ptr(nullptr) {}
 
     template <typename T>
@@ -34,9 +30,6 @@ struct segment_tree_simd {
         }
         assert(m == 1);
 
-#ifdef SLOW_SEGTREE
-        m_height = Height;
-#endif
         uint64_t total_size =
             total_nodes * Node::bytes + Height * sizeof(uint32_t);
         m_data.resize(total_size);
@@ -79,70 +72,32 @@ struct segment_tree_simd {
     }
 
     static std::string name() {
-        return "segment_tree_simd_" + Node::name();
+        return "segment_tree_bary_" + Node::name();
     }
 
     uint32_t size() const {
         return m_size;
     }
 
-    void update(uint64_t i, int64_t delta) {
-        assert(i < size());
-
-#ifdef SLOW_SEGTREE
-        if (m_height == 1) {
-            UPDATE_H1
-        } else if (m_height == 2) {
-            UPDATE_H2
-        } else if (m_height == 3) {
-            UPDATE_H3
-        } else if (m_height == 4) {
-            UPDATE_H4
-        } else {
-            UPDATE_H5
-        }
-#else
-        if constexpr (Height == 1) { UPDATE_H1 }
-        if constexpr (Height == 2) { UPDATE_H2 }
-        if constexpr (Height == 3) { UPDATE_H3 }
-        if constexpr (Height == 4) { UPDATE_H4 }
-        if constexpr (Height == 5) { UPDATE_H5 }
-#endif
-
-        assert(false);
-        __builtin_unreachable();
-    }
-
     int64_t sum(uint64_t i) const {
         assert(i < size());
-
-#ifdef SLOW_SEGTREE
-        if (m_height == 1) {
-            SUM_H1
-        } else if (m_height == 2) {
-            SUM_H2
-        } else if (m_height == 3) {
-            SUM_H3
-        } else if (m_height == 4) {
-            SUM_H4
-        } else {
-            SUM_H5
-        }
-#else
         if constexpr (Height == 1) { SUM_H1 }
         if constexpr (Height == 2) { SUM_H2 }
         if constexpr (Height == 3) { SUM_H3 }
         if constexpr (Height == 4) { SUM_H4 }
         if constexpr (Height == 5) { SUM_H5 }
-#endif
-        assert(false);
-        __builtin_unreachable();
+    }
+
+    void update(uint64_t i, int64_t delta) {
+        assert(i < size());
+        if constexpr (Height == 1) { UPDATE_H1 }
+        if constexpr (Height == 2) { UPDATE_H2 }
+        if constexpr (Height == 3) { UPDATE_H3 }
+        if constexpr (Height == 4) { UPDATE_H4 }
+        if constexpr (Height == 5) { UPDATE_H5 }
     }
 
 private:
-#ifdef SLOW_SEGTREE
-    uint32_t m_height;
-#endif
     uint32_t m_size;
     uint32_t* m_num_nodes_per_level;
     uint8_t* m_ptr;

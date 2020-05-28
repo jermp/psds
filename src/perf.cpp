@@ -7,10 +7,6 @@
 #include "types.hpp"
 #include "util.hpp"
 
-#ifdef AVX_512
-#include "nodes/node1024_restricted.hpp"
-#endif
-
 using namespace psds;
 
 static constexpr int runs = 100;
@@ -40,8 +36,8 @@ struct ft_wrapper {
 };
 
 template <uint32_t, class>
-struct st_wrapper {
-    typedef segment_tree tree_type;
+struct st_td_wrapper {
+    typedef segment_tree_topdown tree_type;
 };
 
 template <uint32_t, class>
@@ -248,32 +244,38 @@ int main(int argc, char** argv) {
     if (parser.parsed("name")) name = parser.get<std::string>("name");
     if (parser.parsed("i")) i = parser.get<int>("i");
 
-    if (type == "st") {  // segment tree
-        perf_test<st_wrapper, fake_node>(operation, name, i);
+    if (type == "st_td") {  // segment tree - topdown
+        perf_test<st_td_wrapper, fake_node>(operation, name, i);
     } else if (type == "st_bu") {  // segment tree - bottomup
         perf_test<st_bu_wrapper, fake_node>(operation, name, i);
-
     } else if (type == "ft") {  // fenwick tree
         perf_test<ft_wrapper, fake_node>(operation, name, i);
 
-    } else if (type == "sts_64") {  // segment tree with SIMD - fanout 64
-        perf_test<segment_tree_simd, node64>(operation, name, i);
-    } else if (type == "sts_64_restricted") {  // segment tree with SIMD -
-                                               // fanout 64 - restricted case
-        perf_test<segment_tree_simd, node64_restricted>(operation, name, i);
-    } else if (type == "sts_256") {  // segment tree with SIMD - fanout 256
-        perf_test<segment_tree_simd, node256>(operation, name, i);
-    } else if (type == "sts_256_restricted") {  // segment tree with SIMD -
-                                                // fanout 256 - restricted case
-        perf_test<segment_tree_simd, node256_restricted>(operation, name, i);
+    } else if (type == "fts_64") {  // fenwick tree b-ary - fanout 64
+        perf_test<fenwick_tree_bary, node64>(operation, name, i);
+        // } else if (type == "fts_64_restricted") {  // fenwick tree b-ary -
+        // fanout 64
+        //                                            // - restricted case
+        //     perf_test<fenwick_tree_bary, node64_restricted>(operation, name,
+        //     i);
+    } else if (type == "fts_256") {  // fenwick tree b-ary - fanout 256
+        perf_test<fenwick_tree_bary, node256>(operation, name, i);
+        // } else if (type == "fts_256_restricted") {  // fenwick tree b-ary -
+        // fanout
+        //                                             // 256 - restricted case
+        //     perf_test<fenwick_tree_bary, node256_restricted>(operation, name,
+        //     i);
 
-#ifdef AVX_512
-    } else if (type ==
-               "sts_1024_restricted") {  // segment tree with SIMD AVX 512 -
-                                         // fanout 1024 - restricted
-            case perf_test<segment_tree_simd, node1024_restricted>(operation,
-                                                                   name, i);
-#endif
+    } else if (type == "sts_64") {  // segment tree b-ary - fanout 64
+        perf_test<segment_tree_bary, node64>(operation, name, i);
+    } else if (type == "sts_64_restricted") {  // segment tree b-ary -
+                                               // fanout 64 - restricted case
+        perf_test<segment_tree_bary, node64_restricted>(operation, name, i);
+    } else if (type == "sts_256") {  // segment tree b-ary - fanout 256
+        perf_test<segment_tree_bary, node256>(operation, name, i);
+    } else if (type == "sts_256_restricted") {  // segment tree b-ary -
+                                                // fanout 256 - restricted case
+        perf_test<segment_tree_bary, node256_restricted>(operation, name, i);
 
     } else if (type == "ftt_64") {  // fenwick tree truncated - fanout 64
         perf_test<ftt_64_wrapper, fake_node>(operation, name, i);
