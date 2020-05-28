@@ -211,13 +211,8 @@ struct fenwick_btree {
 
         std::vector<int64_t> fenwick_tree_data(1 + m_blocks * b, 0);
         std::copy(input, input + n, fenwick_tree_data.begin() + 1);
-
         uint64_t size = fenwick_tree_data.size();
         build(fenwick_tree_data.data(), 1, size - 1, size - 1);
-
-        // for (auto x : fenwick_tree_data) std::cout << x << " ";
-        // std::cout << std::endl;
-        // std::cout << "===" << std::endl;
 
         std::vector<int64_t> node_data(b);
         m_data.resize(m_blocks * Node::bytes, 0);
@@ -230,8 +225,6 @@ struct fenwick_btree {
             Node::build(node_data.data(), ptr);
             ptr += Node::bytes;
         }
-
-        // std::cout << "===" << std::endl;
     }
 
     static std::string name() {
