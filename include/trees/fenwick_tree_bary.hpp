@@ -24,16 +24,14 @@ namespace psds {
     DIGIT_4     \
     DIGIT(5)
 
-#define SUM_DIGIT(K)                                     \
-    if (digit##K != 0) {                                 \
-        Node node(m_ptr + (block##K - 1) * Node::bytes); \
-        sum##K = node.back();                            \
+#define SUM_DIGIT(K)                                                \
+    if (digit##K != 0) {                                            \
+        sum##K = Node(m_ptr + (block##K - 1) * Node::bytes).back(); \
     }
 
-#define SUM_DIGIT_1                                    \
-    if (digit1 != 0) {                                 \
-        Node node(m_ptr + (block1 - 1) * Node::bytes); \
-        sum1 = node.sum(digit1 - 1);                   \
+#define SUM_DIGIT_1                                                      \
+    if (digit1 != 0) {                                                   \
+        sum1 = Node(m_ptr + (block1 - 1) * Node::bytes).sum(digit1 - 1); \
     }
 
 #define SUM_DIGIT_2 \
@@ -100,8 +98,7 @@ struct fenwick_tree_bary {
 
         if constexpr (Height == 1) {
             uint64_t digit1 = i & group_mask;
-            Node node(m_ptr);
-            return node.sum(digit1 - 1);
+            return Node(m_ptr).sum(digit1 - 1);
         }
 
         if constexpr (Height == 2) {
@@ -147,12 +144,12 @@ struct fenwick_tree_bary {
         assert(i < size());
 
         uint64_t block = i / b;
-        Node node(m_ptr + block * Node::bytes);
         uint64_t digit = i & group_mask;
+        Node node(m_ptr + block * Node::bytes);
         node.update(digit, delta);
         if (digit != b - 1) node.update_back(delta);
 
-        for (uint64_t power = b, group = 1, offset = block * b; group <= Height;
+        for (uint64_t power = b, group = 1, offset = block * b; group < Height;
              power *= b, ++group) {
             i >>= log2_b;
             uint64_t digit = i & group_mask;
@@ -161,8 +158,7 @@ struct fenwick_tree_bary {
                 offset += power;
                 if (offset >= m_size) break;
                 uint64_t block = offset / b;
-                Node node(m_ptr + block * Node::bytes);
-                node.update_back(delta);
+                Node(m_ptr + block * Node::bytes).update_back(delta);
             }
         }
     }
@@ -172,7 +168,6 @@ private:
     uint8_t* m_ptr;
     std::vector<uint8_t> m_data;
 
-    // [l,r], not semi-open
     void build(int64_t* input, uint64_t l, uint64_t r, uint64_t size) {
         assert(r > l);
         int64_t sum = 0;
