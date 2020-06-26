@@ -1,21 +1,25 @@
 Prefix-Sum Data Structures
 ------
 
-Given an integer array A[0..n), the *Prefix-Sum Problem*
+Given an integer array A[0..n), the *prefix-sum problem*
 asks for a data structure built from A that supports
 for any 0 ≤ i < n:
 
 - sum(i) = A[0] + ... + A[i];
 - update(i, x) which sets A[i] to A[i] + x.
+- access(i) = A[i].
 
 The library implements the following solutions to solve the problem.
 
-- Segment Tree with node fanout 2 (top-down and bottom-up)
-- Segment Tree with node fanout b > 2
-- Fenwick Tree
-- Fenwick Tree with node fanout b > 2
-- Truncated Fenwick Tree
-- Blocked Fenwick Tree
+- binary Segment-Tree (top-down and bottom-up)
+- b-ary Segment-Tree (b > 2)
+- Fenwick-Tree
+- b-ary Fenwick-Tree
+- blocked Fenwick-Tree with blocks of b keys
+- truncated Fenwick-Tree with blocks of leaves of b keys
+
+For a description and anlysis of all these data structures,
+see the paper [Practical Trade-Offs for the Prefix-Sum Problem](https://arxiv.org/pdf/2006.14552.pdf), by Giulio Ermanno Pibiri and Rossano Venturini.
 
 Compiling the code <a name="compiling"></a>
 ------------------
