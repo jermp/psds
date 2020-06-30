@@ -7,7 +7,7 @@ void test_tree(size_t n) {
     essentials::uniform_int_rng<int64_t> distr(-100, +1000000000,
                                                essentials::get_random_seed());
     std::cout << "== testing " << Tree::name() << " with " << n
-              << " nodes ==" << std::endl;
+              << " leaves ==" << std::endl;
     std::vector<int64_t> A(n);
     std::generate(A.begin(), A.end(), [&] { return distr.gen(); });
     Tree tree;

@@ -28,7 +28,7 @@ template <typename Tree>
 void test_tree(uint64_t n) {
     uniform_int_rng<int64_t> distr(-100, +100);
     std::cout << "== testing " << Tree::name() << " with " << n
-              << " nodes ==" << std::endl;
+              << " leaves ==" << std::endl;
     std::vector<int64_t> A(n);
     std::generate(A.begin(), A.end(), [&] { return distr.gen(); });
     Tree tree;
