@@ -1,6 +1,6 @@
 #!/bin/python
 
-import sys, os, argparse
+import os, argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('directory', type = str, help = "Directory with executables. Path must be relative to project parent directory.")

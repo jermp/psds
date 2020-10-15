@@ -154,7 +154,7 @@ struct fenwick_tree_bary {
             i >>= log2_b;
             uint64_t digit = i & group_mask;
             uint64_t powers = b - digit - 1;
-            for (uint64_t i = 0; i != powers; ++i) {
+            for (uint64_t p = 0; p != powers; ++p) {
                 offset += power;
                 if (offset >= m_size) break;
                 uint64_t block = offset / b;
