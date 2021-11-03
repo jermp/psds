@@ -1,5 +1,7 @@
+[![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/jermp/psds.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/jermp/psds/context:cpp)
+
 Prefix-Sum Data Structures
-------
+==========================
 
 Given an integer array A[0..n), the *prefix-sum problem*
 asks for a data structure built from A that supports
