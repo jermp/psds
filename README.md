@@ -19,7 +19,9 @@ The library implements the following solutions to solve the problem.
 - truncated Fenwick-Tree with blocks of leaves of b keys
 
 For a description and anlysis of all these data structures,
-see the paper [Practical Trade-Offs for the Prefix-Sum Problem](https://arxiv.org/pdf/2006.14552.pdf), by Giulio Ermanno Pibiri and Rossano Venturini.
+see the paper **[Practical Trade-Offs for the Prefix-Sum Problem](https://onlinelibrary.wiley.com/doi/abs/10.1002/spe.2918)** (SPE 2020).
+
+Please, cite the paper if you use this library.
 
 Compiling the code <a name="compiling"></a>
 ------------------
